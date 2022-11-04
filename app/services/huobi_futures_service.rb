@@ -1,6 +1,5 @@
 require 'openssl'
 require 'rest-client'
-require "addressable/uri"
 
 class HuobiFuturesService
   BASE_URL = ENV['HUOBI_FUTURES_URL']
@@ -14,6 +13,7 @@ class HuobiFuturesService
         "SignatureVersion" => 2,
         "Timestamp" => get_timestamp
       }
+
       payload["Signature"] = signed_data(build_query(payload), path)
       headers = {'Accept' => 'application/json', 'Content-type' => 'application/json'}
       url = BASE_URL + path + "?" + build_query(payload)
@@ -33,10 +33,13 @@ class HuobiFuturesService
     end
 
     def build_query(params)
-      return params unless params.is_a? Hash
-      uri               =   Addressable::URI.new
-      uri.query_values  =   params
-      uri.query
+      params.map do |key, value|
+        if value.is_a?(Array)
+          value.map { |v| "#{key}=#{CGI.escape(v.to_s)}" }.join('&')
+        else
+          "#{key}=#{CGI.escape(value.to_s)}"
+        end
+      end.join('&')
     end
   end
 end
