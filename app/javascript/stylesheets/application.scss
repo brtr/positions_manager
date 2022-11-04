@@ -1,0 +1,23 @@
+@import "bootstrap";
+@import "bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.css";
+
+.neg-num { color: red !important;}
+.pos-num { color: green !important;}
+
+.question-mark {
+  font-size: medium;
+  vertical-align: super;
+  color: red;
+}
+
+.table-container-tr {
+  a {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+  }
+}
+
+.text-right{
+  text-align: right;
+}

@@ -1,0 +1,11 @@
+<div class="mt-3">
+  <%- if controller_name != 'sessions' %>
+    <%= link_to "登录", new_session_path(resource_name) %>
+  <% end %>
+
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <%= link_to "注册", new_registration_path(resource_name) %>
+  <% end %>
+</div>
+
+

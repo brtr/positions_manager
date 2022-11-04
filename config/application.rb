@@ -1,19 +1,6 @@
 require_relative "boot"
 
-require "rails"
-# Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "active_storage/engine"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_mailbox/engine"
-require "action_text/engine"
-require "action_view/railtie"
-require "action_cable/engine"
-require "sprockets/railtie"
-# require "rails/test_unit/railtie"
+require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -24,15 +11,28 @@ module PositionsManager
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
+    config.eager_load_paths += ["#{Rails.root}/lib"]
+    config.eager_load_paths += Dir["#{Rails.root}/lib/**/"]
+
+    config.i18n.load_path += Dir[File.join(Rails.root.to_s, 'config', 'locales', '**', '*.{rb,yml}')]
+    config.i18n.available_locales = [:"zh-CN", :zh, :en]
+    config.i18n.default_locale = 'zh-CN'
+
+    config.exceptions_app = self.routes
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.cache_store = :redis_cache_store, {
+      url: ENV["SIDEKIQ_REDIS_URL"] || "redis://localhost:6379/1",
+      pool_size: 5,
+      pool_timeout: 5
+    }
 
-    # Don't generate system test files.
-    config.generators.system_tests = nil
+    ENV.fetch('RAILS_HOST_NAME').split(",").each do |h|
+      config.hosts << h
+    end
+
+    config.host_authorization = { exclude: ->(request) { request.path =~ /healthcheck/ } }
   end
 end

@@ -1,0 +1,31 @@
+<div class="m-3">
+  <h3>合约仓位管理</h3>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+    上传交易记录
+  </button>
+  <div class="mb-3 mt-3 col-6">
+    <%= form_tag user_positions_path, id: "search_targets", method: "GET" do %>
+      <div class="input-group mb-3">
+        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "搜索交易对..." %>
+        <button type="submit" class="btn btn-primary">确定</button>
+        <%= link_to "Reset", user_positions_path, class: 'btn btn-default' %>
+        <%= link_to "Refresh", refresh_user_positions_path, class: 'btn btn-warning' %>
+        <div class="mt-2 ms-2"><%= get_refresh_time(current_user.id) %></div>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    <div class="p-3">
+      <p>总投入: <%= @total_summary[:total_cost].round(3) %> ( <span class="<%= @last_summary[:total_cost].to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @last_summary[:total_cost].to_f.round(3) rescue 0 %> </span>) / 总盈利: <%= @total_summary[:total_revenue].round(3) %> ( <span class="<%= @last_summary[:total_revenue].to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @last_summary[:total_revenue].to_f.round(3) rescue 0 %> </span>) </p>
+      <p>盈利总数量: <%= @total_summary[:profit_count] %> ( <span class="<%= @last_summary[:profit_count].to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @last_summary[:profit_count] rescue 0 %> </span>) / 盈利总金额: <%= @total_summary[:profit_amount].round(3) %> ( <span class="<%= @last_summary[:profit_amount].to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @last_summary[:profit_amount].to_f.round(3) rescue 0 %> </span>) </p>
+      <p>亏损总数量: <%= @total_summary[:loss_count] %> ( <span class="<%= @last_summary[:loss_count].to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @last_summary[:loss_count] rescue 0 %> </span>) / 亏损总金额: <%= @total_summary[:loss_amount].round(3) %> ( <span class="<%= @last_summary[:loss_amount].to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @last_summary[:loss_amount].to_f.round(3) rescue 0 %> </span>) </p>
+      <p>历史最高盈利: <%= @total_summary[:max_profit].round(3) %></p>
+      <p>历史最高亏损: <%= @total_summary[:max_loss].round(3) %></p>
+    </div>
+  </div>
+  <div id="user-positions-container">
+    <%= render partial: "shared/list", locals: { source_type: :private } %>
+  </div>
+</div>
+
+<%= render partial: "modal" %>
