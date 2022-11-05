@@ -14,4 +14,5 @@ Rails.application.routes.draw do
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/refresh_user_positions', to: 'page#refresh_user_positions', as: :refresh_public_user_positions
+  get "/healthcheck", to: "page#health_check"
 end

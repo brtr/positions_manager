@@ -20,4 +20,8 @@ class PageController < ApplicationController
 
     redirect_to public_user_positions_path, notice: "正在更新，请稍等刷新查看最新仓位..."
   end
+
+  def health_check
+    render plain: "ok"
+  end
 end
