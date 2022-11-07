@@ -1,7 +1,11 @@
+require "sidekiq/web"
+require 'sidekiq-scheduler/web'
+
 Rails.application.routes.draw do
   devise_for :users
 
   root 'page#user_positions'
+  mount Sidekiq::Web => "/sidekiq"
 
   resources :user_positions, only: :index do
     collection do
