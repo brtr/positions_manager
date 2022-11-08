@@ -13,7 +13,7 @@ class UserPositionsController < ApplicationController
     @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
     @total_summary = UserPosition.available.total_summary(current_user.id)
     snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: current_user.id, event_date: Date.yesterday})
-    @last_summary = snapshots.total_summary(current_user.id)
+    @last_summary = snapshots.last_summary(current_user.id)
     @snapshots = snapshots.to_a
   end
 
