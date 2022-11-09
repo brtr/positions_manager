@@ -94,4 +94,10 @@ module ApplicationHelper
   def trade_type_style(trade_type)
     trade_type.to_s.downcase == 'sell' ? "text-danger" : "text-success"
   end
+
+  def display_symbol(h, s=nil)
+    str = "#{h.from_symbol} / #{h.fee_symbol}"
+    return str if s.present?
+    "(新) " + str
+  end
 end

@@ -20,7 +20,7 @@
     <% @histories.each do |h| %>
       <% snapshot = @snapshots.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first %>
       <tr>
-        <td><%= h.from_symbol %> / <%= h.fee_symbol %></td>
+        <td><%= display_symbol(h, snapshot) %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
         <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.current_price.round(4) %> <%= h.fee_symbol %></td>
