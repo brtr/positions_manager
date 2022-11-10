@@ -8,13 +8,17 @@ class GenerateUserPositionsSnapshotsJob < ApplicationJob
       snapshot_info = SnapshotInfo.where(event_date: date, user_id: user_id).first_or_create
       generate_snapshot(snapshot_info)
       $redis.del("user_#{user_id}_positions_max_profit")
+      $redis.del("user_#{user_id}_positions_max_profit_date")
       $redis.del("user_#{user_id}_positions_max_loss")
+      $redis.del("user_#{user_id}_positions_max_loss_date")
     end
 
     snapshot_info = SnapshotInfo.where(event_date: date, user_id: nil).first_or_create
     generate_snapshot(snapshot_info)
-    $redis.del('user_positions_max_profit')
-    $redis.del('user_positions_max_loss')
+    $redis.del('user__positions_max_profit')
+    $redis.del('user__positions_max_profit_date')
+    $redis.del('user__positions_max_loss')
+    $redis.del('user__positions_max_loss_date')
   end
 
   def generate_snapshot(snapshot_info)

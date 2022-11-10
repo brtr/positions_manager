@@ -46,7 +46,9 @@ class UserPosition < ApplicationRecord
       total_cost: records.sum(&:amount),
       total_revenue: records.sum(&:revenue),
       max_profit: infos.max_profit(user_id),
-      max_loss: infos.max_loss(user_id)
+      max_profit_date: $redis.get("user_#{user_id}_positions_max_profit_date"),
+      max_loss: infos.max_loss(user_id),
+      max_loss_date: $redis.get("user_#{user_id}_positions_max_loss_date")
     }
   end
 
