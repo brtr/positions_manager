@@ -19,9 +19,10 @@ class GetPublicUserPositionsJob < ApplicationJob
       get_info(up)
     end
 
-    okx_data["data"].select{|i| i["pos"].to_f != 0}.each do |d|
+    okx_data["data"].each do |d|
       from_symbol, fee_symbol = d["instId"].split('-')
-      qty = (d["notionalUsd"].to_f / d["last"].to_f).round(0)
+      qty = (d["notionalUsd"].to_f / d["last"].to_f).round(8)
+      next if qty == 0
       t_type = d["posSide"] == "long" || (d["posSide"] == "net" && d["pos"].to_f > 0) ? "sell" : "buy"
       up = get_up(d["instId"], fee_symbol, from_symbol, t_type, 'okx')
       ids.push(up.id)
