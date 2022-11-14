@@ -24,4 +24,15 @@ class PageController < ApplicationController
   def health_check
     render plain: "ok"
   end
+
+  def get_24hr_ticker
+    @page_index = 5
+    @data = JSON.parse($redis.get("get_24hr_tickers")) rescue []
+  end
+
+  def refresh_24hr_ticker
+    SyncFutures24hrTickerJob.perform_later
+
+    redirect_to get_24hr_ticker_url, notice: "正在更新，请稍等刷新查看最新排名..."
+  end
 end

@@ -1,0 +1,48 @@
+<div class="m-3">
+  <h3>
+    最近24小时币种涨跌排名列表
+    <%= link_to "Refresh", refresh_24hr_ticker_path, class: 'btn btn-warning' %>
+  </h3>
+  <div class="row mt-5">
+    <div class="col-6">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>币种</th>
+            <th>24小时涨幅</th>
+            <th>半年内底部比例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @data.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(15).each do |d| %>
+            <tr>
+              <td><%= d["symbol"] %></td>
+              <td><%= d["priceChangePercent"] + " %" %></td>
+              <td><%= d["bottomPriceRatio"] + " %" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-6">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>币种</th>
+            <th>24小时跌幅</th>
+            <th>半年内底部比例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @data.sort_by{|d| d["priceChangePercent"].to_f}.first(15).each do |d| %>
+            <tr>
+              <td><%= d["symbol"] %></td>
+              <td><%= d["priceChangePercent"] + " %" %></td>
+              <td><%= d["bottomPriceRatio"] + " %" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -45,6 +45,9 @@
                 </ul>
               </li>
             <% end %>
+            <li class="nav-item">
+              <%= link_to "24小时币种涨跌排名", get_24hr_ticker_path, class: "nav-link #{@page_index == 5 ? 'active' : ''}" %>
+            </li>
           </ul>
         </div>
       </div>
