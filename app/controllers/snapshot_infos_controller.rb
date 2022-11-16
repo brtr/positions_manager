@@ -21,6 +21,12 @@ class SnapshotInfosController < ApplicationController
     @total_summary = records.total_summary(params[:user_id].presence)
   end
 
+  def positions_graphs
+    @page_index = 6
+    infos = SnapshotInfo.includes(:snapshot_positions).where(user_id: nil, event_date: [Date.yesterday - 1.month..Date.yesterday]).order(event_date: :asc)
+    @records = infos.map{|info| {info.event_date => info.snapshot_positions.total_summary.merge(date: info.event_date)}}.inject(:merge)
+  end
+
   private
 
   def split_event_dates(infos)

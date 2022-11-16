@@ -14,7 +14,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :snapshot_infos, only: [:index, :show]
+  resources :snapshot_infos, only: [:index, :show] do
+    get :positions_graphs, on: :collection
+  end
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/refresh_user_positions', to: 'page#refresh_user_positions', as: :refresh_public_user_positions

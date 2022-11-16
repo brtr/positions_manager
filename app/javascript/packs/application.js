@@ -11,9 +11,15 @@ require("channels");
 require("bootstrap-datepicker");
 require("bootstrap");
 require('select2');
+require("chartkick");
+require("chart.js");
+require("chartkick/chart.js");
 import "../stylesheets/application";
 import 'select2';
 import 'select2/dist/css/select2.css';
+import Chart from 'chart.js/auto';
+
+global.Chart = Chart;
 
 window.jQuery = $;
 window.$ = $;
