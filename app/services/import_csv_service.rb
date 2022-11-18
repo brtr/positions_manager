@@ -64,14 +64,19 @@ class ImportCsvService
   private
 
   def store_model(row)
-    if row[0].include?('永续')
-      symbol = row[0].split(' 永续')[0]
+    split_keys = ['永续', 'Perpetual']
+    if split_keys.any? { |k| row[0].include?(k) }
+      symbol, _ = row[0].split(' 永续')
+      symbol = row[0].split(' Perpetual')[0] if symbol == row[0]
       amount, fee_symbol = row[1].split(' ')
-      return unless fee_symbol
-      from_symbol = symbol.split(fee_symbol)[0]
       price = currency_to_number(row[2])
-      qty = amount.to_f / price
-      trade_type = qty > 0 ? "sell" : "buy"
+      from_symbol = symbol.split(fee_symbol)[0]
+      revenue = row[4].split(' (')[0].to_f
+      return unless revenue
+      amount = amount.to_f
+      trade_type = amount > 0 ? 'sell' : 'buy'
+      amount = amount > 0 ? amount.abs - revenue : amount.abs + revenue
+      qty = amount / price
 
       record = UserPosition.where(
         source: @source,
