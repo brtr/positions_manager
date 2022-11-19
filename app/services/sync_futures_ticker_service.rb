@@ -38,6 +38,8 @@ class SyncFuturesTickerService
         from_symbol
       end.map{|k,v| v[0]}
 
+      result.delete_if { |r| r["symbol"].in?(['SRMUSDT', 'RAYUSDT']) }
+
       $redis.set("get_24hr_tickers", result.to_json)
     end
 
