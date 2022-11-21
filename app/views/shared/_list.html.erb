@@ -27,7 +27,7 @@
         <td><%= h.qty.round(4) %></td>
         <td><%= position_amount_display(h, snapshot) %></td>
         <td><%= "#{(h.cost_ratio(@total_summary[:total_cost]) * 100).round(3)}%" %></td>
-        <td style="width: 8%" class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= position_revenue_display(h) %></td>
+        <td style="width: 8%"><%= position_revenue_display(h) %></td>
         <td style="width: 8%" class="<%= h.margin_revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= h.margin_revenue %> <%= h.fee_symbol %></td>
         <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(3)}%" %></td>
         <td><%= "#{(h.revenue_ratio(@total_summary[:total_revenue]) * 100).round(3)}%" %></td>

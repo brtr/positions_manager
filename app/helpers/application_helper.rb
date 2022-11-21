@@ -85,9 +85,9 @@ module ApplicationHelper
   end
 
   def position_revenue_display(h)
-    str = "#{h.revenue.round(4)} #{h.fee_symbol}"
+    str = "<span class=#{h.revenue > 0 ? 'pos-num' : 'neg-num'}>#{h.revenue.round(4)} #{h.fee_symbol}</span>"
     last_revenue = h.last_revenue.to_f
-    str += "(<span class=#{last_revenue > 0 ? 'pos-roi' : 'neg-roi'}>#{last_revenue.round(4)}</span>)"
+    str += "(<span class=#{last_revenue > 0 ? 'pos-num' : 'neg-num'}>#{last_revenue.round(4)}</span>)"
     str.html_safe
   end
 
@@ -99,5 +99,10 @@ module ApplicationHelper
     str = "#{h.from_symbol} / #{h.fee_symbol}"
     return str if s.present?
     "(新) " + str
+  end
+
+  def get_roi(total_summary)
+    roi = ((total_summary[:total_revenue].to_f / total_summary[:total_cost].to_f) * 100).round(3)
+    "<span class=#{roi > 0 ? 'pos-num' : 'neg-num'}>#{roi}%</span>".html_safe
   end
 end
