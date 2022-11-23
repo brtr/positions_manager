@@ -25,16 +25,21 @@ class SnapshotPosition < ApplicationRecord
     records = SnapshotPosition.available.total_summary(user_id)
 
     {
-      total_cost: latest_summary[:total_cost] - records[:total_cost],
-      total_revenue: latest_summary[:total_revenue] - records[:total_revenue],
-      profit_count: latest_summary[:profit_count] - records[:profit_count],
-      profit_amount: latest_summary[:profit_amount] - records[:profit_amount],
-      loss_count: latest_summary[:loss_count] - records[:loss_count],
-      loss_amount: latest_summary[:loss_amount] - records[:loss_amount]
+      total_cost: display_number(latest_summary[:total_cost] - records[:total_cost]),
+      total_revenue: display_number(latest_summary[:total_revenue] - records[:total_revenue]),
+      profit_count: display_number(latest_summary[:profit_count] - records[:profit_count]),
+      profit_amount: display_number(latest_summary[:profit_amount] - records[:profit_amount]),
+      loss_count: display_number(latest_summary[:loss_count] - records[:loss_count]),
+      loss_amount: display_number(latest_summary[:loss_amount] - records[:loss_amount])
     }
   end
 
   def roi
     revenue / amount
+  end
+
+  private
+  def self.display_number(num)
+    num >= 1 || num <= -1 ? num.round(3) : ''
   end
 end

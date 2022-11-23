@@ -105,4 +105,11 @@ module ApplicationHelper
     roi = ((total_summary[:total_revenue].to_f / total_summary[:total_cost].to_f) * 100).round(3)
     "<span class=#{roi > 0 ? 'pos-num' : 'neg-num'}>#{roi}%</span>".html_safe
   end
+
+  def last_summary_display(data)
+    if data.to_f >= 1 || data.to_f <= -1
+      c = data > 0 ? 'pos-num' : 'neg-num'
+      "(<span class='#{c}'>#{data}</span>)".html_safe
+    end
+  end
 end
