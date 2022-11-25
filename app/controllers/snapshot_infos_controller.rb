@@ -11,14 +11,17 @@ class SnapshotInfosController < ApplicationController
   end
 
   def show
-    @page_index = params[:user_id].present? ? 4 : 2
+    user_id = params[:user_id].presence
+    @page_index = user_id.present? ? 4 : 2
     @info = SnapshotInfo.find_by(id: params[:id])
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
     records = @info.snapshot_positions
     records = records.where(from_symbol: params[:search]) if params[:search].present?
     @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
-    @total_summary = records.total_summary(params[:user_id].presence)
+    @total_summary = records.total_summary(user_id)
+    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: user_id, event_date: @info.event_date - 1.day})
+    @last_summary = snapshots.last_summary(user_id: user_id, data: records)
   end
 
   def positions_graphs

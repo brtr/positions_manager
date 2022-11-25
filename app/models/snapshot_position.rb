@@ -20,8 +20,8 @@ class SnapshotPosition < ApplicationRecord
     }
   end
 
-  def self.last_summary(user_id=nil)
-    latest_summary = UserPosition.total_summary(user_id)
+  def self.last_summary(user_id: nil, data: nil)
+    latest_summary = data.present? ? data.total_summary(user_id) : UserPosition.total_summary(user_id)
     records = SnapshotPosition.available.total_summary(user_id)
 
     {

@@ -11,9 +11,9 @@
   </div>
   <div>
     <div class="p-3">
-      <p>总投入: <%= @total_summary[:total_cost].round(3) %> / 总盈利: <%= @total_summary[:total_revenue].round(3) %></p>
-      <p>盈利总数量: <%= @total_summary[:profit_count] %> / 盈利总金额: <%= @total_summary[:profit_amount].round(3) %></p>
-      <p>亏损总数量: <%= @total_summary[:loss_count] %> / 亏损总金额: <%= @total_summary[:loss_amount].round(3) %> </p>
+      <p>总投入: <%= @total_summary[:total_cost].round(3) %> <%= last_summary_display(@last_summary[:total_cost]) %> / 总盈利: <%= @total_summary[:total_revenue].round(3) %> <%= last_summary_display(@last_summary[:total_revenue]) %> / 盈利和投入的比例: <%= get_roi(@total_summary)  %></p>
+      <p>盈利总数量: <%= @total_summary[:profit_count] %> <%= last_summary_display(@last_summary[:profit_count]) %> / 盈利总金额: <%= @total_summary[:profit_amount].round(3) %><%= last_summary_display(@last_summary[:profit_amount]) %> </p>
+      <p>亏损总数量: <%= @total_summary[:loss_count] %> <%= last_summary_display(@last_summary[:loss_count]) %> / 亏损总金额: <%= @total_summary[:loss_amount].round(3) %> <%= last_summary_display(@last_summary[:loss_amount]) %> </p>
     </div>
   </div>
   <div id="position-histories-container">
