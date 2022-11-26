@@ -1,11 +1,16 @@
 class SnapshotInfosController < ApplicationController
   def index
     if params[:user_id].present?
-      @page_index = 4
-      infos = SnapshotInfo.where(user_id: params[:user_id]).pluck(:id, :event_date)
+      if params[:is_synced].present?
+        @page_index = 8
+        infos = SnapshotInfo.synced.where(user_id: params[:user_id]).pluck(:id, :event_date)
+      else
+        @page_index = 4
+        infos = SnapshotInfo.uploaded.where(user_id: params[:user_id]).pluck(:id, :event_date)
+      end
     else
       @page_index = 2
-      infos = SnapshotInfo.where(user_id: nil).pluck(:id, :event_date)
+      infos = SnapshotInfo.synced.where(user_id: nil).pluck(:id, :event_date)
     end
     @results = split_event_dates(infos)
   end

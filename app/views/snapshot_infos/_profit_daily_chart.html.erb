@@ -10,7 +10,7 @@ document.addEventListener('turbolinks:load', () => {
     var chart_data = JSON.parse(ctx.canvas.dataset.data)
     const result = Object.values(chart_data)
     var myChart = new Chart(ctx, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: Object.keys(chart_data),
         datasets: [
