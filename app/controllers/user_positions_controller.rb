@@ -12,8 +12,8 @@ class UserPositionsController < ApplicationController
     @histories = @histories.reverse if sort_type == "desc"
     @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
     @total_summary = UserPosition.available.total_summary(current_user.id)
-    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: current_user.id, event_date: Date.yesterday})
-    @last_summary = snapshots.last_summary(user_id: current_user.id)
+    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'uploaded', user_id: current_user.id, event_date: Date.yesterday})
+    @last_summary = snapshots.last_summary(user_id: current_user.id, data: @total_summary)
     @snapshots = snapshots.to_a
   end
 
@@ -33,6 +33,8 @@ class UserPositionsController < ApplicationController
   end
 
   def refresh
+    GetPrivateUserPositionsInfoJob.perform_later(current_user.id)
+
     redirect_to user_positions_path, notice: "正在更新，请稍等刷新查看最新价格以及其他信息..."
   end
 end

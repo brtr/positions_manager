@@ -1,10 +1,8 @@
 require "rails_helper"
 
 RSpec.describe SnapshotInfosController, type: :controller do
-  let(:user) { create(:user) }
-  let(:snapshot_info) { create(:snapshot_info, user_id: user.id) }
+  let(:snapshot_info) { create(:snapshot_info) }
   before do
-    sign_in user
     10.times{ create(:snapshot_position, snapshot_info: snapshot_info) }
   end
 

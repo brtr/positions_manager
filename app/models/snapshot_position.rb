@@ -21,16 +21,15 @@ class SnapshotPosition < ApplicationRecord
   end
 
   def self.last_summary(user_id: nil, data: nil)
-    latest_summary = data.present? ? data.total_summary(user_id) : UserPosition.total_summary(user_id)
     records = SnapshotPosition.available.total_summary(user_id)
 
     {
-      total_cost: display_number(latest_summary[:total_cost] - records[:total_cost]),
-      total_revenue: display_number(latest_summary[:total_revenue] - records[:total_revenue]),
-      profit_count: display_number(latest_summary[:profit_count] - records[:profit_count]),
-      profit_amount: display_number(latest_summary[:profit_amount] - records[:profit_amount]),
-      loss_count: display_number(latest_summary[:loss_count] - records[:loss_count]),
-      loss_amount: display_number(latest_summary[:loss_amount] - records[:loss_amount])
+      total_cost: display_number(data[:total_cost] - records[:total_cost]),
+      total_revenue: display_number(data[:total_revenue] - records[:total_revenue]),
+      profit_count: display_number(data[:profit_count] - records[:profit_count]),
+      profit_amount: display_number(data[:profit_amount] - records[:profit_amount]),
+      loss_count: display_number(data[:loss_count] - records[:loss_count]),
+      loss_amount: display_number(data[:loss_amount] - records[:loss_amount])
     }
   end
 

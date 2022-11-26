@@ -2,7 +2,7 @@ class GetPublicUserPositionsJob < ApplicationJob
   queue_as :daily_job
 
   def perform
-    binance_data = BinanceFuturesService.get_positions
+    binance_data = BinanceFuturesService.new.get_positions
     okx_data = OkxFuturesService.get_positions
     huobi_data = HuobiFuturesService.get_positions
     ids = []

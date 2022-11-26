@@ -4,7 +4,7 @@ require 'rest-client'
 class SyncFuturesTickerService
   class << self
     def get_24hr_tickers
-      binance_24hr_tickers = BinanceFuturesService.get_24hr_tickers
+      binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
       okx_24hr_tickers = OkxFuturesService.get_24hr_tickers
 
       binance_24hr_tickers.map! do |ticker|

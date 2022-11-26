@@ -10,8 +10,8 @@ class PageController < ApplicationController
     @histories = @histories.reverse if sort_type == "desc"
     @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
     @total_summary = UserPosition.available.total_summary
-    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: Date.yesterday})
-    @last_summary = snapshots.last_summary
+    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: Date.yesterday})
+    @last_summary = snapshots.last_summary(data: @total_summary)
     @snapshots = snapshots.to_a
   end
 

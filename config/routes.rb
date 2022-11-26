@@ -14,6 +14,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :user_synced_positions, only: :index do
+    collection do
+      get  :refresh
+      post :add_key
+    end
+  end
+
   resources :snapshot_infos, only: [:index, :show] do
     get :positions_graphs, on: :collection
   end

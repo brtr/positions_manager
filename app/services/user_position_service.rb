@@ -1,9 +1,9 @@
 class UserPositionService
   class << self
-    def get_info(up, user_id=nil)
+    def get_info(up, user_id=nil, is_uploaded=false)
       get_current_price(up)
       get_margin_ratio(up)
-      get_last_revenue(up, user_id)
+      get_last_revenue(up, user_id, is_uploaded)
     end
 
     def get_current_price(up)
@@ -36,8 +36,10 @@ class UserPositionService
       up.update(margin_ratio: data["margin_ratio"])
     end
   
-    def get_last_revenue(up, user_id=nil)
-      snapshot = SnapshotPosition.joins(:snapshot_info).where(origin_symbol: up.origin_symbol, trade_type: up.trade_type, source: up.source, snapshot_info: {user_id: user_id, event_date: Date.yesterday}).take
+    def get_last_revenue(up, user_id=nil, is_uploaded=false)
+      infos = is_uploaded ? SnapshotInfo.uploaded : SnapshotInfo.synced
+      infos = infos.where(user_id: user_id, event_date: Date.yesterday)
+      snapshot = SnapshotPosition.joins(:snapshot_info).where(snapshot_info_id: infos.pluck(:id), origin_symbol: up.origin_symbol, trade_type: up.trade_type, source: up.source).take
       up.update(last_revenue: snapshot.revenue) if snapshot
     end
   end

@@ -1,16 +1,16 @@
 <div class="m-3">
-  <h3>上传仓位管理</h3>
+  <h3>同步仓位管理</h3>
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
-    上传交易记录
+    币安API KEY管理
   </button>
   <div class="mb-3 mt-3 col-6">
-    <%= form_tag user_positions_path, id: "search_targets", method: "GET" do %>
+    <%= form_tag user_synced_positions_path, id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
         <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "搜索交易对..." %>
         <button type="submit" class="btn btn-primary">确定</button>
-        <%= link_to "Reset", user_positions_path, class: 'btn btn-default' %>
-        <%= link_to "Refresh", refresh_user_positions_path, class: 'btn btn-warning' %>
-        <div class="mt-2 ms-2"><%= get_refresh_time(current_user.id) %></div>
+        <%= link_to "Reset", user_synced_positions_path, class: 'btn btn-default' %>
+        <%= link_to "Refresh", refresh_user_synced_positions_path, class: 'btn btn-warning' %>
+        <div class="mt-2 ms-2"><%= get_synced_refresh_time(current_user.id) %></div>
       </div>
     <% end %>
   </div>

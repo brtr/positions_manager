@@ -21,7 +21,7 @@ class SnapshotInfosController < ApplicationController
     @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
     @total_summary = records.total_summary(user_id)
     snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: user_id, event_date: @info.event_date - 1.day})
-    @last_summary = snapshots.last_summary(user_id: user_id, data: records)
+    @last_summary = snapshots.last_summary(user_id: user_id, data: @total_summary)
   end
 
   def positions_graphs

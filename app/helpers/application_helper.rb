@@ -76,6 +76,11 @@ module ApplicationHelper
     time == '' ? '' : "#{time_ago_in_words(time)} 之前"
   end
 
+  def get_synced_refresh_time(user_id=nil)
+    time = $redis.get("get_user_#{user_id}_synced_positions_refresh_time").to_datetime rescue ''
+    time == '' ? '' : "#{time_ago_in_words(time)} 之前"
+  end
+
   def position_amount_display(h, s=nil)
     str = "#{h.amount.round(4)} #{h.fee_symbol}"
     margin = h.amount - s.amount rescue 0
@@ -102,7 +107,7 @@ module ApplicationHelper
   end
 
   def get_roi(total_summary)
-    roi = ((total_summary[:total_revenue].to_f / total_summary[:total_cost].to_f) * 100).round(3)
+    roi = total_summary[:total_cost].to_f == 0 ? 0 : ((total_summary[:total_revenue].to_f / total_summary[:total_cost].to_f) * 100).round(3)
     "<span class=#{roi > 0 ? 'pos-num' : 'neg-num'}>#{roi}%</span>".html_safe
   end
 

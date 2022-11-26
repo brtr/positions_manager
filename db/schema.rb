@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_03_080255) do
+ActiveRecord::Schema.define(version: 2022_11_26_080118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2022_11_03_080255) do
     t.date "event_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "source_type"
     t.index ["event_date", "user_id"], name: "index_snapshot_infos_on_event_date_and_user_id"
     t.index ["event_date"], name: "index_snapshot_infos_on_event_date"
     t.index ["user_id"], name: "index_snapshot_infos_on_user_id"
@@ -59,6 +60,23 @@ ActiveRecord::Schema.define(version: 2022_11_03_080255) do
     t.index ["user_id"], name: "index_user_positions_on_user_id"
   end
 
+  create_table "user_synced_positions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "source"
+    t.string "origin_symbol"
+    t.string "from_symbol"
+    t.string "fee_symbol"
+    t.string "trade_type"
+    t.decimal "qty"
+    t.decimal "price"
+    t.decimal "current_price"
+    t.decimal "margin_ratio"
+    t.decimal "last_revenue"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_synced_positions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "email", default: "", null: false
@@ -73,6 +91,8 @@ ActiveRecord::Schema.define(version: 2022_11_03_080255) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "api_key"
+    t.string "secret_key"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["name"], name: "index_users_on_name"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
