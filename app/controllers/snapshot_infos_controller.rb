@@ -32,7 +32,11 @@ class SnapshotInfosController < ApplicationController
   def positions_graphs
     @page_index = 6
     infos = SnapshotInfo.includes(:snapshot_positions).where(user_id: nil, event_date: [Date.yesterday - 1.month..Date.yesterday]).order(event_date: :asc)
-    @records = infos.map{|info| {info.event_date => info.snapshot_positions.total_summary.merge(date: info.event_date)}}.inject(:merge)
+    @records = infos.map do |info|
+      total_summary = info.snapshot_positions.total_summary
+      last_summary = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: info.event_date - 1.day}).last_summary(data: total_summary)
+      {info.event_date => total_summary.merge(revenue_change: last_summary[:total_cost], date: info.event_date)}
+    end.inject(:merge)
   end
 
   private
