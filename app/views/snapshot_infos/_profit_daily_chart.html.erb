@@ -17,7 +17,7 @@ document.addEventListener('turbolinks:load', () => {
           {
             label: "总收益(每天)",
             data: result.map(i => {
-              return i.profit_amount
+              return i.total_revenue
             }),
             tension: 0.4,
             backgroundColor: value => {

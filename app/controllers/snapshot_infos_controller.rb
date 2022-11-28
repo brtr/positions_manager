@@ -35,7 +35,7 @@ class SnapshotInfosController < ApplicationController
     @records = infos.map do |info|
       total_summary = info.snapshot_positions.total_summary
       last_summary = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: info.event_date - 1.day}).last_summary(data: total_summary)
-      {info.event_date => total_summary.merge(revenue_change: last_summary[:total_cost], date: info.event_date)}
+      {info.event_date => total_summary.merge(revenue_change: last_summary[:total_revenue], date: info.event_date)}
     end.inject(:merge)
   end
 
