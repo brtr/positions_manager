@@ -31,7 +31,7 @@ class SnapshotInfosController < ApplicationController
 
   def positions_graphs
     @page_index = 6
-    infos = SnapshotInfo.includes(:snapshot_positions).where(user_id: nil, event_date: [Date.yesterday - 1.month..Date.yesterday]).order(event_date: :asc)
+    infos = SnapshotInfo.includes(:snapshot_positions).where(user_id: nil, event_date: [period_date..Date.yesterday]).order(event_date: :asc)
     @records = infos.map do |info|
       total_summary = info.snapshot_positions.total_summary
       last_summary = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: info.event_date - 1.day}).last_summary(data: total_summary)
@@ -40,6 +40,13 @@ class SnapshotInfosController < ApplicationController
   end
 
   private
+
+  def period_date
+    case params[:period]
+    when "quarter" then Date.today.last_quarter.to_date
+    else Date.today.last_month.to_date
+    end
+  end
 
   def split_event_dates(infos)
     date_records = []

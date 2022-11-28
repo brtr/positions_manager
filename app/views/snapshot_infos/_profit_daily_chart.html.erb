@@ -15,7 +15,7 @@ document.addEventListener('turbolinks:load', () => {
         labels: Object.keys(chart_data),
         datasets: [
           {
-            label: "总收益(每天)",
+            label: "绝对收益(每天)",
             data: result.map(i => {
               return i.total_revenue
             }),

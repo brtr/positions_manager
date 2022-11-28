@@ -1,5 +1,15 @@
-<div class="m-3" id="weekly_analysis_page">
+<div class="m-3 row" id="analysis_page">
   <h2>历史仓位变化曲线图</h2>
+  <div class="text-right mt-5 col-6">
+    <%= form_tag positions_graphs_snapshot_infos_path, id: "period_targets", method: "GET", class: "row" do %>
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="margin-left:3rem;width:33%;">
+        <%= radio_button_tag :period, "quarter", params[:period] == "quarter", class: "btn-check", id: "btnradio1", onclick: "this.form.submit();" %>
+        <label class="btn btn-outline-primary quarter" for="btnradio1">三个月</label>
+        <%= radio_button_tag :period, "month", params[:period] == "month", class: "btn-check", id: "btnradio2", onclick: "this.form.submit();" %>
+        <label class="btn btn-outline-primary month" for="btnradio2">一个月</label>
+      </div>
+    <% end %>
+  </div>
   <div class="chart mb-5">
     <div>
       <%= render partial: "profit_daily_chart" %>
