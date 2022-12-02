@@ -2,9 +2,8 @@
   <thead>
     <tr class="table-container-tr">
       <% positions_table_headers.each do |h| %>
-        <% next if h[:sort].in?(["cost_ratio", "margin_revenue", "roi", "revenue_ratio", "margin_ratio"]) %>
         <th scope="col">
-          <% if h[:sort] == "none" || h[:sort] == "best_revenue_date" %>
+          <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
           <% else %>
             <%= link_to "#{h[:name]}", snapshot_info_path(@info, ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
@@ -22,7 +21,12 @@
         <td><%= h.estimate_price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.qty.round(4) %></td>
         <td><%= h.amount.round(4) %> <%= h.fee_symbol %></td>
-        <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= h.revenue.round(4) %> <%= h.fee_symbol %></td>
+        <td><%= "#{(h.cost_ratio(@total_summary[:total_cost]) * 100).round(3)}%" %></td>
+        <td style="width: 8%"><%= position_revenue_display(h) %></td>
+        <td style="width: 8%" class="<%= h.margin_revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= h.margin_revenue %> <%= h.fee_symbol %></td>
+        <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(3)}%" %></td>
+        <td><%= "#{(h.revenue_ratio(@total_summary[:total_revenue]) * 100).round(3)}%" %></td>
+        <td><%= "#{(h.margin_ratio.to_f * 100).round(3)}%" %></td>
         <td><%= h.source %></td>
       </tr>
     <% end %>

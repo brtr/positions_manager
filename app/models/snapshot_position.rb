@@ -37,6 +37,18 @@ class SnapshotPosition < ApplicationRecord
     revenue / amount
   end
 
+  def cost_ratio(total_cost)
+    amount / total_cost
+  end
+
+  def revenue_ratio(total_revenue)
+    (revenue / total_revenue).abs
+  end
+
+  def margin_revenue
+    (revenue - last_revenue).round(4) rescue 0
+  end
+
   private
   def self.display_number(num)
     num >= 1 || num <= -1 ? num.round(3) : ''
