@@ -9,6 +9,7 @@ class SnapshotPosition < ApplicationRecord
     records = SnapshotPosition.available
     profit_records = records.profit
     loss_records = records.loss
+    infos = SnapshotInfo.includes(:snapshot_positions).where("event_date <= ?", Date.yesterday)
 
     {
       total_cost: records.sum(&:amount).to_f,
@@ -16,7 +17,11 @@ class SnapshotPosition < ApplicationRecord
       profit_count: profit_records.count,
       profit_amount: profit_records.sum(&:revenue),
       loss_count: loss_records.count,
-      loss_amount: loss_records.sum(&:revenue)
+      loss_amount: loss_records.sum(&:revenue),
+      max_profit: infos.max_profit(user_id),
+      max_profit_date: $redis.get("user_#{user_id}_positions_max_profit_date"),
+      max_loss: infos.max_loss(user_id),
+      max_loss_date: $redis.get("user_#{user_id}_positions_max_loss_date")
     }
   end
 
