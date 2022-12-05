@@ -5,11 +5,12 @@ class SnapshotPosition < ApplicationRecord
   scope :profit, -> { where("revenue > 0") }
   scope :loss, -> { where("revenue < 0") }
 
-  def self.total_summary(user_id=nil)
+  def self.total_summary(user_id=nil, is_synced=false)
     records = SnapshotPosition.available
     profit_records = records.profit
     loss_records = records.loss
     infos = SnapshotInfo.includes(:snapshot_positions).where("event_date <= ?", Date.yesterday)
+    redis_key = is_synced ? "user_#{user_id}_synced_positions" : "user_#{user_id}_positions"
 
     {
       total_cost: records.sum(&:amount).to_f,
@@ -18,10 +19,10 @@ class SnapshotPosition < ApplicationRecord
       profit_amount: profit_records.sum(&:revenue),
       loss_count: loss_records.count,
       loss_amount: loss_records.sum(&:revenue),
-      max_profit: infos.max_profit(user_id),
-      max_profit_date: $redis.get("user_#{user_id}_positions_max_profit_date"),
-      max_loss: infos.max_loss(user_id),
-      max_loss_date: $redis.get("user_#{user_id}_positions_max_loss_date")
+      max_profit: infos.max_profit(user_id, is_synced),
+      max_profit_date: $redis.get("#{redis_key}_max_profit_date"),
+      max_loss: infos.max_loss(user_id, is_synced),
+      max_loss_date: $redis.get("#{redis_key}_max_loss_date")
     }
   end
 
