@@ -6,7 +6,7 @@
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
           <% else %>
-            <% url = source_type == :public ? public_user_positions_path(ch_remote_params(params, h[:sort])) : user_positions_path(ch_remote_params(params, h[:sort])) %>
+            <% url = get_list_url(source_type, ch_remote_params(params, h[:sort])) %>
             <%= link_to "#{h[:name]}", url, remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
           <% end %>
           <% if h[:sort].in?(["roi", "margin_ratio"]) %>

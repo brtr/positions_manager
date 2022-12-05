@@ -117,4 +117,15 @@ module ApplicationHelper
       "(<span class='#{c}'>#{data}</span>)".html_safe
     end
   end
+
+  def get_list_url(source_type, params)
+    case source_type
+    when :public
+      public_user_positions_path(params)
+    when :private_synced
+      user_synced_positions_path(params)
+    else
+      user_positions_path(params)
+    end
+  end
 end
