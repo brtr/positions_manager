@@ -22,7 +22,10 @@ Rails.application.routes.draw do
   end
 
   resources :snapshot_infos, only: [:index, :show] do
-    get :positions_graphs, on: :collection
+    collection do
+      get :positions_graphs
+      get :export_roi
+    end
   end
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions

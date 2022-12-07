@@ -32,11 +32,31 @@ class SnapshotInfosController < ApplicationController
   def positions_graphs
     @page_index = 6
     infos = SnapshotInfo.includes(:snapshot_positions).where(user_id: nil, event_date: [period_date..Date.yesterday]).order(event_date: :asc)
+    @median = SnapshotInfo.get_median_roi
     @records = infos.map do |info|
       total_summary = info.snapshot_positions.total_summary
       last_summary = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: info.event_date - 1.day}).last_summary(data: total_summary)
       {info.event_date => total_summary.merge(revenue_change: last_summary[:total_revenue], date: info.event_date)}
     end.inject(:merge)
+  end
+
+  def export_roi
+    infos = SnapshotInfo.includes(:snapshot_positions).where(user_id: nil, event_date: [Date.today.last_quarter.to_date..Date.yesterday]).order(event_date: :desc)
+
+    file = CSV.generate(force_quotes: true) do |csv|
+      csv << ['日期', '总投入', '总收益', '收益占比']
+      infos.each do |info|
+        total_summary = info.snapshot_positions.total_summary
+        total_cost = total_summary[:total_cost]
+        total_revenue = total_summary[:total_revenue]
+        roi = ((total_revenue / total_cost) * 100).round(3).to_s + "%"
+        csv << [info.event_date, total_cost.round(3), total_revenue.round(3), roi]
+      end
+    end
+
+    respond_to do |format|
+      format.csv { send_data file, filename: "records.csv" }
+    end
   end
 
   private

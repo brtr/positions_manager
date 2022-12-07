@@ -1,6 +1,9 @@
 <div class="m-3 row" id="analysis_page">
-  <h2>历史仓位变化曲线图</h2>
-  <div class="text-right mt-5 col-6">
+  <h2>
+    历史仓位变化曲线图
+    <%= link_to "导出CSV", export_roi_snapshot_infos_path(format: :csv), class: "btn btn-primary" %>
+  </h2>
+  <div class="float-right mt-5 col-6">
     <%= form_tag positions_graphs_snapshot_infos_path, id: "period_targets", method: "GET", class: "row" do %>
       <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="margin-left:3rem;width:33%;">
         <%= radio_button_tag :period, "quarter", params[:period] == "quarter", class: "btn-check", id: "btnradio1", onclick: "this.form.submit();" %>
