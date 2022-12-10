@@ -25,4 +25,20 @@ RSpec.describe SnapshotInfosController, type: :controller do
       expect(response).to render_template(:show)
     end
   end
+
+  describe "GET positions_graphs" do
+    it "renders a successful response" do
+      get :positions_graphs
+
+      expect(response).to be_successful
+    end
+  end
+
+  describe "GET export_roi" do
+    it "generate CSV" do
+      get :export_roi, format: :csv
+
+      expect(response.header['Content-Type']).to include 'text/csv'
+    end
+  end
 end
