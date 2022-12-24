@@ -56,6 +56,59 @@ module ApplicationHelper
     ]
   end
 
+  def transactions_table_headers
+    [
+      {
+        name: "交易时间",
+        sort: "event_time"
+      },
+      {
+        name: "交易对",
+        sort: "none"
+      },
+      {
+        name: "类别",
+        sort: "none"
+      },
+      {
+        name: "成本价",
+        sort: "none"
+      },
+      {
+        name: "当前价",
+        sort: "none"
+      },
+      {
+        name: "数量",
+        sort: "none"
+      },
+      {
+        name: "总投入",
+        sort: "amount"
+      },
+      {
+        name: "币种投入/总投入",
+        sort: "none"
+      },
+      {
+        name: "预计收益",
+        sort: "revenue"
+      },
+      {
+        name: "预计ROI",
+        sort: "roi"
+      },
+      {
+        name: "预计收益/总收益",
+        sort: "none"
+      },
+      {
+        name: "来源",
+        sort: "none"
+      }
+    ]
+  end
+
   def change_sort_type(sort)
     sort == 'asc' ? "desc" : "asc"
   end

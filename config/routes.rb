@@ -28,6 +28,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :origin_transactions, only: [:index, :edit, :update]
+  resources :combine_transactions, only: :index
+
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/refresh_user_positions', to: 'page#refresh_user_positions', as: :refresh_public_user_positions
   get "/get_24hr_ticker" => "page#get_24hr_ticker", as: :get_24hr_ticker
