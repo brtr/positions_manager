@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_21_091515) do
+ActiveRecord::Schema.define(version: 2022_12_28_094200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,36 @@ ActiveRecord::Schema.define(version: 2022_12_21_091515) do
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "margin_ratio"
     t.decimal "last_revenue"
+  end
+
+  create_table "transactions_snapshot_infos", force: :cascade do |t|
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_date"], name: "index_transactions_snapshot_infos_on_event_date"
+  end
+
+  create_table "transactions_snapshot_records", force: :cascade do |t|
+    t.integer "transactions_snapshot_info_id"
+    t.string "order_id"
+    t.string "source"
+    t.string "original_symbol"
+    t.string "from_symbol"
+    t.string "to_symbol"
+    t.string "fee_symbol"
+    t.string "trade_type"
+    t.string "campaign"
+    t.decimal "price", default: "0.0", null: false
+    t.decimal "qty", default: "0.0", null: false
+    t.decimal "amount", default: "0.0", null: false
+    t.decimal "fee", default: "0.0", null: false
+    t.decimal "revenue", default: "0.0", null: false
+    t.decimal "roi", default: "0.0", null: false
+    t.decimal "current_price", default: "0.0", null: false
+    t.datetime "event_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["transactions_snapshot_info_id"], name: "index_snapshot_info_id"
   end
 
   create_table "user_positions", force: :cascade do |t|

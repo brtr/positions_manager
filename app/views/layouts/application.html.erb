@@ -34,12 +34,15 @@
               <%= link_to "历史仓位变化曲线图", positions_graphs_snapshot_infos_path, class: "nav-link #{@page_index == 6 ? 'active' : ''}" %>
             </li>
             <li class="nav-item dropdown">
-              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([8, 9]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([8, 9, 10]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 现货交易记录
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
                 <li class="nav-item">
                   <%= link_to "原始交易记录列表", origin_transactions_path, class: "nav-link #{@page_index == 8 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "原始交易记录快照", transactions_snapshot_infos_path, class: "nav-link #{@page_index == 10 ? 'active' : ''}" %>
                 </li>
                 <li class="nav-item">
                   <%= link_to "合并交易记录列表", combine_transactions_path, class: "nav-link #{@page_index == 9 ? 'active' : ''}" %>
