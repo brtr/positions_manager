@@ -29,4 +29,13 @@ $(document).on("ajax:before ajaxStart page:fetch turbolinks:click turbolinks:loa
 
   $('[data-bs-toggle="tooltip"]').tooltip({html: true});
   $('.select2-dropdown').select2();
+  $('.datepicker').datepicker({
+    language: 'zh-CN',
+    format: "yyyy-mm-dd",
+    autoclose: true,
+    forceParse: true,
+    todayBtn: true,
+    endDate: moment().subtract(1, 'day').toDate(),
+    initialDate: moment().subtract(1, 'day').toDate()
+  })
 });

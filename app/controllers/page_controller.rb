@@ -10,9 +10,11 @@ class PageController < ApplicationController
     @histories = @histories.reverse if sort_type == "desc"
     @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
     @total_summary = UserPosition.available.total_summary
-    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: Date.yesterday})
+    compare_date = params[:compare_date].presence || Date.yesterday
+    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: compare_date})
     @last_summary = snapshots.last_summary(data: @total_summary)
     @snapshots = snapshots.to_a
+    flash[:alert] = "找不到相应的快照" if @snapshots.blank?
   end
 
   def refresh_user_positions

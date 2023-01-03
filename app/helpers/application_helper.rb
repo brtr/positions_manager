@@ -142,10 +142,10 @@ module ApplicationHelper
     str.html_safe
   end
 
-  def position_revenue_display(h)
+  def position_revenue_display(h, s=nil)
     str = "<span class=#{h.revenue > 0 ? 'pos-num' : 'neg-num'}>#{h.revenue.round(4)} #{h.fee_symbol}</span>"
-    last_revenue = h.last_revenue.to_f
-    str += "(<span class=#{last_revenue > 0 ? 'pos-num' : 'neg-num'}>#{last_revenue.round(4)}</span>)"
+    return str.html_safe if s.nil?
+    str += "(<span class=#{s.revenue > 0 ? 'pos-num' : 'neg-num'}>#{s.revenue.round(4)}</span>)"
     str.html_safe
   end
 
