@@ -29,8 +29,9 @@ class UserPosition < ApplicationRecord
     (revenue / total_revenue).abs
   end
 
-  def margin_revenue(snapshot)
-    (revenue - snapshot.revenue).round(4) rescue 0
+  def margin_revenue
+    compare_revenue = $redis.get("user_positions_#{id}_compare_revenue").to_f
+    (revenue - compare_revenue).round(4) rescue 0
   end
 
   def self.total_summary(user_id=nil)

@@ -119,7 +119,8 @@ module ApplicationHelper
       sort_type: "#{change_sort_type(params[:sort_type])}",
       search: params[:search],
     }
-    res.merge(user_id: params[:user_id]) if params[:user_id]
+    res.merge!(user_id: params[:user_id]) if params[:user_id]
+    res.merge!(compare_date: params[:compare_date]) if params[:compare_date]
     res
   end
 
