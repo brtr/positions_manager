@@ -138,7 +138,7 @@ module ApplicationHelper
   def position_amount_display(h, s=nil)
     str = "#{h.amount.round(4)} #{h.fee_symbol}"
     margin = h.amount - s.amount rescue 0
-    return str if s.nil? || margin < 1 || margin > -1
+    return str if s.nil? || margin == 0 || (margin > 0 && margin < 1) || (margin < 0 && margin > -1)
     str += "(<span class=#{margin > 0 ? 'pos-num' : 'neg-num'}>#{margin.round(4)}</span>)"
     str.html_safe
   end
