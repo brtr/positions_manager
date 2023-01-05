@@ -1,11 +1,12 @@
-Feature: Public pages
+Feature: User Synced Positions pages
   Background:
-    Given I have 10 user positions
-    Given I have different snapshots
+    Given I am a new, authenticated user
+    Given I have 10 user synced positions with user id
+    Given I have synced snapshot with user id
 
   @javascript
-  Scenario: Visit Public positions page
-    When I visit the '/' page
+  Scenario: Visit User Synced positions page
+    When I visit the '/user_synced_positions' page
     Then I see '总投入' text
     Then I see '(-124.799)' text
     Then I see '总盈利' text
@@ -16,16 +17,10 @@ Feature: Public pages
      And I click on the button "确定"
     Then I should not see 'EOS' text
     Then I see 'BTC' text
-    When I fill '2022-11-05' into the 'compare_date' field
-     And I click on the button "确定"
-    Then I see '总投入' text
-    Then I see '-6.799' text
-    Then I see '总盈利' text
-    Then I see '345.017' text
 
   @javascript
-  Scenario: Visit Public positions page with sort
-    When I visit the '/' page
+  Scenario: Visit User Synced positions page with sort
+    When I visit the '/user_synced_positions' page
     Then I see '交易对' text
     Then I see '成本价' text
     When I click on the '预计收益' link
