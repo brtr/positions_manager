@@ -56,3 +56,13 @@ jobs:
         run: |
             bundle exec rspec
             bundle exec cucumber
+      - name: Report Status
+        if: always()
+        uses: ravsamhq/notify-slack-action@v1
+        with:
+          status: ${{ job.status }}
+          notification_title: "Github Actions CI Result"
+          message_format: "{emoji} *Test* {status_message} in <{commit_url}|{commit_sha}>"
+          notify_when: 'failure'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
