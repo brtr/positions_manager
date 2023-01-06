@@ -29,7 +29,6 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
-      SIDEKIQ_REDIS_URL: 'redis://127.0.0.1:6379'
       RAILS_HOST_NAME: '127.0.0.1'
       S3_BUCKET_NAME: coin-elite
       ACCESS_ID: ''

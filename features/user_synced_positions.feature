@@ -16,7 +16,7 @@ Feature: User Synced Positions pages
     When I fill 'BTC' into the 'search' field
      And I click on the button "确定"
     Then I should not see 'EOS' text
-    Then I should not see 'BTC' text
+    Then I see 'BTC' text
 
   @javascript
   Scenario: Visit User Synced positions page with sort
