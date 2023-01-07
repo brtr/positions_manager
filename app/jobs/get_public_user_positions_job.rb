@@ -48,7 +48,8 @@ class GetPublicUserPositionsJob < ApplicationJob
     UserPosition.where(user_id: nil).where.not(id: ids).each do |up|
       if up.binance?
         d = binance_data["positions"].select{|i| i["symbol"] == up.origin_symbol}.first
-        up.update(price: d["entryPrice"].to_f, qty: d["positionAmt"].to_f.abs) if d
+        qty = d.present? ? d["positionAmt"].to_f.abs : 0
+        up.update(qty: qty)
       else
         up.update(qty: 0)
       end
