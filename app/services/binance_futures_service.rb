@@ -47,6 +47,12 @@ class BinanceFuturesService
     do_request("get", url, payload)
   end
 
+  def get_my_trades(symbol)
+    url = BASE_URL + "/fapi/v1/userTrades?"
+    payload = {timestamp: get_timestamp, symbol: symbol}
+    do_request("get", url, payload)
+  end
+
   def get_24hr_tickers
     url = BASE_URL + "/fapi/v1/ticker/24hr"
     response = RestClient.get(url)

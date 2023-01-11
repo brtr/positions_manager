@@ -34,6 +34,11 @@ class UserPosition < ApplicationRecord
     (revenue - compare_revenue).round(4) rescue 0
   end
 
+  def last_snapshot
+    SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: Date.yesterday},
+                                                 origin_symbol: origin_symbol, trade_type: trade_type, source: source).take
+  end
+
   def self.total_summary(user_id=nil)
     records = user_id ? UserPosition.where(user_id: user_id) : UserPosition.where(user_id: nil)
     profit_records = records.select{|r| r.revenue > 0}

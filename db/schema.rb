@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_28_094200) do
+ActiveRecord::Schema.define(version: 2023_01_10_085350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,23 @@ ActiveRecord::Schema.define(version: 2022_12_28_094200) do
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "margin_ratio"
     t.decimal "last_revenue"
+  end
+
+  create_table "synced_transactions", force: :cascade do |t|
+    t.string "order_id"
+    t.string "trade_type"
+    t.string "source"
+    t.string "origin_symbol"
+    t.string "fee_symbol"
+    t.decimal "price"
+    t.decimal "qty"
+    t.decimal "amount"
+    t.decimal "fee"
+    t.decimal "revenue"
+    t.datetime "event_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_synced_transactions_on_order_id"
   end
 
   create_table "transactions_snapshot_infos", force: :cascade do |t|

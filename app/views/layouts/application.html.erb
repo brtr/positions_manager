@@ -31,6 +31,9 @@
               <%= link_to "公开合约仓位快照", snapshot_infos_path, class: "nav-link #{@page_index == 2 ? 'active' : ''}" %>
             </li>
             <li class="nav-item">
+              <%= link_to "公开合约交易记录", synced_transactions_path, class: "nav-link #{@page_index == 11 ? 'active' : ''}" %>
+            </li>
+            <li class="nav-item">
               <%= link_to "历史仓位变化曲线图", positions_graphs_snapshot_infos_path, class: "nav-link #{@page_index == 6 ? 'active' : ''}" %>
             </li>
             <li class="nav-item dropdown">

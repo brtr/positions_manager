@@ -1,0 +1,24 @@
+<div class="m-3 row">
+  <h3>合约交易记录列表</h3>
+  <div class="mb-3 col-3">
+    <%= form_tag synced_transactions_path, id: "search_targets", class: "position-relative", method: "GET" do %>
+      <div class="input-group mb-3">
+        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "搜索交易对..." %>
+        <button type="submit" class="btn btn-primary">确定</button>
+      </div>
+    <% end %>
+  </div>
+  <div class="mb-3 col-3">
+    <%= link_to "Reset", synced_transactions_path, class: 'btn btn-warning' %>
+  </div>
+  <div>
+    <div class="p-3">
+      <p>总投入: <%= @total_summary[:total_cost].to_f.round(3) %> / 总盈利: <%= @total_summary[:total_revenue].to_f.round(3) %> / 总手续费: <%= @total_summary[:total_fee].to_f.round(3) %> </p>
+      <p>盈利总数量: <%= @total_summary[:profit_count] %>  / 盈利总金额: <%= @total_summary[:profit_amount].to_f.round(3) %> </p>
+      <p>亏损总数量: <%= @total_summary[:loss_count] %>  / 亏损总金额: <%= @total_summary[:loss_amount].to_f.round(3) %> </p>
+    </div>
+  </div>
+  <div id="trading-histories-container">
+    <%= render partial: "list" %>
+  </div>
+</div>

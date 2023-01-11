@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   resources :origin_transactions, only: [:index, :edit, :update]
   resources :combine_transactions, only: :index
   resources :transactions_snapshot_infos, only: [:index, :show]
+  resources :synced_transactions, only: :index
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/refresh_user_positions', to: 'page#refresh_user_positions', as: :refresh_public_user_positions
