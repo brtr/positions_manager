@@ -136,6 +136,10 @@ module ApplicationHelper
         sort: "amount"
       },
       {
+        name: "手续费",
+        sort: "fee"
+      },
+      {
         name: "收益",
         sort: "revenue"
       },

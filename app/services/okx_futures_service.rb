@@ -14,6 +14,24 @@ class OkxFuturesService
       end
     end
 
+    def get_contract_value(instId)
+      begin
+        request_path = "/api/v5/public/instruments?instType=SWAP&instId=#{instId}"
+        do_request("get", request_path)
+      rescue => e
+        format_error_msg(e)
+      end
+    end
+
+    def get_orders
+      begin
+        request_path = "/api/v5/trade/orders-history-archive?instType=SWAP&state=filled"
+        do_request("get", request_path)
+      rescue => e
+        format_error_msg(e)
+      end
+    end
+
     def get_24hr_tickers
       begin
         url = BASE_URL + "/api/v5/market/tickers?instType=SWAP"

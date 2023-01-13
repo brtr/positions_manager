@@ -6,6 +6,8 @@ class GetBinanceFuturesTransactionsJob < ApplicationJob
 
     SyncedTransaction.transaction do
       binance_data.each do |d|
+        revenue = d['realizedPnl'].to_f
+        next if revenue == 0
         SyncedTransaction.where(order_id: d['orderId']).first_or_create(
           source: 'binance',
           origin_symbol: d['symbol'],
@@ -15,7 +17,7 @@ class GetBinanceFuturesTransactionsJob < ApplicationJob
           qty: d['qty'],
           amount: d['quoteQty'],
           fee: d['commission'],
-          revenue: d['realizedPnl'],
+          revenue: revenue,
           event_time: Time.at(d['time'].to_i / 1000)
         )
       end

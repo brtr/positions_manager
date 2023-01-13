@@ -22,6 +22,7 @@
         <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.qty.round(4) %></td>
         <td><%= h.amount.round(4) %> <%= h.fee_symbol %></td>
+        <td><%= h.fee.round(4) %> <%= h.fee_symbol %></td>
         <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= "#{h.revenue.round(4)} #{h.fee_symbol}" %></td>
         <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(3)}%" %></td>
         <td><%= h.source %></td>
