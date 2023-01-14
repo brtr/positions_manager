@@ -1,5 +1,8 @@
 <div class="m-3">
-  <h3>合约仓位列表</h3>
+  <h3>
+    合约仓位列表
+    <%= link_to "导出CSV", export_user_positions_path(format: :csv, search: params[:search], compare_date: params[:compare_date]), class: "btn btn-primary" %>
+  </h3>
   <div class="mb-3 col-6">
     <%= form_tag public_user_positions_path, id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">

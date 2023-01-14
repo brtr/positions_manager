@@ -180,19 +180,28 @@ module ApplicationHelper
     time == '' ? '' : "#{time_ago_in_words(time)} 之前"
   end
 
-  def position_amount_display(h, s=nil)
+  def position_amount_display(h, s=nil, html_safe: true)
     str = "#{h.amount.round(4)} #{h.fee_symbol}"
     margin = h.amount - s.amount rescue 0
     return str if s.nil? || margin == 0 || (margin > 0 && margin < 1) || (margin < 0 && margin > -1)
-    str += "(<span class=#{margin > 0 ? 'pos-num' : 'neg-num'}>#{margin.round(4)}</span>)"
-    str.html_safe
+    if html_safe
+      str += "(<span class=#{margin > 0 ? 'pos-num' : 'neg-num'}>#{margin.round(4)}</span>)"
+      str.html_safe
+    else
+      "#{str} (#{margin.round(4)})"
+    end
   end
 
-  def position_revenue_display(h, s=nil)
-    str = "<span class=#{h.revenue > 0 ? 'pos-num' : 'neg-num'}>#{h.revenue.round(4)} #{h.fee_symbol}</span>"
-    return str.html_safe if s.nil?
-    str += "(<span class=#{s.revenue > 0 ? 'pos-num' : 'neg-num'}>#{s.revenue.round(4)}</span>)"
-    str.html_safe
+  def position_revenue_display(h, s=nil, html_safe: true)
+    if html_safe
+      str = "<span class=#{h.revenue > 0 ? 'pos-num' : 'neg-num'}>#{h.revenue.round(4)} #{h.fee_symbol}</span>"
+      return str.html_safe if s.nil?
+      str += "(<span class=#{s.revenue > 0 ? 'pos-num' : 'neg-num'}>#{s.revenue.round(4)}</span>)"
+      str.html_safe
+    else
+      str = "#{h.revenue.round(4)} #{h.fee_symbol}"
+      s.present? ? "#{str} (#{s.revenue.round(4)})" : str
+    end
   end
 
   def trade_type_style(trade_type)

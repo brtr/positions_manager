@@ -26,6 +26,8 @@ Rails.application.routes.draw do
       get :positions_graphs
       get :export_roi
     end
+
+    get :export_user_positions, on: :member
   end
 
   resources :origin_transactions, only: [:index, :edit, :update]
@@ -34,6 +36,7 @@ Rails.application.routes.draw do
   resources :synced_transactions, only: :index
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
+  get '/export_user_positions', to: 'page#export_user_positions', as: :export_user_positions
   get '/refresh_user_positions', to: 'page#refresh_user_positions', as: :refresh_public_user_positions
   get "/get_24hr_ticker" => "page#get_24hr_ticker", as: :get_24hr_ticker
   get "/refresh_24hr_ticker" => "page#refresh_24hr_ticker", as: :refresh_24hr_ticker

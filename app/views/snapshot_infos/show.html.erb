@@ -1,6 +1,9 @@
 <div class="m-3">
-  <h2 class="mb-4 text-center">合约仓位历史快照 - <%= @info.event_date.to_s %></h2>
-  <div class="mb-3 col-6">
+  <h2 class="mb-4 row">
+    <%= link_to "导出CSV", export_user_positions_snapshot_info_path(@info, format: :csv, search: params[:search]), class: "btn btn-primary col-1" %>
+    <div class="text-center col-10">合约仓位历史快照 - <%= @info.event_date.to_s %></div>
+  </h2>
+  <div class="mb-3 col-2">
     <%= form_tag snapshot_info_path(@info, user_id: params[:user_id]), id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
         <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "搜索交易对..." %>
