@@ -8,16 +8,20 @@ class SyncFuturesTickerService
       okx_24hr_tickers = OkxFuturesService.get_24hr_tickers
 
       binance_24hr_tickers.map! do |ticker|
+        next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
         from_symbol = fetch_symbol(ticker["symbol"])
         {
           "symbol" => ticker["symbol"],
           "lastPrice" => ticker["lastPrice"],
           "priceChangePercent" => ticker["priceChangePercent"],
-          "bottomPriceRatio" => get_bottom_price_ratio(from_symbol, ticker["lastPrice"].to_f).to_s
+          "bottomPriceRatio" => get_bottom_price_ratio(from_symbol, ticker["lastPrice"].to_f).to_s,
+          "openPrice" => ticker["openPrice"],
+          "source" => "binance"
         }
       end
 
       okx_24hr_tickers.map! do |ticker|
+        next if Time.at(ticker["ts"].to_f / 1000) < Date.today
         from_symbol, to_symbol = ticker["instId"].split(/-/)
         open_price = ticker["sodUtc8"].to_f
         last_price = ticker["last"].to_f
@@ -26,19 +30,20 @@ class SyncFuturesTickerService
           "symbol" => from_symbol + to_symbol,
           "lastPrice" => last_price,
           "priceChangePercent" => (price_change * 100).round(3).to_s,
-          "bottomPriceRatio" => get_bottom_price_ratio(from_symbol, last_price).to_s
+          "bottomPriceRatio" => get_bottom_price_ratio(from_symbol, last_price).to_s,
+          "openPrice" => open_price,
+          "source" => "okx"
         }
       end
 
       result = (binance_24hr_tickers + okx_24hr_tickers).group_by do |d|
+        next if d.blank?
         symbol = d["symbol"]
         from_symbol = symbol.split(/USDT/)[0]
         from_symbol = symbol.split(/BUSD/)[0] if from_symbol == symbol
         from_symbol = symbol.split(/USD/)[0] if from_symbol == symbol
         from_symbol
-      end.map{|k,v| v[0]}
-
-      result.delete_if { |r| r["symbol"].in?(['SRMUSDT', 'RAYUSDT']) }
+      end.map{|k,v| v[0]}.compact
 
       $redis.set("get_24hr_tickers", result.to_json)
     end

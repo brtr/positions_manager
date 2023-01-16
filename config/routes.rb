@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   resources :combine_transactions, only: :index
   resources :transactions_snapshot_infos, only: [:index, :show]
   resources :synced_transactions, only: :index
+  resources :ranking_snapshots, only: :index
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/export_user_positions', to: 'page#export_user_positions', as: :export_user_positions

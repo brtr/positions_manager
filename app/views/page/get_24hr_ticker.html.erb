@@ -11,6 +11,7 @@
             <th>币种</th>
             <th>24小时涨幅</th>
             <th>半年内底部比例</th>
+            <th>来源</th>
           </tr>
         </thead>
         <tbody>
@@ -19,6 +20,7 @@
               <td><%= d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
+              <td><%= d["source"] %></td>
             </tr>
           <% end %>
         </tbody>
@@ -31,6 +33,7 @@
             <th>币种</th>
             <th>24小时跌幅</th>
             <th>半年内底部比例</th>
+            <th>来源</th>
           </tr>
         </thead>
         <tbody>
@@ -39,6 +42,7 @@
               <td><%= d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
+              <td><%= d["source"] %></td>
             </tr>
           <% end %>
         </tbody>
