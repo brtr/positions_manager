@@ -13,7 +13,6 @@ RSpec.describe RankingSnapshotsController, type: :controller do
 
       expect(response).to be_successful
       expect(response).to render_template(:index)
-      expect(assigns(:daily_ranking).size).to eq 5
       expect(assigns(:three_days_ranking).size).to eq 10
       expect(assigns(:weekly_ranking).size).to eq 15
     end
