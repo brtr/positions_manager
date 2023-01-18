@@ -1,7 +1,7 @@
 class OriginTransactionsController < ApplicationController
   def index
     @page_index = 8
-    sort = params[:sort].presence || "revenue"
+    sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
     txs = OriginTransaction.where(trade_type: 'buy').order("#{sort} #{sort_type}")
     txs = txs.where(campaign: params[:campaign]) if params[:campaign]
