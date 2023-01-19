@@ -9,5 +9,6 @@ FactoryBot.define do
     amount { 1 }
     fee { 0.1 }
     revenue { 1 }
+    event_time { Time.now }
   end
 end

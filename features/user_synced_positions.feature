@@ -8,10 +8,9 @@ Feature: User Synced Positions pages
   Scenario: Visit User Synced positions page
     When I visit the '/user_synced_positions' page
     Then I see '总投入' text
-    Then I see '(-124.799)' text
+    Then I see '(-138.419)' text
     Then I see '总盈利' text
-    Then I see '(392.55)' text
-    Then I see '(3.7202)' text
+    Then I see '(378.93)' text
     Then I see 'EOS' text
     When I fill 'BTC' into the 'search' field
      And I click on the button "确定"
