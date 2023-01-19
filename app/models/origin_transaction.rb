@@ -18,8 +18,9 @@ class OriginTransaction < ApplicationRecord
     JSON.parse result
   end
 
-  def revenue_ratio(total_cost)
-    (revenue / total_cost).abs
+  def revenue_ratio(total_revenue)
+    ratio = (revenue / total_revenue).abs
+    revenue > 0 ? ratio : ratio * -1
   end
 
   def cost_ratio(total_cost)

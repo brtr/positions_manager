@@ -26,7 +26,8 @@ class UserPosition < ApplicationRecord
   end
 
   def revenue_ratio(total_revenue)
-    (revenue / total_revenue).abs
+    ratio = (revenue / total_revenue).abs
+    revenue > 0 ? ratio : ratio * -1
   end
 
   def margin_revenue
