@@ -17,6 +17,7 @@ zh-CN:
     contract_trading:
       sell: 多
       buy: 空
+      adding_rate: 总盈利 / 总亏损
   activerecord:
     errors:
       models:

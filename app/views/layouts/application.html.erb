@@ -76,6 +76,9 @@
             <li class="nav-item">
               <%= link_to "24小时币种涨跌排名", ranking_snapshots_path, class: "nav-link #{@page_index == 5 ? 'active' : ''}" %>
             </li>
+            <li class="nav-item">
+              <%= link_to "最近一周内新增投入", recently_adding_positions_path, class: "nav-link #{@page_index == 12 ? 'active' : ''}" %>
+            </li>
           </ul>
         </div>
       </div>

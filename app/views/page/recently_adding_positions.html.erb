@@ -1,0 +1,44 @@
+<div class="m-3 row">
+  <div class="col-10 mx-auto">
+    <h3>
+      最近一周内新增投入
+      <%= link_to "Refresh", refresh_recently_adding_positions_path, class: 'btn btn-warning' %>
+    </h3>
+    <div>
+      <% summary = adding_positions_summary(@original_data) %>
+      <div class="pt-3">
+        <p>总新增投入金额: <%= summary[:total_amount] %></p>
+        <p>
+          总新增投入盈亏比: <%= "#{summary[:rate]}%" %>
+          <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.adding_rate") %>'>?</span>
+        </p>
+        <p>投入最多的币种: <%= summary[:max_symbol] %> 金额: <%= summary[:max_amount] %></p>
+      </div>
+    </div>
+    <div class="mt-3">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>币种</th>
+            <th>新增数量</th>
+            <th>新增金额</th>
+            <th>新增收益</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @data.each do |d| %>
+            <tr>
+              <td><%= d["symbol"] %></td>
+              <td><%= d["qty"] %></td>
+              <td><%= d["amount"] %></td>
+              <td><%= d["revenue"] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="p-4">
+        <%= paginate @data %>
+      </div>
+    </div>
+  </div>
+</div>

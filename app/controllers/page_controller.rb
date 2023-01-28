@@ -57,4 +57,16 @@ class PageController < ApplicationController
 
     redirect_to ranking_snapshots_path, notice: "正在更新，请稍等刷新查看最新排名..."
   end
+
+  def recently_adding_positions
+    @page_index = 12
+    @original_data = JSON.parse($redis.get('recently_adding_positions')) rescue []
+    @data = Kaminari.paginate_array(@original_data).page(params[:page]).per(15)
+  end
+
+  def refresh_recently_adding_positions
+    GetRecentlyAddingPositionsJob.perform_later
+
+    redirect_to recently_adding_positions_path, notice: "正在更新，请稍等刷新查看最新结果..."
+  end
 end
