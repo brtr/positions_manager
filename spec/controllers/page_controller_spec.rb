@@ -25,18 +25,26 @@ RSpec.describe PageController, type: :controller do
     end
   end
 
-  describe "GET get 24hr ticker" do
-    it "renders a successful response" do
-      get :get_24hr_ticker
-
-      expect(response).to be_successful
-      expect(response).to render_template(:get_24hr_ticker)
-    end
-  end
-
   describe "GET refresh 24hr ticker" do
     it "renders a successful response" do
       get :refresh_24hr_ticker
+
+      expect(response.code).to eq "302"
+    end
+  end
+
+  describe "GET recently adding positions" do
+    it "renders a successful response" do
+      get :recently_adding_positions
+
+      expect(response).to be_successful
+      expect(response).to render_template(:recently_adding_positions)
+    end
+  end
+
+  describe "GET refresh recently adding positions" do
+    it "renders a successful response" do
+      get :refresh_recently_adding_positions
 
       expect(response.code).to eq "302"
     end
