@@ -9,15 +9,16 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
     UserPosition.where(user_id: nil).available.each do |h|
       snapshot = snapshot_records.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first
       margin_qty = h.qty - snapshot&.qty.to_f
-      next if margin_qty <= 0
-      margin_amount = snapshot&.price.to_f * margin_qty
+      margin_amount = (h.amount - snapshot&.amount.to_f).round(3)
+      next if margin_amount < 1
+      open_amount = snapshot&.price.to_f * margin_qty
       last_amount = margin_qty * h.current_price
-      revenue = snapshot.nil? ? h.revenue : h.trade_type == 'sell' ? last_amount - margin_amount : margin_amount - last_amount
+      revenue = snapshot.nil? ? h.revenue : h.trade_type == 'sell' ? last_amount - open_amount : open_amount - last_amount
       result.push({
         symbol: h.origin_symbol,
         qty: margin_qty.round(3),
         revenue: revenue.round(3),
-        amount: (h.amount - snapshot&.amount.to_f).round(3)
+        amount: margin_amount
       })
     end
 
