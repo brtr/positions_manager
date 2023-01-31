@@ -8,7 +8,7 @@ Feature: Public pages
     When I visit the '/' page
     Then I see '总投入' text
     Then I see '(-124.799)' text
-    Then I see '总盈利' text
+    Then I see '绝对收益' text
     Then I see '(392.55)' text
     Then I see '(3.7202)' text
     Then I see 'EOS' text
@@ -20,7 +20,7 @@ Feature: Public pages
      And I click on the button "确定"
     Then I see '总投入' text
     Then I see '-6.799' text
-    Then I see '总盈利' text
+    Then I see '绝对收益' text
     Then I see '345.017' text
 
   @javascript
