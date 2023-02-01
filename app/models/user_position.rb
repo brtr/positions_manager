@@ -55,7 +55,11 @@ class UserPosition < ApplicationRecord
       max_profit: infos.max_profit(user_id),
       max_profit_date: $redis.get("user_#{user_id}_positions_max_profit_date"),
       max_loss: infos.max_loss(user_id),
-      max_loss_date: $redis.get("user_#{user_id}_positions_max_loss_date")
+      max_loss_date: $redis.get("user_#{user_id}_positions_max_loss_date"),
+      max_revenue: infos.max_revenue,
+      max_revenue_date: $redis.get('user_positions_max_revenue_date'),
+      min_revenue: infos.min_revenue,
+      min_revenue_date: $redis.get('user_positions_min_revenue_date')
     }
   end
 

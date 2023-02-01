@@ -22,6 +22,8 @@
       <p>亏损总数量: <%= @total_summary[:loss_count] %> <%= last_summary_display(@last_summary[:loss_count]) %> / 亏损总金额: <%= @total_summary[:loss_amount].round(3) %> <%= last_summary_display(@last_summary[:loss_amount]) %> </p>
       <p>历史最高盈利: <%= @total_summary[:max_profit].round(3) %> ( <%= @total_summary[:max_profit_date] %> )</p>
       <p>历史最高亏损: <%= @total_summary[:max_loss].round(3) %> ( <%= @total_summary[:max_loss_date] %> )</p>
+      <p>历史最高绝对收益: <%= @total_summary[:max_revenue].round(3) %> ( <%= @total_summary[:max_revenue_date] %> )</p>
+      <p>历史最低绝对收益: <%= @total_summary[:min_revenue].round(3) %> ( <%= @total_summary[:min_revenue_date] %> )</p>
     </div>
   </div>
   <div id="user-positions-container">
