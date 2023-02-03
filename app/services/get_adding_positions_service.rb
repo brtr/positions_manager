@@ -1,0 +1,34 @@
+class GetAddingPositionsService
+  class << self
+    def execute(from_date, to_date)
+      $redis.del('filters_adding_positions')
+      result = []
+
+      from_date_records = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: from_date})
+      to_date_records = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: to_date})
+
+      to_date_records.available.each do |h|
+        snapshot = from_date_records.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first
+        margin_qty = h.qty - snapshot&.qty.to_f
+        margin_amount = (h.amount - snapshot&.amount.to_f).round(3)
+        next if margin_amount < 1
+        open_amount = snapshot&.price.to_f * margin_qty
+        last_amount = margin_qty * h.estimate_price
+        revenue = snapshot.nil? ? h.revenue : h.trade_type == 'sell' ? last_amount - open_amount : open_amount - last_amount
+        price = margin_amount / margin_qty
+        result.push({
+          symbol: h.origin_symbol,
+          source: h.source,
+          price: price.round(3),
+          qty: margin_qty.round(3),
+          revenue: revenue.round(3),
+          amount: margin_amount,
+          roi: ((revenue / margin_amount) * 100).round(3),
+          amount_ratio: ((margin_amount / h.amount) * 100).round(3)
+        })
+      end
+
+      $redis.set('filters_adding_positions', result.to_json) if result.any?
+    end
+  end
+end

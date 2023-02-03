@@ -60,7 +60,16 @@ class PageController < ApplicationController
 
   def recently_adding_positions
     @page_index = 12
-    @original_data = JSON.parse($redis.get('recently_adding_positions')) rescue []
+    @to_date = Date.parse(params[:to_date]) rescue Date.yesterday
+    @from_date = params[:from_date].presence || @to_date - 1.week
+
+    if params[:from_date].present? || params[:to_date].present?
+      GetAddingPositionsService.execute(@from_date, @to_date)
+      @original_data = JSON.parse($redis.get('filters_adding_positions')) rescue []
+    else
+      @original_data = JSON.parse($redis.get('recently_adding_positions')) rescue []
+    end
+
     @data = Kaminari.paginate_array(@original_data).page(params[:page]).per(15)
   end
 
