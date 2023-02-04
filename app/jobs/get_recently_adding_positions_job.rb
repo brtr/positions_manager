@@ -11,9 +11,8 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
       margin_qty = h.qty - snapshot&.qty.to_f
       margin_amount = (h.amount - snapshot&.amount.to_f).round(3)
       next if margin_amount < 1
-      open_amount = snapshot&.price.to_f * margin_qty
       last_amount = margin_qty * h.current_price
-      revenue = snapshot.nil? ? h.revenue : h.trade_type == 'sell' ? last_amount - open_amount : open_amount - last_amount
+      revenue = snapshot.nil? ? h.revenue : h.trade_type == 'sell' ? last_amount - margin_amount : margin_amount - last_amount
       price = margin_amount / margin_qty
       result.push({
         symbol: h.origin_symbol,
