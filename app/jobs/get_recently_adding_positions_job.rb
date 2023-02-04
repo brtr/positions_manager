@@ -18,6 +18,7 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
         symbol: h.origin_symbol,
         source: h.source,
         price: price.round(3),
+        current_price: h.current_price.round(3),
         qty: margin_qty.round(3),
         revenue: revenue.round(3),
         amount: margin_amount,
