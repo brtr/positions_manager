@@ -2,7 +2,7 @@ class SnapshotInfosController < ApplicationController
   def index
     if params[:user_id].present?
       if params[:is_synced].present?
-        @page_index = 8
+        @page_index = 13
         infos = SnapshotInfo.synced.where(user_id: params[:user_id]).pluck(:id, :event_date)
       else
         @page_index = 4

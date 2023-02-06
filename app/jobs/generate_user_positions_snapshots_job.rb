@@ -8,10 +8,10 @@ class GenerateUserPositionsSnapshotsJob < ApplicationJob
     $redis.del('user__positions_max_profit_date')
     $redis.del('user__positions_max_loss')
     $redis.del('user__positions_max_loss_date')
-    $redis.del('user_positions_max_revenue')
-    $redis.del('user_positions_max_revenue_date')
-    $redis.del('user_positions_min_revenue')
-    $redis.del('user_positions_min_revenue_date')
+    $redis.del('user__positions_max_revenue')
+    $redis.del('user__positions_max_revenue_date')
+    $redis.del('user__positions_min_revenue')
+    $redis.del('user__positions_min_revenue_date')
 
     user_ids = UserPosition.where("qty != ?", 0).pluck(:user_id).compact.uniq
     user_ids.each do |user_id|
@@ -21,6 +21,10 @@ class GenerateUserPositionsSnapshotsJob < ApplicationJob
       $redis.del("user_#{user_id}_positions_max_profit_date")
       $redis.del("user_#{user_id}_positions_max_loss")
       $redis.del("user_#{user_id}_positions_max_loss_date")
+      $redis.del("user_#{user_id}_positions_max_revenue")
+      $redis.del("user_#{user_id}_positions_max_revenue_date")
+      $redis.del("user_#{user_id}_positions_min_revenue")
+      $redis.del("user_#{user_id}_positions_min_revenue_date")
     end
 
     user_ids = UserSyncedPosition.where("qty != ?", 0).pluck(:user_id).compact.uniq
@@ -31,6 +35,10 @@ class GenerateUserPositionsSnapshotsJob < ApplicationJob
       $redis.del("user_#{user_id}_synced_positions_max_profit_date")
       $redis.del("user_#{user_id}_synced_positions_max_loss")
       $redis.del("user_#{user_id}_synced_positions_max_loss_date")
+      $redis.del("user_#{user_id}_positions_max_revenue")
+      $redis.del("user_#{user_id}_positions_max_revenue_date")
+      $redis.del("user_#{user_id}_positions_min_revenue")
+      $redis.del("user_#{user_id}_positions_min_revenue_date")
     end
   end
 

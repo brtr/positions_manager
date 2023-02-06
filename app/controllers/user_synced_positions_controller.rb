@@ -12,7 +12,8 @@ class UserSyncedPositionsController < ApplicationController
     @histories = @histories.reverse if sort_type == "desc"
     @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
     @total_summary = UserSyncedPosition.available.total_summary(current_user.id)
-    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: current_user.id, event_date: Date.yesterday})
+    compare_date = params[:compare_date].presence || Date.yesterday
+    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: current_user.id, event_date: compare_date})
     @last_summary = snapshots.last_summary(user_id: current_user.id, data: @total_summary)
     @snapshots = snapshots.to_a
   end

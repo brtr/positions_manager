@@ -6,11 +6,9 @@ default: &default
 
 development:
   <<: *default
-  database: positions_manager_dev
 
 test:
   <<: *default
-  database: positions_manager_test
 
 stage:
   <<: *default

@@ -49,7 +49,11 @@ class UserSyncedPosition < ApplicationRecord
       max_profit: infos.max_profit(user_id, true),
       max_profit_date: $redis.get("user_#{user_id}_synced_positions_max_profit_date"),
       max_loss: infos.max_loss(user_id, true),
-      max_loss_date: $redis.get("user_#{user_id}_synced_positions_max_loss_date")
+      max_loss_date: $redis.get("user_#{user_id}_synced_positions_max_loss_date"),
+      max_revenue: infos.max_revenue(user_id, true),
+      max_revenue_date: $redis.get("user_#{user_id}_synced_positions_max_revenue_date"),
+      min_revenue: infos.min_revenue(user_id, true),
+      min_revenue_date: $redis.get("user_#{user_id}_synced_positions_min_revenue_date")
     }
   end
 end

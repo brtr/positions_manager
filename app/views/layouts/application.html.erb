@@ -54,7 +54,7 @@
             </li>
             <% if current_user %>
               <li class="nav-item dropdown">
-                <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([3, 4, 7]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([3, 4, 7, 13]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                   个人仓位管理
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
@@ -68,7 +68,7 @@
                     <%= link_to "同步仓位列表", user_synced_positions_path, class: "nav-link #{@page_index == 7 ? 'active' : ''}" %>
                   </li>
                   <li class="nav-item">
-                    <%= link_to "同步仓位快照", snapshot_infos_path(user_id: current_user.id, is_synced: 1), class: "nav-link #{@page_index == 8 ? 'active' : ''}" %>
+                    <%= link_to "同步仓位快照", snapshot_infos_path(user_id: current_user.id, is_synced: 1), class: "nav-link #{@page_index == 13 ? 'active' : ''}" %>
                   </li>
                 </ul>
               </li>

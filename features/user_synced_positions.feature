@@ -9,7 +9,7 @@ Feature: User Synced Positions pages
     When I visit the '/user_synced_positions' page
     Then I see '总投入' text
     Then I see '(-138.419)' text
-    Then I see '总盈利' text
+    Then I see '绝对收益' text
     Then I see '(378.93)' text
     Then I see 'EOS' text
     When I fill 'BTC' into the 'search' field
