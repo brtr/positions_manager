@@ -47,6 +47,15 @@ class OkxFuturesService
       end
     end
 
+    def get_account
+      begin
+        request_path = "/api/v5/account/balance"
+        do_request("get", request_path)
+      rescue => e
+        format_error_msg(e)
+      end
+    end
+
     private
     def do_request(method, request_path)
       url = BASE_URL + request_path

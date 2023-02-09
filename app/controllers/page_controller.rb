@@ -81,6 +81,7 @@ class PageController < ApplicationController
 
   def account_balance
     @page_index = 14
-    @data = BinanceFuturesService.new.get_positions
+    @binance_data = BinanceFuturesService.new.get_positions
+    @okx_data = OkxFuturesService.get_account
   end
 end

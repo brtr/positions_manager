@@ -12,9 +12,11 @@ module PageHelper
     }
   end
 
-  def account_balance_format(data)
-    {
-      rate: data['totalMaintMargin'].to_f / data['totalMarginBalance'].to_f
-    }.merge(data)
+  def account_balance_format(data, source_type)
+    if source_type == :binance
+      {rate: data['totalMaintMargin'].to_f / data['totalMarginBalance'].to_f}.merge(data)
+    else
+      data["data"][0]["details"].select{|x| x["ccy"] == "USDT"}.first
+    end
   end
 end

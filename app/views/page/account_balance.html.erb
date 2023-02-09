@@ -3,42 +3,89 @@
   <div class="row">
     <div class="col-9 ms-5">
       <dl class="row">
-        <% account = account_balance_format(@data) %>
+        <% account = account_balance_format(@binance_data, :binance) %>
         <dt class="col-sm-7">当前所需起始保证金总额(存在逐仓请忽略, 持仓所需起始保证金+当前挂单所需起始保证金)</dt>
-        <dd class="col-sm-5"><%= account['totalInitialMargin'] %></dd>
+        <dd class="col-sm-5"><%= account['totalInitialMargin'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">维持保证金总额</dt>
-        <dd class="col-sm-5"><%= account['totalMaintMargin'] %></dd>
+        <dd class="col-sm-5"><%= account['totalMaintMargin'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">账户总余额(未实现盈亏+保证金总余额)</dt>
-        <dd class="col-sm-5"><%= account['totalWalletBalance'] %></dd>
+        <dd class="col-sm-5"><%= account['totalWalletBalance'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">持仓未实现盈亏总额</dt>
-        <dd class="col-sm-5"><%= account['totalUnrealizedProfit'] %></dd>
+        <dd class="col-sm-5"><%= account['totalUnrealizedProfit'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">保证金总余额</dt>
-        <dd class="col-sm-5"><%= account['totalMarginBalance'] %></dd>
+        <dd class="col-sm-5"><%= account['totalMarginBalance'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">持仓所需起始保证金(基于最新标记价格)</dt>
-        <dd class="col-sm-5"><%= account['totalPositionInitialMargin'] %></dd>
+        <dd class="col-sm-5"><%= account['totalPositionInitialMargin'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">当前挂单所需起始保证金(基于最新标记价格)</dt>
-        <dd class="col-sm-5"><%= account['totalOpenOrderInitialMargin'] %></dd>
+        <dd class="col-sm-5"><%= account['totalOpenOrderInitialMargin'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">全仓账户余额</dt>
-        <dd class="col-sm-5"><%= account['totalCrossWalletBalance'] %></dd>
+        <dd class="col-sm-5"><%= account['totalCrossWalletBalance'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">全仓持仓未实现盈亏总额</dt>
-        <dd class="col-sm-5"><%= account['totalCrossUnPnl'] %></dd>
+        <dd class="col-sm-5"><%= account['totalCrossUnPnl'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">可用余额</dt>
-        <dd class="col-sm-5"><%= account['availableBalance'] %></dd>
+        <dd class="col-sm-5"><%= account['availableBalance'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">最大可转出余额</dt>
-        <dd class="col-sm-5"><%= account['maxWithdrawAmount'] %></dd>
+        <dd class="col-sm-5"><%= account['maxWithdrawAmount'].to_f.round(2) %></dd>
 
         <dt class="col-sm-7">保证金比率</dt>
-        <dd class="col-sm-5"><%= account[:rate].round(4) %></dd>
+        <dd class="col-sm-5"><%= (account[:rate] * 100).round(3) %>%</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h3 class="ms-5 mb-5">OKX合约账户信息(仅计算usdt资产)</h3>
+  <div class="row">
+    <div class="col-9 ms-5">
+      <dl class="row">
+        <% account = account_balance_format(@okx_data, :okx) %>
+        <dt class="col-sm-7">未实现盈亏</dt>
+        <dd class="col-sm-5"><%= account['upl'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">逐仓未实现盈亏</dt>
+        <dd class="col-sm-5"><%= account['isoUpl'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">可用保证金</dt>
+        <dd class="col-sm-5"><%= account['availEq'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">币种总权益</dt>
+        <dd class="col-sm-5"><%= account['eq'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">币种权益美金价值</dt>
+        <dd class="col-sm-5"><%= account['eqUsd'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">美金层面币种折算权益</dt>
+        <dd class="col-sm-5"><%= account['disEq'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">币种逐仓仓位权益</dt>
+        <dd class="col-sm-5"><%= account['isoEq'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">币种余额</dt>
+        <dd class="col-sm-5"><%= account['cashBal'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">可用余额</dt>
+        <dd class="col-sm-5"><%= account['availBal'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">币种占用金额</dt>
+        <dd class="col-sm-5"><%= account['frozenBal'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">挂单冻结数量</dt>
+        <dd class="col-sm-5"><%= account['ordFrozen'].to_f.round(2) %></dd>
+
+        <dt class="col-sm-7">币种杠杆倍数</dt>
+        <dd class="col-sm-5"><%= account['notionalLever'].to_f.round(2) %>%</dd>
+
+        <dt class="col-sm-7">保证金比率</dt>
+        <dd class="col-sm-5"><%= account['mgnRatio'].to_f.round(2) %>%</dd>
       </dl>
     </div>
   </div>
