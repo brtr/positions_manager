@@ -78,4 +78,9 @@ class PageController < ApplicationController
 
     redirect_to recently_adding_positions_path, notice: "正在更新，请稍等刷新查看最新结果..."
   end
+
+  def account_balance
+    @page_index = 14
+    @data = BinanceFuturesService.new.get_positions
+  end
 end

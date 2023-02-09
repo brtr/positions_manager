@@ -11,4 +11,10 @@ module PageHelper
       rate: (rate * 100).round(3)
     }
   end
+
+  def account_balance_format(data)
+    {
+      rate: data['totalMaintMargin'].to_f / data['totalMarginBalance'].to_f
+    }.merge(data)
+  end
 end

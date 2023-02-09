@@ -1,0 +1,45 @@
+<div class="m-3">
+  <h3 class="ms-5 mb-5">币安合约账户信息(仅计算usdt资产)</h3>
+  <div class="row">
+    <div class="col-9 ms-5">
+      <dl class="row">
+        <% account = account_balance_format(@data) %>
+        <dt class="col-sm-7">当前所需起始保证金总额(存在逐仓请忽略, 持仓所需起始保证金+当前挂单所需起始保证金)</dt>
+        <dd class="col-sm-5"><%= account['totalInitialMargin'] %></dd>
+
+        <dt class="col-sm-7">维持保证金总额</dt>
+        <dd class="col-sm-5"><%= account['totalMaintMargin'] %></dd>
+
+        <dt class="col-sm-7">账户总余额(未实现盈亏+保证金总余额)</dt>
+        <dd class="col-sm-5"><%= account['totalWalletBalance'] %></dd>
+
+        <dt class="col-sm-7">持仓未实现盈亏总额</dt>
+        <dd class="col-sm-5"><%= account['totalUnrealizedProfit'] %></dd>
+
+        <dt class="col-sm-7">保证金总余额</dt>
+        <dd class="col-sm-5"><%= account['totalMarginBalance'] %></dd>
+
+        <dt class="col-sm-7">持仓所需起始保证金(基于最新标记价格)</dt>
+        <dd class="col-sm-5"><%= account['totalPositionInitialMargin'] %></dd>
+
+        <dt class="col-sm-7">当前挂单所需起始保证金(基于最新标记价格)</dt>
+        <dd class="col-sm-5"><%= account['totalOpenOrderInitialMargin'] %></dd>
+
+        <dt class="col-sm-7">全仓账户余额</dt>
+        <dd class="col-sm-5"><%= account['totalCrossWalletBalance'] %></dd>
+
+        <dt class="col-sm-7">全仓持仓未实现盈亏总额</dt>
+        <dd class="col-sm-5"><%= account['totalCrossUnPnl'] %></dd>
+
+        <dt class="col-sm-7">可用余额</dt>
+        <dd class="col-sm-5"><%= account['availableBalance'] %></dd>
+
+        <dt class="col-sm-7">最大可转出余额</dt>
+        <dd class="col-sm-5"><%= account['maxWithdrawAmount'] %></dd>
+
+        <dt class="col-sm-7">保证金比率</dt>
+        <dd class="col-sm-5"><%= account[:rate].round(4) %></dd>
+      </dl>
+    </div>
+  </div>
+</div>
