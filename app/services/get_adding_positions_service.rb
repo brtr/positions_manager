@@ -1,6 +1,6 @@
 class GetAddingPositionsService
   class << self
-    def execute(from_date, to_date)
+    def execute(from_date, to_date, get_summary = false)
       $redis.del('filters_adding_positions')
       result = []
 
@@ -29,7 +29,11 @@ class GetAddingPositionsService
         })
       end
 
-      $redis.set('filters_adding_positions', result.to_json) if result.any?
+      if get_summary
+        result.sum{|d| d[:amount]}
+      else
+        $redis.set('filters_adding_positions', result.to_json) if result.any?
+      end
     end
   end
 end

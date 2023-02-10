@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   get "/recently_adding_positions" => "page#recently_adding_positions", as: :recently_adding_positions
   get "/refresh_recently_adding_positions" => "page#refresh_recently_adding_positions", as: :refresh_recently_adding_positions
   get "/account_balance" => "page#account_balance", as: :account_balance
+  get "/price_chart" => "page#price_chart", as: :price_chart
 
   get "/healthcheck", to: "page#health_check"
 end

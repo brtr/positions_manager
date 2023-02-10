@@ -84,4 +84,8 @@ class PageController < ApplicationController
     @binance_data = BinanceFuturesService.new.get_positions
     @okx_data = OkxFuturesService.get_account
   end
+
+  def price_chart
+    @chart_data = JSON.parse($redis.get('monthly_chart_data')) rescue []
+  end
 end
