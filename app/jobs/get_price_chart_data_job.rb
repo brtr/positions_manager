@@ -11,7 +11,8 @@ class GetPriceChartDataJob < ApplicationJob
 
     position_data = {}
     (from_date..to_date).each do |date|
-      position_data[date.to_s] = GetAddingPositionsService.execute(date + 1.day, date, true)
+      target_date = date + 1.day
+      position_data[target_date.to_s] = GetAddingPositionsService.execute(date, target_date, true)
     end
 
     result = {}

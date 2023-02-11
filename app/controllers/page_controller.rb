@@ -86,6 +86,7 @@ class PageController < ApplicationController
   end
 
   def price_chart
+    @page_index = 15
     @chart_data = JSON.parse($redis.get('monthly_chart_data')) rescue []
   end
 end
