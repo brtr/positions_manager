@@ -87,6 +87,7 @@ class PageController < ApplicationController
 
   def price_chart
     @page_index = 15
+    GetPriceChartDataService.execute(params[:period])
     @chart_data = JSON.parse($redis.get('monthly_chart_data')) rescue []
   end
 end

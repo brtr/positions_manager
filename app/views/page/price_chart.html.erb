@@ -2,6 +2,16 @@
   <h2>
     大盘走势和新增投入对比图
   </h2>
+  <div class="mt-5">
+    <%= form_tag price_chart_path, id: "period_targets", method: "GET", class: "row" do %>
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="margin-left:3rem;width:33%;">
+        <%= radio_button_tag :period, "3", params[:period] == "3", class: "btn-check", id: "btnradio1", onclick: "this.form.submit();" %>
+        <label class="btn btn-outline-primary quarter" for="btnradio1">三个月</label>
+        <%= radio_button_tag :period, "1", params[:period] == "1", class: "btn-check", id: "btnradio2", onclick: "this.form.submit();" %>
+        <label class="btn btn-outline-primary month" for="btnradio2">一个月</label>
+      </div>
+    <% end %>
+  </div>
   <div class="chart mb-5">
     <div>
       <%= render partial: "price_chart" %>
