@@ -20,7 +20,10 @@ document.addEventListener('turbolinks:load', () => {
               return i.revenue_data
             }),
             tension: 0.4,
-            backgroundColor: 'rgb(255, 99, 132)',
+            backgroundColor: value => {
+              const rate = Object.values(value)[3];
+              return rate > 0 ? 'rgb(54, 162, 235)' : 'rgb(255, 99, 132)'
+            },
             yAxisID: 'y'
           },
           {
