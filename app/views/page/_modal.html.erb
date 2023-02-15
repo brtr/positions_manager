@@ -1,0 +1,22 @@
+<div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">页面过滤配置</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with url: set_public_positions_filter_path, method: :post do |f| %>
+        <div class="modal-body">
+          <div class="field mb-4">
+            <%= f.label :max_amount, '请输入总投入上限' %>
+            <%= f.text_field :max_amount, value: @max_amount, class: "input-sm form-control" %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <%= f.submit "确定", class: "btn btn-primary", data: {disable_with: "提交中..."}%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

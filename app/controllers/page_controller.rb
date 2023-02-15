@@ -1,10 +1,13 @@
 class PageController < ApplicationController
   def user_positions
     @page_index = 1
+    @flag = params[:switch_filter].nil? || params[:switch_filter].to_i == 1
+    @max_amount = $redis.get('max_amount_filter_flag').to_f
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
     histories = UserPosition.available.where(user_id: nil)
     histories = histories.where(from_symbol: params[:search].upcase) if params[:search].present?
+    histories = histories.select{|h| h.amount < @max_amount} if @flag && @max_amount > 0
     parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
     @histories = @histories.reverse if sort_type == "desc"
@@ -89,5 +92,11 @@ class PageController < ApplicationController
     @page_index = 15
     GetPriceChartDataService.execute(params[:period])
     @chart_data = JSON.parse($redis.get('monthly_chart_data')) rescue []
+  end
+
+  def set_public_positions_filter
+    $redis.set('max_amount_filter_flag', params[:max_amount])
+
+    redirect_to root_path
   end
 end

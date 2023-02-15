@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   get "/refresh_recently_adding_positions" => "page#refresh_recently_adding_positions", as: :refresh_recently_adding_positions
   get "/account_balance" => "page#account_balance", as: :account_balance
   get "/price_chart" => "page#price_chart", as: :price_chart
+  post "/set_public_positions_filter" => "page#set_public_positions_filter", as: :set_public_positions_filter
 
   get "/healthcheck", to: "page#health_check"
 end

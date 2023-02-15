@@ -166,6 +166,7 @@ module ApplicationHelper
     }
     res.merge!(user_id: params[:user_id]) if params[:user_id]
     res.merge!(compare_date: params[:compare_date]) if params[:compare_date]
+    res.merge!(switch_filter: params[:switch_filter]) if params[:switch_filter]
     res
   end
 

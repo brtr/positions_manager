@@ -2,6 +2,9 @@
   <h3>
     合约仓位列表
     <%= link_to "导出CSV", export_user_positions_path(format: :csv, search: params[:search], compare_date: params[:compare_date]), class: "btn btn-primary" %>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#configModal">
+      列表过滤配置
+    </button>
   </h3>
   <div class="mb-3 col-6">
     <%= form_tag public_user_positions_path, id: "search_targets", method: "GET" do %>
@@ -12,6 +15,11 @@
         <%= link_to "Reset", public_user_positions_path, class: 'btn btn-default' %>
         <%= link_to "Refresh", refresh_public_user_positions_path, class: 'btn btn-warning' %>
         <div class="mt-2 ms-2"><%= get_refresh_time %></div>
+      </div>
+      <div class="form-check form-switch">
+        <%= hidden_field_tag :switch_filter, 0 %>
+        <%= check_box_tag :switch_filter, 1, @flag, class: "form-check-input", id: "filterSwitch", onchange: "this.form.submit();" %>
+        <label class="form-check-label" for="filterSwitch">过滤总投入</label>
       </div>
     <% end %>
   </div>
@@ -30,3 +38,5 @@
     <%= render partial: "shared/list", locals: { source_type: :public } %>
   </div>
 </div>
+
+<%= render partial: "modal" %>
