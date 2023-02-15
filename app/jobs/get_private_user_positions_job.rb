@@ -20,7 +20,7 @@ class GetPrivateUserPositionsJob < ApplicationJob
     UserSyncedPosition.where(user_id: user_id).where.not(id: ids).each do |up|
       if up.binance?
         d = binance_data["positions"].select{|i| i["symbol"] == up.origin_symbol}.first
-        t_type = d["positionAmt"].to_f > 0 ? "sell" : "buy"
+        t_type = d["positionAmt"].to_f > 0 ? "sell" : "buy" rescue nil
         if d && up.trade_type == t_type
           up.update(price: d["entryPrice"].to_f, qty: d["positionAmt"].to_f.abs)
         else
