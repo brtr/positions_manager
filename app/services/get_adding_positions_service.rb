@@ -5,7 +5,11 @@ class GetAddingPositionsService
       result = []
 
       from_date_records = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: from_date})
-      to_date_records = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: to_date})
+      to_date_records = if to_date.to_s == Date.today.to_s
+                          UserPosition.where(user_id: nil)
+                        else
+                          SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: to_date})
+                        end
 
       to_date_records.available.each do |h|
         snapshot = from_date_records.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first

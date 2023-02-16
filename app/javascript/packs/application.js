@@ -35,7 +35,7 @@ $(document).on("ajax:before ajaxStart page:fetch turbolinks:click turbolinks:loa
     autoclose: true,
     forceParse: true,
     todayBtn: true,
-    endDate: moment().subtract(1, 'day').toDate(),
-    initialDate: moment().subtract(1, 'day').toDate()
+    endDate: moment().toDate(),
+    initialDate: moment().toDate()
   })
 });
