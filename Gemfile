@@ -36,6 +36,7 @@ gem "sidekiq-scheduler"
 gem 'rest-client'
 gem 'binance-connector-ruby'
 gem "sentry-raven"
+gem 'whenever', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
