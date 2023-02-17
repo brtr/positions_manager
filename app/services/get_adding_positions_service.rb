@@ -16,7 +16,7 @@ class GetAddingPositionsService
         margin_qty = h.qty - snapshot&.qty.to_f
         margin_amount = (h.amount - snapshot&.amount.to_f).round(3)
         next if margin_amount < 1
-        current_price = UserPosition.where(origin_symbol: h.origin_symbol, trade_type: h.trade_type, source: h.source).take&.current_price || h.estimate_price
+        current_price = UserPosition.where(user_id: nil, origin_symbol: h.origin_symbol, trade_type: h.trade_type, source: h.source).take&.current_price || h.estimate_price
         last_amount = margin_qty * current_price
         revenue = snapshot.nil? ? h.revenue : h.trade_type == 'sell' ? last_amount - margin_amount : margin_amount - last_amount
         price = margin_amount / margin_qty
