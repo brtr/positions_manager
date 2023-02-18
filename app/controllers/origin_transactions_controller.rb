@@ -27,6 +27,12 @@ class OriginTransactionsController < ApplicationController
     redirect_to origin_transactions_path
   end
 
+  def refresh
+    GetSpotTransactionsJob.perform_later
+
+    redirect_to origin_transactions_path, notice: "正在更新，请稍等刷新查看最新价格以及其他信息..."
+  end
+
   private
   def tx_params
     params.require(:origin_transaction).permit(:campaign)

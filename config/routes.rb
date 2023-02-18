@@ -30,7 +30,10 @@ Rails.application.routes.draw do
     get :export_user_positions, on: :member
   end
 
-  resources :origin_transactions, only: [:index, :edit, :update]
+  resources :origin_transactions, only: [:index, :edit, :update] do
+    get :refresh, on: :collection
+  end
+
   resources :combine_transactions, only: :index
   resources :transactions_snapshot_infos, only: [:index, :show]
   resources :synced_transactions, only: :index

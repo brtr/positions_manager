@@ -7,8 +7,9 @@
         <%= select_tag(:campaign, options_for_select(OriginTransaction.pluck(:campaign).compact.uniq, params[:campaign]),{ prompt: '请选择campaign...', class: 'select2-dropdown form-control', onchange: 'this.form.submit()' }) %>
         <span class='ms-3'></span>
         <%= select_tag(:source, options_for_select(OriginTransaction.pluck(:source).compact.uniq, params[:source]),{ prompt: '请选择来源...', class: 'select2-dropdown form-control', onchange: 'this.form.submit()' }) %>
-        <button type="submit" class="btn btn-primary ms-3">确定</button>
-        <%= link_to "Reset", origin_transactions_path, class: 'btn btn-warning' %>
+        <button type="submit" class="btn btn-primary mx-3">确定</button>
+        <%= link_to "Reset", origin_transactions_path, class: 'btn btn-warning me-3' %>
+        <%= link_to "Refresh", refresh_origin_transactions_path, class: 'btn btn-success' %>
       </div>
     <% end %>
   </div>
