@@ -1,12 +1,14 @@
 <div class="m-3 row">
   <h3>合并交易记录列表</h3>
-  <div class="mb-3 col-3">
+  <div class="mb-3 mt-3 col-4">
     <%= form_tag combine_transactions_path, id: "search_targets", class: "position-relative", method: "GET" do %>
-      <%= select_tag(:source, options_for_select(CombineTransaction.pluck(:source).compact.uniq, params[:source]),{ prompt: '请选择来源...', class: 'select2-dropdown', onchange: 'this.form.submit()' }) %>
+      <div class="input-group mb-3">
+        <%= text_field_tag :search, params[:search], class: "form-control me-3", placeholder: "搜索交易对..." %>
+        <%= select_tag(:source, options_for_select(CombineTransaction.pluck(:source).compact.uniq, params[:source]),{ prompt: '请选择来源...', class: 'select2-dropdown form-control', onchange: 'this.form.submit()' }) %>
+        <button type="submit" class="btn btn-primary mx-3">确定</button>
+        <%= link_to "Reset", combine_transactions_path, class: 'btn btn-warning me-3' %>
+      </div>
     <% end %>
-  </div>
-  <div class="mb-3 col-3">
-    <%= link_to "Reset", combine_transactions_path, class: 'btn btn-warning' %>
   </div>
   <div>
     <div class="p-3">
