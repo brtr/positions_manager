@@ -1,0 +1,47 @@
+<div class="m-3 row">
+  <div class="col-10 mx-auto">
+    <h3>
+      <%= "#{params[:origin_symbol]}历史投入" %>
+    </h3>
+    <div class="mt-3">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>时间</th>
+            <th>类别</th>
+            <th>平均成本价</th>
+            <th>最新价格</th>
+            <th>新增数量</th>
+            <th>新增金额</th>
+            <th>
+              新增收益
+              <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue") %>'>?</span>
+            </th>
+            <th>新增收益占新增金额的占比</th>
+            <th>新增金额占当前该币种总仓位的占比</th>
+            <th>来源</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @data.each do |d| %>
+            <tr>
+              <td><%= d.event_date.to_s %></td>
+              <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
+              <td><%= d.price %></td>
+              <td><%= d.current_price %></td>
+              <td><%= d.qty %></td>
+              <td><%= d.amount %></td>
+              <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue %></td>
+              <td><%= "#{d.roi}%" %></td>
+              <td><%= "#{d.amount_ratio}%" %></td>
+              <td><%= d.source %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="p-4">
+        <%= paginate @data %>
+      </div>
+    </div>
+  </div>
+</div>

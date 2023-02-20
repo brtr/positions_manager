@@ -15,7 +15,7 @@
       <% end %>
     </div>
     <div>
-      <% summary = adding_positions_summary(@original_data) %>
+      <% summary = adding_positions_summary(@data) %>
       <div class="pt-3">
         <p>总新增投入金额: <%= summary[:total_amount] %></p>
         <p>
@@ -30,6 +30,7 @@
         <thead>
           <tr class="table-container-tr">
             <th>币种</th>
+            <th>类别</th>
             <th>平均成本价</th>
             <th>最新价格</th>
             <th>新增数量</th>
@@ -46,15 +47,16 @@
         <tbody>
           <% @data.each do |d| %>
             <tr>
-              <td><%= d['symbol'] %></td>
-              <td><%= d['price'] %></td>
-              <td><%= d['current_price'] %></td>
-              <td><%= d['qty'] %></td>
-              <td><%= d['amount'] %></td>
-              <td class="<%= d['revenue'].to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d['revenue'] %></td>
-              <td><%= "#{d['roi']}%" %></td>
-              <td><%= "#{d['amount_ratio']}%" %></td>
-              <td><%= d['source'] %></td>
+              <td><%= link_to d.origin_symbol, position_detail_path(origin_symbol: d.origin_symbol, source: d.source), target: '_blank' %></td>
+              <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
+              <td><%= d.price %></td>
+              <td><%= d.current_price %></td>
+              <td><%= d.qty %></td>
+              <td><%= d.amount %></td>
+              <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue %></td>
+              <td><%= "#{d.roi}%" %></td>
+              <td><%= "#{d.amount_ratio}%" %></td>
+              <td><%= d.source %></td>
             </tr>
           <% end %>
         </tbody>

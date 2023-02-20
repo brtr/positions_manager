@@ -1,0 +1,2 @@
+class AddingPositionsHistory < ApplicationRecord
+end

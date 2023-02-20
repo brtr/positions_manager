@@ -64,20 +64,12 @@ class PageController < ApplicationController
   def recently_adding_positions
     @page_index = 12
     @to_date = Date.parse(params[:to_date]) rescue Date.yesterday
-    @from_date = params[:from_date].presence || @to_date - 1.week
-
-    if params[:from_date].present? || params[:to_date].present?
-      GetAddingPositionsService.execute(@from_date, @to_date)
-      @original_data = JSON.parse($redis.get('filters_adding_positions')) rescue []
-    else
-      @original_data = JSON.parse($redis.get('recently_adding_positions')) rescue []
-    end
-
-    @data = Kaminari.paginate_array(@original_data).page(params[:page]).per(15)
+    @from_date = Date.parse(params[:from_date]) rescue @to_date - 1.week
+    @data = AddingPositionsHistory.where(event_date: (@from_date..@to_date)).page(params[:page]).per(15)
   end
 
   def refresh_recently_adding_positions
-    GetRecentlyAddingPositionsJob.perform_later
+    GetAddingPositionsHistoriesJob.perform_later
 
     redirect_to recently_adding_positions_path, notice: "正在更新，请稍等刷新查看最新结果..."
   end
@@ -98,5 +90,9 @@ class PageController < ApplicationController
     $redis.set('max_amount_filter_flag', params[:max_amount])
 
     redirect_to root_path
+  end
+
+  def position_detail
+    @data = AddingPositionsHistory.where(origin_symbol: params[:origin_symbol], source: params[:source]).order(event_date: :desc).page(params[:page]).per(15)
   end
 end

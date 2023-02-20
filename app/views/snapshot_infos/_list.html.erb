@@ -16,7 +16,7 @@
     <% @records.each do |h| %>
       <% snapshot = @snapshots.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first %>
       <tr>
-        <td><%= h.from_symbol %> / <%= h.fee_symbol %></td>
+        <td><%= link_to display_symbol(h, snapshot), position_detail_path(origin_symbol: h.origin_symbol, source: h.source), target: '_blank' %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
         <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.estimate_price.to_f.round(4) %> <%= h.fee_symbol %></td>

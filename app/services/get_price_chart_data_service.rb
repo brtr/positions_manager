@@ -8,10 +8,8 @@ class GetPriceChartDataService
       btc_data = JSON.parse(response.body)
 
       position_data = {}
-      (from_date..to_date).each do |date|
-        target_date = date + 1.day
-        position_data[target_date.to_s] = GetAddingPositionsService.execute(date, target_date, true)
-      end
+      AddingPositionsHistory.where(event_date: (from_date..to_date)).order(event_date: :asc).group_by(&:event_date)
+                            .map{|date, data| position_data[date.to_s] = data.sum(&:amount)}
 
       revenue_data = {}
       SnapshotInfo.where(source_type: 'synced', user_id: nil, event_date: (from_date..to_date)).order(event_date: :asc)

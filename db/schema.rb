@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_16_085306) do
+ActiveRecord::Schema.define(version: 2023_02_20_084155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "adding_positions_histories", force: :cascade do |t|
+    t.string "origin_symbol"
+    t.string "from_symbol"
+    t.string "fee_symbol"
+    t.string "source"
+    t.string "trade_type"
+    t.decimal "price"
+    t.decimal "qty"
+    t.decimal "amount"
+    t.decimal "current_price"
+    t.decimal "revenue"
+    t.decimal "roi"
+    t.decimal "amount_ratio"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_date"], name: "index_adding_positions_histories_on_event_date"
+    t.index ["origin_symbol"], name: "index_adding_positions_histories_on_origin_symbol"
+  end
 
   create_table "combine_transactions", force: :cascade do |t|
     t.string "source"

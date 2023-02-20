@@ -21,7 +21,13 @@
       <% snapshot = @snapshots.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first %>
       <% $redis.set("user_positions_#{h.id}_compare_revenue", snapshot.revenue) if snapshot %>
       <tr>
-        <td><%= display_symbol(h, snapshot) %></td>
+        <td>
+          <% if h.user_id.nil? %>
+            <%= link_to display_symbol(h, snapshot), position_detail_path(origin_symbol: h.origin_symbol, source: h.source), target: '_blank' %>
+          <% else %>
+            <%= display_symbol(h, snapshot) %>
+          <% end %>
+        </td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
         <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.current_price.to_f.round(4) %> <%= h.fee_symbol %></td>
