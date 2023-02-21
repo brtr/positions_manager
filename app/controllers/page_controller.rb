@@ -64,7 +64,7 @@ class PageController < ApplicationController
   def recently_adding_positions
     @page_index = 12
     @to_date = Date.parse(params[:to_date]) rescue Date.yesterday
-    @from_date = Date.parse(params[:from_date]) rescue @to_date - 1.week
+    @from_date = Date.parse(params[:from_date]) + 1.day rescue @to_date - 1.week
     @data = AddingPositionsHistory.where(event_date: (@from_date..@to_date)).page(params[:page]).per(15)
   end
 
@@ -94,5 +94,11 @@ class PageController < ApplicationController
 
   def position_detail
     @data = AddingPositionsHistory.where(origin_symbol: params[:origin_symbol], source: params[:source]).order(event_date: :desc).page(params[:page]).per(15)
+  end
+
+  def adding_positions_calendar
+    @page_index = 16
+    start_date = params.fetch(:start_date, Date.today).to_date
+    @data = AddingPositionsHistory.where(event_date: start_date.beginning_of_month.beginning_of_week..start_date.end_of_month.end_of_week).order(event_date: :asc)
   end
 end

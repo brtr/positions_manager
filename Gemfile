@@ -37,6 +37,7 @@ gem 'rest-client'
 gem 'binance-connector-ruby'
 gem "sentry-raven"
 gem 'whenever', require: false
+gem "simple_calendar", "~> 2.4"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

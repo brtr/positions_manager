@@ -50,7 +50,7 @@
               <td><%= link_to d.origin_symbol, position_detail_path(origin_symbol: d.origin_symbol, source: d.source), target: '_blank' %></td>
               <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
               <td><%= d.price %></td>
-              <td><%= d.current_price %></td>
+              <td><%= d.current_price.round(3) %></td>
               <td><%= d.qty %></td>
               <td><%= d.amount %></td>
               <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue %></td>

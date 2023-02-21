@@ -30,5 +30,12 @@ class GetAddingPositionsService
                    amount_ratio: ((margin_amount / h.amount) * 100).round(3))
       end
     end
+
+    def update_current_price
+      AddingPositionsHistory.all.group_by{|aph| [aph.origin_symbol, aph.trade_type, aph.source]}.each do |key, value|
+        current_price = UserPosition.where(user_id: nil, origin_symbol: key[0], trade_type: key[1], source: key[2]).take&.current_price
+        AddingPositionsHistory.where(id: value.map(&:id)).update_all(current_price: current_price) unless current_price.nil?
+      end
+    end
   end
 end

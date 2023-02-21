@@ -1,0 +1,19 @@
+<div class="m-3">
+  <div class="m-3">
+    <h3 class="text-center">新增仓位日历图</h3>
+  </div>
+  <div id="snapshot-container" class="mt-2">
+    <div class="container">
+      <%= month_calendar(events: @data, attribute: :event_date) do |date, data| %>
+        <%= date %>
+
+        <% data.group_by(&:event_date).each do |event_date, values| %>
+          <% revenue = values.sum(&:revenue) %>
+          <div>
+            <%= link_to revenue, recently_adding_positions_path(from_date: date - 1.day, to_date: date), class: revenue > 0 ? 'pos-num' : 'neg-num' %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

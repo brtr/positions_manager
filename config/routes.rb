@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   get "/account_balance" => "page#account_balance", as: :account_balance
   get "/price_chart" => "page#price_chart", as: :price_chart
   get "/position_detail" => "page#position_detail", as: :position_detail
+  get "/adding_positions_calendar" => "page#adding_positions_calendar", as: :adding_positions_calendar
   post "/set_public_positions_filter" => "page#set_public_positions_filter", as: :set_public_positions_filter
 
   get "/healthcheck", to: "page#health_check"
