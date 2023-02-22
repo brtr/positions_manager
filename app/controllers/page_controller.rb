@@ -3,6 +3,7 @@ class PageController < ApplicationController
     @page_index = 1
     @flag = params[:switch_filter].nil? || params[:switch_filter].to_i == 1
     @max_amount = $redis.get('max_amount_filter_flag').to_f
+    @daily_market_data = JSON.parse($redis.get('daily_market_data')) rescue {}
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
     histories = UserPosition.available.where(user_id: nil)

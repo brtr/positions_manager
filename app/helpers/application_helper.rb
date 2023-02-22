@@ -220,10 +220,14 @@ module ApplicationHelper
     "<span class=#{roi > 0 ? 'pos-num' : 'neg-num'}>#{roi}%</span>".html_safe
   end
 
-  def last_summary_display(data)
+  def last_summary_display(data, without_parentheses = false)
     if data.to_f >= 1 || data.to_f <= -1
       c = data > 0 ? 'pos-num' : 'neg-num'
-      "(<span class='#{c}'>#{data}</span>)".html_safe
+      if without_parentheses
+        "<span class='#{c}'>#{data}</span>".html_safe
+      else
+        "(<span class='#{c}'>#{data}</span>)".html_safe
+      end
     end
   end
 
