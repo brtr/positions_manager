@@ -1,146 +1,26 @@
 <div class="m-3">
-  <h3>
-    最近24小时币种涨跌排名列表
-    <%= link_to "Refresh", refresh_24hr_ticker_path, class: 'btn btn-warning' %>
-  </h3>
-  <div class="row mt-3">
-    <div class="col-6">
-      <table class="table">
-        <thead>
-          <tr class="table-container-tr">
-            <th>币种</th>
-            <th>24小时涨幅</th>
-            <th>半年内底部比例</th>
-            <th>来源</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @daily_ranking.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(10).each do |d| %>
-            <tr>
-              <td><%= d["symbol"] %></td>
-              <td><%= d["priceChangePercent"] + " %" %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
-              <td><%= d["source"] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-6">
-      <table class="table">
-        <thead>
-          <tr class="table-container-tr">
-            <th>币种</th>
-            <th>24小时变动</th>
-            <th>半年内底部比例</th>
-            <th>来源</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @daily_ranking.select{|d| d["priceChangePercent"].to_f < 0}.sort_by{|d| d["bottomPriceRatio"].to_f}.reverse.first(10).each do |d| %>
-            <tr>
-              <td><%= d["symbol"] %></td>
-              <td><%= d["priceChangePercent"] + " %" %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
-              <td><%= d["source"] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+  <div class="m-3">
+    <h3 class="text-center"> 历史币种涨跌排名数据快照 </h3>
   </div>
-  <h3 class="mt-5">最近3天币种涨跌排名列表</h3>
-  <div class="row mt-3">
-    <div class="col-6">
-      <table class="table">
-        <thead>
-          <tr class="table-container-tr">
-            <th>币种</th>
-            <th>3天内涨幅</th>
-            <th>半年内底部比例</th>
-            <th>来源</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @three_days_ranking.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(10).each do |d| %>
-            <tr>
-              <td><%= d["symbol"] %></td>
-              <td><%= d["priceChangePercent"] + " %" %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
-              <td><%= d["source"] %></td>
-            </tr>
+  <div id="snapshot-container" class="mt-2">
+    <div class="container">
+      <% @results.each do |r| %>
+        <div class="row">
+          <h2 class="text-center p-3 base_line"><%= r[:year] %></h2>
+          <% r[:monthes].each do |m| %>
+            <div class="mb-3 col-4">
+              <h4 class="text-center p-2"><%= m[:month] %>月</h4>
+              <div class="row">
+                <% m[:dates].each do |d| %>
+                  <div class="text-center col-2 p-3">
+                    <%= link_to d[:day], list_ranking_snapshots_path(event_date: "#{r[:year]}-#{m[:month]}-#{d[:day]}") %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
           <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-6">
-      <table class="table">
-        <thead>
-          <tr class="table-container-tr">
-            <th>币种</th>
-            <th>3天内跌幅</th>
-            <th>半年内底部比例</th>
-            <th>来源</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @three_days_ranking.sort_by{|d| d["priceChangePercent"].to_f}.first(10).each do |d| %>
-            <tr>
-              <td><%= d["symbol"] %></td>
-              <td><%= d["priceChangePercent"] + " %" %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
-              <td><%= d["source"] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <h3 class="mt-5">最近一周币种涨跌排名列表</h3>
-  <div class="row mt-3">
-    <div class="col-6">
-      <table class="table">
-        <thead>
-          <tr class="table-container-tr">
-            <th>币种</th>
-            <th>一周内涨幅</th>
-            <th>半年内底部比例</th>
-            <th>来源</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @weekly_ranking.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(10).each do |d| %>
-            <tr>
-              <td><%= d["symbol"] %></td>
-              <td><%= d["priceChangePercent"] + " %" %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
-              <td><%= d["source"] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-6">
-      <table class="table">
-        <thead>
-          <tr class="table-container-tr">
-            <th>币种</th>
-            <th>一周内跌幅</th>
-            <th>半年内底部比例</th>
-            <th>来源</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @weekly_ranking.sort_by{|d| d["priceChangePercent"].to_f}.first(10).each do |d| %>
-            <tr>
-              <td><%= d["symbol"] %></td>
-              <td><%= d["priceChangePercent"] + " %" %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
-              <td><%= d["source"] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -11,6 +11,6 @@ FactoryBot.define do
     last_price { 1 }
     price_change_rate { 1 }
     bottom_price_ratio { 1 }
-    event_date { Date.yesterday }
+    event_date { Date.today }
   end
 end

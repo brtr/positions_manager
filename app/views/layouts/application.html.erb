@@ -73,8 +73,18 @@
                 </ul>
               </li>
             <% end %>
-            <li class="nav-item">
-              <%= link_to "24小时币种涨跌排名", ranking_snapshots_path, class: "nav-link #{@page_index == 5 ? 'active' : ''}" %>
+            <li class="nav-item dropdown">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([5, 17]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                币种涨跌排名
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
+                <li class="nav-item">
+                  <%= link_to "24小时币种涨跌排名", get_24hr_tickers_ranking_snapshots_path, class: "nav-link #{@page_index == 5 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "历史币种涨跌排名数据快照", ranking_snapshots_path, class: "nav-link #{@page_index == 17 ? 'active' : ''}" %>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
               <%= link_to "新增投入列表", recently_adding_positions_path, class: "nav-link #{@page_index == 12 ? 'active' : ''}" %>
