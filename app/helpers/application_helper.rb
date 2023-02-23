@@ -247,4 +247,8 @@ module ApplicationHelper
       user_positions_path(params)
     end
   end
+
+  def get_symbol_url(symbol)
+    link_to symbol, ranking_graph_ranking_snapshots_path(symbol: symbol), remote: true
+  end
 end

@@ -1,0 +1,64 @@
+$('#ranking-modal-block').html("<%= j render partial: "modal", locals: { data: @data, symbol: @symbol } %>");
+$('#rankingModal').modal('show');
+
+
+var canvas = document.getElementById('priceChart');
+if(canvas){
+  var ctx = canvas.getContext('2d');
+  var chart_data = JSON.parse(ctx.canvas.dataset.data)
+  const result = Object.values(chart_data)
+  console.log(result)
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Object.keys(chart_data),
+      datasets: [
+        {
+          label: "<%= @symbol%>币种涨跌走势图(每天)",
+          data: result.map(i => {
+            return i.rate
+          }),
+          tension: 0.4,
+          backgroundColor: 'rgb(255, 99, 132)',
+          yAxisID: 'y'
+        }
+      ],
+    },
+    options: {
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          }
+        },
+        y: {
+          position: 'left',
+          ticks: {
+            maxTicksLimit: 5
+          },
+        },
+      },
+      responsive: false,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return ''
+            },
+            footer: function(context) {
+              data = result.filter(function(x) {return x.date == context[0].label})
+              console.log(data)
+              if(data.length > 0){
+                i = data[0]
+                roi = "涨跌: " + i.rate + "%"
+                return [roi]
+              } else {
+                return context.label
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+}

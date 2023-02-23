@@ -1,0 +1,15 @@
+<div class="modal fade" id="rankingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5><%= symbol %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mt-3">
+          <canvas id="priceChart" style="height: 300px; width: 400px" data-data="<%= data.to_json %>" ></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -18,6 +18,11 @@ class RankingSnapshotsController < ApplicationController
     @weekly_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 1.week).get_rankings
   end
 
+  def ranking_graph
+    @symbol = params[:symbol]
+    @data = RankingSnapshot.where(symbol: @symbol).order(event_date: :asc).map{|s| {s.event_date => {rate: s.price_change_rate.to_f, date: s.event_date }}}.inject(:merge)
+  end
+
   private
 
   def split_event_dates(infos)

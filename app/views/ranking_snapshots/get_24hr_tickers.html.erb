@@ -1,4 +1,4 @@
-<div class="m-3">
+<div class="m-3 get_24hr_tickers_page">
   <h3>
     最近24小时币种涨跌排名列表
     <%= link_to "Refresh", refresh_24hr_ticker_path, class: 'btn btn-warning' %>
@@ -17,7 +17,7 @@
         <tbody>
           <% @daily_ranking.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(10).each do |d| %>
             <tr>
-              <td><%= d["symbol"] %></td>
+              <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["source"] %></td>
@@ -39,7 +39,7 @@
         <tbody>
           <% @daily_ranking.select{|d| d["priceChangePercent"].to_f < 0}.sort_by{|d| d["bottomPriceRatio"].to_f}.reverse.first(10).each do |d| %>
             <tr>
-              <td><%= d["symbol"] %></td>
+              <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["source"] %></td>
@@ -64,7 +64,7 @@
         <tbody>
           <% @three_days_ranking.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(10).each do |d| %>
             <tr>
-              <td><%= d["symbol"] %></td>
+              <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["source"] %></td>
@@ -86,7 +86,7 @@
         <tbody>
           <% @three_days_ranking.sort_by{|d| d["priceChangePercent"].to_f}.first(10).each do |d| %>
             <tr>
-              <td><%= d["symbol"] %></td>
+              <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["source"] %></td>
@@ -111,7 +111,7 @@
         <tbody>
           <% @weekly_ranking.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(10).each do |d| %>
             <tr>
-              <td><%= d["symbol"] %></td>
+              <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["source"] %></td>
@@ -133,7 +133,7 @@
         <tbody>
           <% @weekly_ranking.sort_by{|d| d["priceChangePercent"].to_f}.first(10).each do |d| %>
             <tr>
-              <td><%= d["symbol"] %></td>
+              <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["source"] %></td>
@@ -143,4 +143,7 @@
       </table>
     </div>
   </div>
+</div>
+
+<div id="ranking-modal-block">
 </div>
