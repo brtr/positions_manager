@@ -220,15 +220,21 @@ module ApplicationHelper
     "<span class=#{roi > 0 ? 'pos-num' : 'neg-num'}>#{roi}%</span>".html_safe
   end
 
-  def last_summary_display(data, without_parentheses = false)
+  def last_summary_display(data)
     if data.to_f >= 1 || data.to_f <= -1
       c = data > 0 ? 'pos-num' : 'neg-num'
-      if without_parentheses
-        "<span class='#{c}'>#{data}</span>".html_safe
-      else
-        "(<span class='#{c}'>#{data}</span>)".html_safe
-      end
+      "(<span class='#{c}'>#{data}</span>)".html_safe
     end
+  end
+
+  def daily_market_display(data, is_risen = true)
+    c = is_risen ? 'pos-num' : 'neg-num'
+    "<span class='#{c}'>#{data}</span>".html_safe
+  end
+
+  def price_change_style(data)
+    c = data.to_f < 0 ? "text-danger" : "text-success"
+    "<span class='#{c}'>#{data}</span>".html_safe
   end
 
   def get_list_url(source_type, params)
