@@ -37,7 +37,7 @@ class GetAddingPositionsService
         AddingPositionsHistory.where(id: value.map(&:id)).each do |aph|
           last_amount = aph.qty * current_price
           revenue = aph.trade_type == 'sell' ? last_amount - aph.amount : aph.amount - last_amount
-          aph.update(current_price: current_price, revenue: revenue)
+          aph.update(current_price: current_price, revenue: revenue, roi: ((revenue / aph.amount) * 100).round(3))
         end unless current_price.nil?
       end
     end

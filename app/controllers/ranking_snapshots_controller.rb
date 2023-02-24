@@ -20,7 +20,8 @@ class RankingSnapshotsController < ApplicationController
 
   def ranking_graph
     @symbol = params[:symbol]
-    @data = RankingSnapshot.where(symbol: @symbol).order(event_date: :asc).map{|s| {s.event_date => {rate: s.price_change_rate.to_f, date: s.event_date }}}.inject(:merge)
+    date = Date.today
+    @data = RankingSnapshot.where(symbol: @symbol, event_date: (date - 3.months..date)).order(event_date: :asc).map{|s| {s.event_date => {rate: s.price_change_rate.to_f, date: s.event_date }}}.inject(:merge)
   end
 
   private
