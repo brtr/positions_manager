@@ -10,7 +10,7 @@
         <% data.group_by(&:event_date).each do |event_date, values| %>
           <% revenue = values.sum(&:revenue) %>
           <div>
-            <%= link_to revenue, recently_adding_positions_path(from_date: date - 1.day, to_date: date), class: revenue > 0 ? 'pos-num' : 'neg-num' %>
+            <%= link_to revenue.round(3), recently_adding_positions_path(from_date: date - 1.day, to_date: date), class: revenue > 0 ? 'pos-num' : 'neg-num' %>
           </div>
         <% end %>
       <% end %>
