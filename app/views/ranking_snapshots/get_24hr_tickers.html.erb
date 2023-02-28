@@ -10,7 +10,7 @@
           <tr class="table-container-tr">
             <th>币种</th>
             <th>24小时涨幅</th>
-            <th>半年内底部比例</th>
+            <th>一年内底部比例</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -32,7 +32,7 @@
           <tr class="table-container-tr">
             <th>币种</th>
             <th>24小时变动</th>
-            <th>半年内底部比例</th>
+            <th>一年内底部比例</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -49,6 +49,29 @@
       </table>
     </div>
   </div>
+  <h3 class='mt-5'>最近一年距离底部超过一倍的币种</h3>
+  <div class="row mt-3">
+    <div class="col-6">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>币种</th>
+            <th>上涨幅度</th>
+            <th>来源</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @daily_ranking.select{|d| d["bottomPriceRatio"].to_f > 100}.sort_by{|d| d["bottomPriceRatio"].to_f}.reverse.first(10).each do |d| %>
+            <tr>
+              <td><%= get_symbol_url d["symbol"] %></td>
+              <td><%= d["bottomPriceRatio"] + " %" %></td>
+              <td><%= d["source"] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <h3 class="mt-5">最近3天币种涨跌排名列表</h3>
   <div class="row mt-3">
     <div class="col-6">
@@ -57,7 +80,7 @@
           <tr class="table-container-tr">
             <th>币种</th>
             <th>3天内涨幅</th>
-            <th>半年内底部比例</th>
+            <th>一年内底部比例</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -79,7 +102,7 @@
           <tr class="table-container-tr">
             <th>币种</th>
             <th>3天内跌幅</th>
-            <th>半年内底部比例</th>
+            <th>一年内底部比例</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -104,7 +127,7 @@
           <tr class="table-container-tr">
             <th>币种</th>
             <th>一周内涨幅</th>
-            <th>半年内底部比例</th>
+            <th>一年内底部比例</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -126,7 +149,7 @@
           <tr class="table-container-tr">
             <th>币种</th>
             <th>一周内跌幅</th>
-            <th>半年内底部比例</th>
+            <th>一年内底部比例</th>
             <th>来源</th>
           </tr>
         </thead>
