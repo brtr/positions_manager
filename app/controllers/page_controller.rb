@@ -95,7 +95,7 @@ class PageController < ApplicationController
 
   def position_detail
     @data = AddingPositionsHistory.where('current_price is not null and origin_symbol = ? and source = ?', params[:origin_symbol], params[:source]).order(event_date: :desc).page(params[:page]).per(15)
-    @open_orders = BinanceFuturesService.new.get_open_orders(params[:origin_symbol])
+    @open_orders = BinanceFuturesService.new.get_open_orders(params[:origin_symbol]) if params[:source] == 'binance'
   end
 
   def adding_positions_calendar
