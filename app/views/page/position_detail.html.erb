@@ -24,6 +24,7 @@
         </thead>
         <tbody>
           <% @data.each do |d| %>
+            <% next if d.qty.abs < 1 %>
             <tr>
               <td><%= d.event_date.to_s %></td>
               <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
@@ -54,7 +55,6 @@
           <tr class="table-container-tr">
             <th>类别</th>
             <th>委托价</th>
-            <th>触发价</th>
             <th>委托数量</th>
             <th>订单类型</th>
           </tr>
@@ -65,7 +65,6 @@
               <tr>
                 <td class="<%= trade_type_style(d['side'].downcase) %>"><%= I18n.t("views.trading.#{d['side'].downcase}") %></td>
                 <td><%= d['price'].to_f.round(3) %></td>
-                <td><%= d['stopPrice'].to_f.round(3) %></td>
                 <td><%= d['origQty'] %></td>
                 <td><%= d['origType'] %></td>
               </tr>

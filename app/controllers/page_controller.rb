@@ -65,7 +65,7 @@ class PageController < ApplicationController
   def recently_adding_positions
     @page_index = 12
     @to_date = Date.parse(params[:to_date]) rescue Date.yesterday
-    @from_date = Date.parse(params[:from_date]) + 1.day rescue @to_date - 1.week
+    @from_date = Date.parse(params[:from_date]) + 1.day rescue @to_date
     @data = AddingPositionsHistory.where('qty > 0 and event_date between ? and ?', @from_date, @to_date).page(params[:page]).per(15)
   end
 
@@ -95,7 +95,11 @@ class PageController < ApplicationController
 
   def position_detail
     @data = AddingPositionsHistory.where('current_price is not null and origin_symbol = ? and source = ?', params[:origin_symbol], params[:source]).order(event_date: :desc).page(params[:page]).per(15)
-    @open_orders = BinanceFuturesService.new.get_open_orders(params[:origin_symbol]) if params[:source] == 'binance'
+    @open_orders = if params[:source] == 'binance'
+                     BinanceFuturesService.new.get_pending_orders(params[:origin_symbol])
+                   else
+                     OkxFuturesService.get_pending_orders(params[:origin_symbol])
+                   end
   end
 
   def adding_positions_calendar
