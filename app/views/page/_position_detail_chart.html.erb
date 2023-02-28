@@ -1,0 +1,91 @@
+<div class="mt-3">
+  <canvas id="positionDetailChart" style="height: 300px; width: 100%" data-data="<%= @chart_data.to_json %>" ></canvas>
+</div>
+
+<script>
+document.addEventListener('turbolinks:load', () => {
+  var canvas = document.getElementById('positionDetailChart');
+  if(canvas){
+    var ctx = canvas.getContext('2d');
+    var chart_data = JSON.parse(ctx.canvas.dataset.data)
+    const result = Object.values(chart_data)
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Object.keys(chart_data),
+        datasets: [
+          {
+            label: "<%= @symbol %>价格走势图(每天)",
+            data: result.map(i => {
+              return i.daily_price
+            }),
+            tension: 0.4,
+            backgroundColor: 'rgb(255, 99, 132)',
+            yAxisID: 'y'
+          },
+          {
+            label: "仓位平均成本价",
+            data: result.map(i => {
+              return i.price
+            }),
+            tension: 0.4,
+            backgroundColor: 'rgb(54, 162, 235)',
+            borderDash: [10,5],
+            yAxisID: 'y1'
+          },
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+            grid: {
+              display: false,
+            }
+          },
+          y: {
+            position: 'left',
+            ticks: {
+              maxTicksLimit: 5
+            },
+          },
+          y1: {
+            position: 'right',
+            ticks: {
+              maxTicksLimit: 5
+            },
+          }
+        },
+        responsive: false,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return ''
+              },
+              footer: function(context) {
+                const c_type = context[0].dataset.label
+                data = result.filter(function(x) {return x.date == context[0].label})
+                if(data.length > 0){
+                  i = data[0]
+                  if(c_type == "仓位平均成本价"){
+                    console.log(i)
+                    price = "平均成本价: " + i["price"]
+                    qty = "仓位数量: " + i["qty"]
+                    return [price, qty]
+                  } else {
+                    price = "价格: " + i["daily_price"]
+                    amount = "新增投入金额: " + i["position_amount"]
+                    return [price, amount]
+                  }
+                } else {
+                  return context.label
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+})
+</script>

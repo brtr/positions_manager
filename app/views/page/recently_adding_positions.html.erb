@@ -47,7 +47,7 @@
         <tbody>
           <% @data.each do |d| %>
             <tr>
-              <td><%= link_to d.origin_symbol, position_detail_path(origin_symbol: d.origin_symbol, source: d.source), target: '_blank' %></td>
+              <td><%= link_to d.origin_symbol, position_detail_path(origin_symbol: d.origin_symbol, source: d.source, trade_type: d.trade_type), target: '_blank' %></td>
               <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
               <td><%= d.price.round(3) %></td>
               <td><%= d.current_price.round(3) %></td>

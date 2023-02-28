@@ -23,7 +23,7 @@
       <tr>
         <td>
           <% if h.user_id.nil? %>
-            <%= link_to display_symbol(h, snapshot), position_detail_path(origin_symbol: h.origin_symbol, source: h.source), target: '_blank' %>
+            <%= link_to display_symbol(h, snapshot), position_detail_path(origin_symbol: h.origin_symbol, source: h.source, trade_type: h.trade_type), target: '_blank' %>
           <% else %>
             <%= display_symbol(h, snapshot) %>
           <% end %>
