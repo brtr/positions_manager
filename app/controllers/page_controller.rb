@@ -97,7 +97,7 @@ class PageController < ApplicationController
     @symbol = params[:origin_symbol]
     source = params[:source]
     trade_type = params[:trade_type]
-    @data = AddingPositionsHistory.where('current_price is not null and (qty > ? or qty < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, @symbol, source, trade_type)
+    @data = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, @symbol, source, trade_type)
                                   .order(event_date: :desc).page(params[:page]).per(15)
     @open_orders = if params[:source] == 'binance'
                      BinanceFuturesService.new.get_pending_orders(@symbol)
