@@ -71,7 +71,8 @@ document.addEventListener('turbolinks:load', () => {
                     console.log(i)
                     price = "平均成本价: " + i["price"]
                     qty = "仓位数量: " + i["qty"]
-                    return [price, qty]
+                    total_amount = "总投入: " + i["amount"]
+                    return [price, qty, total_amount]
                   } else {
                     price = "价格: " + i["daily_price"]
                     amount = "新增投入金额: " + i["position_amount"]
