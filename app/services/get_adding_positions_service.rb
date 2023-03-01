@@ -29,6 +29,19 @@ class GetAddingPositionsService
                                           fee_symbol: h.fee_symbol, trade_type: h.trade_type, source: h.source).first_or_create
         aph.update(price: price, current_price: current_price, qty: margin_qty, amount: margin_amount)
       end
+
+      from_date_records.each do |h|
+        snapshot = to_date_records.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first
+
+        if snapshot.nil?
+          event_date = h.event_date + 1.day
+          current_price = get_history_price(h.from_symbol.downcase, event_date)
+          margin_qty = h.qty * -1
+          margin_amount = h.amount * -1
+          aph = AddingPositionsHistory.where(event_date: event_date, origin_symbol: h.origin_symbol, from_symbol: h.from_symbol, fee_symbol: h.fee_symbol, trade_type: h.trade_type, source: h.source)
+                                      .first_or_create(price: h.price, current_price: current_price, qty: margin_qty, amount: margin_amount)
+        end
+      end
     end
 
     def update_current_price
