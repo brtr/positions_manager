@@ -71,6 +71,26 @@
         </tbody>
       </table>
     </div>
+    <div class="col-6">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>币种</th>
+            <th>顶部比例</th>
+            <th>来源</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @daily_ranking.select{|d| d["topPriceRatio"] != 0}.sort_by{|d| d["topPriceRatio"]}.first(10).each do |d| %>
+            <tr>
+              <td><%= get_symbol_url d["symbol"] %></td>
+              <td><%= d["topPriceRatio"].to_s + " %" %></td>
+              <td><%= d["source"] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
   <h3 class="mt-5">最近3天币种涨跌排名列表</h3>
   <div class="row mt-3">

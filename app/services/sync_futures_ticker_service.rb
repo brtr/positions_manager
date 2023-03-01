@@ -9,12 +9,14 @@ class SyncFuturesTickerService
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
+        last_price = ticker["lastPrice"].to_f
         from_symbol = fetch_symbol(ticker["symbol"])
         {
           "symbol" => ticker["symbol"],
-          "lastPrice" => ticker["lastPrice"],
+          "lastPrice" => last_price,
           "priceChangePercent" => ticker["priceChangePercent"],
-          "bottomPriceRatio" => get_bottom_price_ratio(from_symbol, ticker["lastPrice"].to_f).to_s,
+          "bottomPriceRatio" => get_price_ratio(from_symbol, last_price)['bottom_ratio'].to_s,
+          "topPriceRatio" => get_price_ratio(from_symbol, last_price)['top_ratio'],
           "openPrice" => ticker["openPrice"],
           "source" => "binance"
         }
@@ -30,7 +32,8 @@ class SyncFuturesTickerService
           "symbol" => from_symbol + to_symbol,
           "lastPrice" => last_price,
           "priceChangePercent" => (price_change * 100).round(3).to_s,
-          "bottomPriceRatio" => get_bottom_price_ratio(from_symbol, last_price).to_s,
+          "bottomPriceRatio" => get_price_ratio(from_symbol, last_price)['bottom_ratio'].to_s,
+          "topPriceRatio" => get_price_ratio(from_symbol, last_price)['top_ratio'],
           "openPrice" => open_price,
           "source" => "okx"
         }
@@ -63,11 +66,11 @@ class SyncFuturesTickerService
       from_symbol
     end
 
-    def get_bottom_price_ratio(symbol, price)
-      url = ENV['COIN_ELITE_URL'] + "/api/user_positions/bottom_price_ratio?symbol=#{symbol}&price=#{price}"
+    def get_price_ratio(symbol, price)
+      url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}"
       response = RestClient.get(url)
       data = JSON.parse(response)
-      data["bottom_ratio"]
+      data
     end
   end
 end
