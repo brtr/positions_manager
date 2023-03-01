@@ -27,8 +27,7 @@ class GetAddingPositionsService
         price = margin_amount / margin_qty.to_f
         aph = AddingPositionsHistory.where(event_date: event_date, origin_symbol: h.origin_symbol, from_symbol: h.from_symbol,
                                           fee_symbol: h.fee_symbol, trade_type: h.trade_type, source: h.source).first_or_create
-        aph.update(price: price, current_price: current_price, qty: margin_qty, amount: margin_amount,
-                   amount_ratio: ((margin_amount / h.amount) * 100).round(3))
+        aph.update(price: price, current_price: current_price, qty: margin_qty, amount: margin_amount)
       end
     end
 
