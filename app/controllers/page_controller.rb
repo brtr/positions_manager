@@ -64,9 +64,9 @@ class PageController < ApplicationController
 
   def recently_adding_positions
     @page_index = 12
-    @to_date = Date.parse(params[:to_date]) rescue Date.yesterday
-    @from_date = Date.parse(params[:from_date]) + 1.day rescue @to_date
-    @data = AddingPositionsHistory.where('qty > 0 and event_date between ? and ?', @from_date, @to_date).page(params[:page]).per(15)
+    @to_date = Date.parse(params[:to_date]) rescue Date.today
+    @from_date = Date.parse(params[:from_date]) + 1.day rescue Date.yesterday
+    @data = AddingPositionsHistory.where('qty > 0 and amount > 1 and event_date between ? and ?', @from_date, @to_date).page(params[:page]).per(15)
   end
 
   def refresh_recently_adding_positions
