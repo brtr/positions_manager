@@ -1,4 +1,5 @@
 class RankingSnapshot < ApplicationRecord
+  scope :with_top10, ->(source, symbol) { where(is_top10: true, source: source, symbol: symbol) }
   def self.get_rankings
     RankingSnapshot.order(event_date: :asc).group_by{|snapshot| [snapshot.symbol, snapshot.source]}.map do |key, data|
       open_price = data.first.open_price

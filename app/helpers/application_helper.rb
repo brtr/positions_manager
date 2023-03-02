@@ -248,7 +248,12 @@ module ApplicationHelper
     end
   end
 
-  def get_symbol_url(symbol)
-    link_to symbol, ranking_graph_ranking_snapshots_path(symbol: symbol), remote: true
+  def get_symbol_url(symbol, count = 0)
+    str = count.zero? ? symbol : "#{symbol} (#{count})"
+    link_to str, ranking_graph_ranking_snapshots_path(symbol: symbol), remote: true
+  end
+
+  def get_top10_count(source, symbol)
+    RankingSnapshot.with_top10(source, symbol).count
   end
 end
