@@ -95,17 +95,19 @@ class PageController < ApplicationController
 
   def position_detail
     @symbol = params[:origin_symbol]
-    source = params[:source]
-    trade_type = params[:trade_type]
-    @data = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, @symbol, source, trade_type)
+    @source = params[:source]
+    @trade_type = params[:trade_type]
+    @data = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, @symbol, @source, @trade_type)
                                   .order(event_date: :desc).page(params[:page]).per(15)
-    @open_orders = if params[:source] == 'binance'
-                     BinanceFuturesService.new.get_pending_orders(@symbol)
-                   else
-                     OkxFuturesService.get_pending_orders(@symbol)
-                   end
-    GetPositionsChartDataService.execute(@symbol, source, trade_type)
-    @chart_data = JSON.parse($redis.get("#{@symbol}_monthly_chart_data")) rescue []
+    if @data.any?
+      @open_orders = if params[:source] == 'binance'
+                      BinanceFuturesService.new.get_pending_orders(@symbol)
+                    else
+                      OkxFuturesService.get_pending_orders(@symbol)
+                    end
+      GetPositionsChartDataService.execute(@symbol, @source, @trade_type)
+      @chart_data = JSON.parse($redis.get("#{@symbol}_monthly_chart_data")) rescue []
+    end
   end
 
   def adding_positions_calendar
