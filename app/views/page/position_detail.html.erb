@@ -1,9 +1,10 @@
 <div class="m-3 row">
   <div class="col-10 mx-auto">
-    <div class="mb-3 mt-3 col-6">
+    <div class="mb-3 mt-3 col-10">
       <%= form_tag position_detail_path, id: "search_targets", method: "GET" do %>
+        <h5>切换币种(请输入全称,比如BTCUSDT)</h5>
         <div class="input-group mb-3">
-          <%= text_field_tag :origin_symbol, '', class: "form-control", placeholder: "切换币种(全称,比如BTCUSDT)..." %>
+          <%= text_field_tag :origin_symbol, @symbol, class: "form-control" %>
           <span class='ms-3'></span>
           <%= select_tag(:source, options_for_select(['binance', 'okx'], @source),{ prompt: '请选择来源...', class: 'select2-dropdown form-control'}) %>
           <span class='ms-3'></span>

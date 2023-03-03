@@ -94,7 +94,7 @@ class PageController < ApplicationController
   end
 
   def position_detail
-    @symbol = params[:origin_symbol]
+    @symbol = params[:origin_symbol].upcase rescue nil
     @source = params[:source]
     @trade_type = params[:trade_type]
     @data = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, @symbol, @source, @trade_type)
