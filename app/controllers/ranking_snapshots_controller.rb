@@ -12,7 +12,10 @@ class RankingSnapshotsController < ApplicationController
 
   def get_24hr_tickers
     @page_index = 5
-
+    if params[:select].to_i > 0
+      SyncFutures24hrTickerJob.perform_later(params[:select].to_i)
+      flash[:notice] = "正在更新，请稍等刷新查看最新排名..."
+    end
     @daily_ranking = JSON.parse($redis.get("get_24hr_tickers")) rescue []
     @three_days_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 3.days).get_rankings
     @weekly_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 1.week).get_rankings

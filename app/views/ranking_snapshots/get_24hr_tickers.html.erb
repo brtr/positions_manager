@@ -3,6 +3,13 @@
     最近24小时币种涨跌排名列表
     <%= link_to "Refresh", refresh_24hr_ticker_path, class: 'btn btn-warning' %>
   </h3>
+  <div class="mb-3 mt-3 col-4">
+    <%= form_tag get_24hr_tickers_ranking_snapshots_path, id: "search_targets", class: "position-relative", method: "GET" do %>
+      <div class="input-group mb-3">
+        <%= select_tag(:select, options_for_select([["所有币种", 0], ["前100名以外",100],["前200名以外",200]], params[:select] ),{ prompt: '请选择币种排名', class: 'select2-dropdown', onchange: 'this.form.submit()' }) %>
+      </div>
+    <% end %>
+  </div>
   <div class="row mt-3">
     <div class="col-6">
       <table class="table">
@@ -56,15 +63,17 @@
         <thead>
           <tr class="table-container-tr">
             <th>币种</th>
-            <th>上涨幅度</th>
+            <th>距离底部上涨幅度</th>
+            <th>距离顶部比例</th>
             <th>来源</th>
           </tr>
         </thead>
         <tbody>
-          <% @daily_ranking.select{|d| d["bottomPriceRatio"].to_f > 100}.sort_by{|d| d["bottomPriceRatio"].to_f}.reverse.first(10).each do |d| %>
+          <% @daily_ranking.select{|d| d["risenRatio"].to_f > 100}.sort_by{|d| d["risenRatio"]}.reverse.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url d["symbol"] %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
+              <td><%= d["risenRatio"].to_s + " %" %></td>
+              <td><%= d["topPriceRatio"].to_s + " %" %></td>
               <td><%= d["source"] %></td>
             </tr>
           <% end %>
@@ -76,7 +85,8 @@
         <thead>
           <tr class="table-container-tr">
             <th>币种</th>
-            <th>顶部比例</th>
+            <th>距离顶部比例</th>
+            <th>距离底部上涨幅度</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -85,6 +95,7 @@
             <tr>
               <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["topPriceRatio"].to_s + " %" %></td>
+              <td><%= d["risenRatio"].to_s + " %" %></td>
               <td><%= d["source"] %></td>
             </tr>
           <% end %>
