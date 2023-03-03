@@ -9,6 +9,7 @@ class SyncFuturesTickerService
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
+        next if ticker["symbol"] == "BTCDOMUSDT"
         last_price = ticker["lastPrice"].to_f
         from_symbol = fetch_symbol(ticker["symbol"])
         price_ratio = get_price_ratio(from_symbol, last_price, rank)

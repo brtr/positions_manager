@@ -113,6 +113,6 @@ class PageController < ApplicationController
   def adding_positions_calendar
     @page_index = 16
     start_date = params.fetch(:start_date, Date.today).to_date
-    @data = AddingPositionsHistory.where('qty > 0 and event_date between ? and ?', start_date.beginning_of_month.beginning_of_week, start_date.end_of_month.end_of_week).order(event_date: :asc)
+    @data = AddingPositionsHistory.where('qty > 0 and amount > 1 and event_date between ? and ?', start_date.beginning_of_month.beginning_of_week, start_date.end_of_month.end_of_week).order(event_date: :asc)
   end
 end
