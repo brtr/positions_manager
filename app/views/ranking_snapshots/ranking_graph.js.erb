@@ -14,14 +14,25 @@ if(canvas){
       labels: Object.keys(chart_data),
       datasets: [
         {
-          label: "<%= @symbol%>币种涨跌走势图(每天)",
+          label: "<%= @symbol %>币种涨跌走势图(每天)",
           data: result.map(i => {
             return i.rate
           }),
           tension: 0.4,
           backgroundColor: 'rgb(255, 99, 132)',
           yAxisID: 'y'
-        }
+        },
+        {
+          label: "是否进入涨幅前10(每天)",
+          data: result.map(i => {
+            return i.is_top10
+          }),
+          tension: 0.4,
+          backgroundColor: 'rgb(54, 162, 235)',
+          type: 'bar',
+          yAxisID: 'y1'
+
+        },
       ],
     },
     options: {
@@ -37,6 +48,12 @@ if(canvas){
             maxTicksLimit: 5
           },
         },
+        y1: {
+          position: 'right',
+          ticks: {
+            maxTicksLimit: 1
+          },
+        }
       },
       responsive: false,
       plugins: {
