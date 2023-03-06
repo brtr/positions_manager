@@ -1,6 +1,7 @@
 Feature: Snapshot Info pages
   Background:
     Given I have different snapshots
+    Given I have 10 positions summary snapshots
 
   @javascript
   Scenario: Visit Snapshot Info Index page
