@@ -79,18 +79,4 @@ class SnapshotInfo < ApplicationRecord
     end
     total_revenue
   end
-
-  def self.get_roi_summary
-    roi_list = SnapshotInfo.where(user_id: nil).includes(:snapshot_positions).map do |info|
-                total_summary = info.snapshot_positions.total_summary
-                ((total_summary[:total_revenue] / total_summary[:total_cost]) * 100).round(3)
-               end.sort
-    midpoint = roi_list.size / 2.0
-    median = roi_list.size.even? ? roi_list[midpoint, 2].sum / 2.0 : roi_list[midpoint]
-    {
-      max: roi_list.last,
-      median: median,
-      min: roi_list.first
-    }
-  end
 end

@@ -52,13 +52,12 @@ document.addEventListener('turbolinks:load', () => {
                 return ''
               },
               footer: function(context) {
-                data = result.filter(function(x) {return x.date == context[0].label})
-                console.log(data)
+                data = result.filter(function(x) {return x.event_date == context[0].label})
                 if(data.length > 0){
                   i = data[0]
-                  cost = "总投入: " + i.total_cost.toFixed(3)
-                  revenue = "总收益: " + i.total_revenue.toFixed(3)
-                  roi = "比例: " + ((i.total_revenue / i.total_cost) * 100).toFixed(3) + "%"
+                  cost = "总投入: " + parseFloat(i.total_cost).toFixed(3)
+                  revenue = "总收益: " + parseFloat(i.total_revenue).toFixed(3)
+                  roi = "比例: " + ((parseFloat(i.total_revenue) / parseFloat(i.total_cost)) * 100).toFixed(3) + "%"
                   return [cost, revenue, roi]
                 } else {
                   return context.label

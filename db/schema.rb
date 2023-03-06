@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_02_084226) do
+ActiveRecord::Schema.define(version: 2023_03_06_090955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,19 @@ ActiveRecord::Schema.define(version: 2023_03_02_084226) do
     t.index ["campaign"], name: "index_origin_transactions_on_campaign"
     t.index ["order_id"], name: "index_origin_transactions_on_order_id"
     t.index ["source"], name: "index_origin_transactions_on_source"
+  end
+
+  create_table "positions_summary_snapshots", force: :cascade do |t|
+    t.decimal "total_cost"
+    t.decimal "total_revenue"
+    t.decimal "total_loss"
+    t.decimal "total_profit"
+    t.decimal "roi"
+    t.decimal "revenue_change"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_date"], name: "index_positions_summary_snapshots_on_event_date"
   end
 
   create_table "ranking_snapshots", force: :cascade do |t|
