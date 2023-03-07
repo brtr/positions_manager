@@ -3,13 +3,13 @@
     <div class="mb-3 mt-3 col-8">
       <%= form_tag position_detail_path, id: "search_targets", method: "GET" do %>
         <h5>切换币种(请输入全称,比如BTCUSDT)</h5>
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 position-detail-filter">
           <%= select_tag(:origin_symbol, options_for_select(AddingPositionsHistory.pluck(:origin_symbol).uniq, @symbol), class: 'select2-dropdown form-control') %>
           <span class='ms-3'></span>
           <%= select_tag(:source, options_for_select(['binance', 'okx'], @source),{ prompt: '请选择来源...', class: 'select2-dropdown form-control'}) %>
           <span class='ms-3'></span>
           <%= select_tag(:trade_type, options_for_select([['做空', 'buy'], ['做多', 'sell']], @trade_type),{ prompt: '请选择交易类别...', class: 'select2-dropdown form-control'}) %>
-          <button type="submit" class="btn btn-primary mt-3">确定</button>
+          <button type="submit" class="btn btn-primary ms-3">确定</button>
         </div>
       <% end %>
     </div>
