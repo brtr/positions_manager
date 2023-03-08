@@ -5,12 +5,12 @@ class SnapshotPosition < ApplicationRecord
   scope :profit, -> { where("revenue > 0") }
   scope :loss, -> { where("revenue < 0") }
 
-  def self.total_summary(user_id=nil, is_synced=false)
+  def self.total_summary(user_id: nil, is_synced: false, date: Date.yesterday)
     records = SnapshotPosition.available
     profit_records = records.profit
     loss_records = records.loss
-    infos = SnapshotInfo.includes(:snapshot_positions).where("event_date <= ?", Date.yesterday)
-    redis_key = is_synced ? "user_#{user_id}_synced_positions" : "user_#{user_id}_positions"
+    infos = SnapshotInfo.includes(:snapshot_positions).where("event_date <= ?", date)
+    redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions" : "user_#{user_id}_#{date.to_s}_positions"
 
     {
       total_cost: records.sum(&:amount).to_f,
@@ -19,15 +19,19 @@ class SnapshotPosition < ApplicationRecord
       profit_amount: profit_records.sum(&:revenue),
       loss_count: loss_records.count,
       loss_amount: loss_records.sum(&:revenue),
-      max_profit: infos.max_profit(user_id, is_synced),
+      max_profit: infos.max_profit(user_id: user_id, is_synced: is_synced, date: date),
       max_profit_date: $redis.get("#{redis_key}_max_profit_date"),
-      max_loss: infos.max_loss(user_id, is_synced),
-      max_loss_date: $redis.get("#{redis_key}_max_loss_date")
+      max_loss: infos.max_loss(user_id: user_id, is_synced: is_synced, date: date),
+      max_loss_date: $redis.get("#{redis_key}_max_loss_date"),
+      max_revenue: infos.max_revenue(user_id: user_id, is_synced: is_synced, date: date),
+      max_revenue_date: $redis.get("#{redis_key}_max_revenue_date"),
+      min_revenue: infos.min_revenue(user_id: user_id, is_synced: is_synced, date: date),
+      min_revenue_date: $redis.get("#{redis_key}_min_revenue_date")
     }
   end
 
   def self.last_summary(user_id: nil, data: nil)
-    records = SnapshotPosition.available.total_summary(user_id)
+    records = SnapshotPosition.available.total_summary(user_id: user_id)
 
     {
       total_cost: display_number(data[:total_cost] - records[:total_cost]),
@@ -44,7 +48,7 @@ class SnapshotPosition < ApplicationRecord
   end
 
   def cost_ratio(total_cost)
-    amount / total_cost
+    amount / total_cost rescue 0
   end
 
   def revenue_ratio(total_revenue)

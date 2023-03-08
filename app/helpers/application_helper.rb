@@ -256,4 +256,8 @@ module ApplicationHelper
   def get_top10_count(source, symbol)
     RankingSnapshot.with_top10(source, symbol).count
   end
+
+  def get_date_format(date)
+    date.strftime('%Y-%m-%d') rescue ''
+  end
 end

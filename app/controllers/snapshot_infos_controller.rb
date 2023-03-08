@@ -24,10 +24,7 @@ class SnapshotInfosController < ApplicationController
     records = @info.snapshot_positions
     records = records.where(from_symbol: params[:search]) if params[:search].present?
     @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
-    @total_summary = records.total_summary(user_id, @info.synced?)
-    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: @info.source_type, user_id: user_id, event_date: @info.event_date - 1.day})
-    @last_summary = snapshots.last_summary(user_id: user_id, data: @total_summary)
-    @snapshots = snapshots.to_a
+    @snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: @info.source_type, user_id: user_id, event_date: @info.event_date - 1.day}).to_a
   end
 
   def export_user_positions

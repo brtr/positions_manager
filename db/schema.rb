@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_06_090955) do
+ActiveRecord::Schema.define(version: 2023_03_07_093315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,25 @@ ActiveRecord::Schema.define(version: 2023_03_06_090955) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "source_type"
+    t.integer "increase_count"
+    t.integer "decrease_count"
+    t.decimal "btc_change"
+    t.decimal "btc_change_ratio"
+    t.decimal "total_cost"
+    t.decimal "total_revenue"
+    t.decimal "total_roi"
+    t.integer "profit_count"
+    t.decimal "profit_amount"
+    t.integer "loss_count"
+    t.decimal "loss_amount"
+    t.decimal "max_profit"
+    t.decimal "max_loss"
+    t.decimal "max_revenue"
+    t.decimal "min_revenue"
+    t.datetime "max_profit_date"
+    t.datetime "max_loss_date"
+    t.datetime "max_revenue_date"
+    t.datetime "min_revenue_date"
     t.index ["event_date", "user_id"], name: "index_snapshot_infos_on_event_date_and_user_id"
     t.index ["event_date"], name: "index_snapshot_infos_on_event_date"
     t.index ["user_id"], name: "index_snapshot_infos_on_user_id"

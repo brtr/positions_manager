@@ -16,8 +16,32 @@ class SnapshotInfo < ApplicationRecord
     snapshot_positions.sum(&:revenue)
   end
 
-  def self.max_profit(user_id=nil, is_synced=false)
-    redis_key = is_synced ? "user_#{user_id}_synced_positions_max_profit" : "user_#{user_id}_positions_max_profit"
+  def total_symbol_count
+    increase_count + decrease_count rescue 0
+  end
+
+  def increase_ratio
+    total_symbol_count.zero? ? 0 : ((increase_count / total_symbol_count.to_f) * 100).round(3)
+  end
+
+  def decrease_ratio
+    total_symbol_count.zero? ? 0 : ((decrease_count / total_symbol_count.to_f) * 100).round(3)
+  end
+
+  def margin_summary
+    last_info = SnapshotInfo.find_by(source_type: source_type, user_id: user_id, event_date: event_date - 1.day)
+    {
+      total_cost: display_number(total_cost - last_info&.total_cost.to_f),
+      total_revenue: display_number(total_revenue - last_info&.total_revenue.to_f),
+      profit_count: display_number(profit_count - last_info&.profit_count.to_f),
+      profit_amount: display_number(profit_amount - last_info&.profit_amount.to_f),
+      loss_count: display_number(loss_count - last_info&.loss_count.to_f),
+      loss_amount: display_number(loss_amount - last_info&.loss_amount.to_f)
+    }
+  end
+
+  def self.max_profit(user_id: nil, is_synced: false, date: Date.yesterday)
+    redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions_max_profit" : "user_#{user_id}_#{date.to_s}_positions_max_profit"
     total_profit = $redis.get(redis_key).to_f
     if total_profit == 0
       infos = SnapshotInfo.where(user_id: user_id)
@@ -32,8 +56,8 @@ class SnapshotInfo < ApplicationRecord
     total_profit
   end
 
-  def self.max_loss(user_id=nil, is_synced=false)
-    redis_key = is_synced ? "user_#{user_id}_synced_positions_max_loss" : "user_#{user_id}_positions_max_loss"
+  def self.max_loss(user_id: nil, is_synced: false, date: Date.yesterday)
+    redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions_max_loss" : "user_#{user_id}_#{date.to_s}_positions_max_loss"
     total_loss = $redis.get(redis_key).to_f
     if total_loss == 0
       infos = SnapshotInfo.where(user_id: user_id)
@@ -48,8 +72,8 @@ class SnapshotInfo < ApplicationRecord
     total_loss
   end
 
-  def self.max_revenue(user_id=nil, is_synced=false)
-    redis_key = is_synced ? "user_#{user_id}_synced_positions_max_revenue" : "user_#{user_id}_positions_max_revenue"
+  def self.max_revenue(user_id: nil, is_synced: false, date: Date.yesterday)
+    redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions_max_revenue" : "user_#{user_id}_#{date.to_s}_positions_max_revenue"
     total_revenue = $redis.get(redis_key).to_f
     if total_revenue == 0
       infos = SnapshotInfo.where(user_id: user_id)
@@ -64,8 +88,8 @@ class SnapshotInfo < ApplicationRecord
     total_revenue
   end
 
-  def self.min_revenue(user_id=nil, is_synced=false)
-    redis_key = is_synced ? "user_#{user_id}_synced_positions_min_revenue" : "user_#{user_id}_positions_min_revenue"
+  def self.min_revenue(user_id: nil, is_synced: false, date: Date.yesterday)
+    redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions_min_revenue" : "user_#{user_id}_#{date.to_s}_positions_min_revenue"
     total_revenue = $redis.get(redis_key).to_f
     if total_revenue == 0
       infos = SnapshotInfo.where(user_id: user_id)
@@ -78,5 +102,10 @@ class SnapshotInfo < ApplicationRecord
       end
     end
     total_revenue
+  end
+
+  private
+  def display_number(num)
+    num >= 1 || num <= -1 ? num.round(3) : ''
   end
 end

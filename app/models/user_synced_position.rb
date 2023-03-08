@@ -38,7 +38,8 @@ class UserSyncedPosition < ApplicationRecord
     records = UserSyncedPosition.where(user_id: user_id)
     profit_records = records.select{|r| r.revenue > 0}
     loss_records = records.select{|r| r.revenue < 0}
-    infos = SnapshotInfo.synced.includes(:snapshot_positions).where("event_date <= ?", Date.yesterday)
+    date = Date.yesterday
+    infos = SnapshotInfo.synced.includes(:snapshot_positions).where("event_date <= ?", date)
     {
       profit_count: profit_records.count,
       profit_amount: profit_records.sum(&:revenue),
@@ -46,14 +47,14 @@ class UserSyncedPosition < ApplicationRecord
       loss_amount: loss_records.sum(&:revenue),
       total_cost: records.sum(&:amount),
       total_revenue: records.sum(&:revenue),
-      max_profit: infos.max_profit(user_id, true),
-      max_profit_date: $redis.get("user_#{user_id}_synced_positions_max_profit_date"),
-      max_loss: infos.max_loss(user_id, true),
-      max_loss_date: $redis.get("user_#{user_id}_synced_positions_max_loss_date"),
-      max_revenue: infos.max_revenue(user_id, true),
-      max_revenue_date: $redis.get("user_#{user_id}_synced_positions_max_revenue_date"),
-      min_revenue: infos.min_revenue(user_id, true),
-      min_revenue_date: $redis.get("user_#{user_id}_synced_positions_min_revenue_date")
+      max_profit: infos.max_profit(user_id: user_id, is_synced: true, date: date),
+      max_profit_date: $redis.get("user_#{user_id}_#{date.to_s}_synced_positions_max_profit_date"),
+      max_loss: infos.max_loss(user_id: user_id, is_synced: true, date: date),
+      max_loss_date: $redis.get("user_#{user_id}_#{date.to_s}_synced_positions_max_loss_date"),
+      max_revenue: infos.max_revenue(user_id: user_id, is_synced: true, date: date),
+      max_revenue_date: $redis.get("user_#{user_id}_#{date.to_s}_synced_positions_max_revenue_date"),
+      min_revenue: infos.min_revenue(user_id: user_id, is_synced: true, date: date),
+      min_revenue_date: $redis.get("user_#{user_id}_#{date.to_s}_synced_positions_min_revenue_date")
     }
   end
 end
