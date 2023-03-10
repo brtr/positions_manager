@@ -66,7 +66,15 @@ class PageController < ApplicationController
     @page_index = 12
     @to_date = Date.parse(params[:to_date]) rescue Date.today
     @from_date = Date.parse(params[:from_date]) + 1.day rescue Date.yesterday
-    @data = AddingPositionsHistory.where('qty > 0 and amount > 1 and event_date between ? and ?', @from_date, @to_date).page(params[:page]).per(15)
+    @symbol = params[:origin_symbol]
+    sort = params[:sort].presence || "revenue"
+    sort_type = params[:sort_type].presence || "desc"
+    data = AddingPositionsHistory.where('qty > 0 and amount > 1 and event_date between ? and ?', @from_date, @to_date)
+    data = data.where(origin_symbol: @symbol) if @symbol
+    parts = data.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
+    data = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
+    data = data.reverse if sort_type == "desc"
+    @data = Kaminari.paginate_array(data).page(params[:page]).per(15)
   end
 
   def refresh_recently_adding_positions

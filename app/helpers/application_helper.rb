@@ -154,6 +154,66 @@ module ApplicationHelper
     ]
   end
 
+  def adding_positions_history_headers
+    [
+      {
+        name: "投入日期",
+        sort: "none"
+      },
+      {
+        name: "币种",
+        sort: "none"
+      },
+      {
+        name: "类别",
+        sort: "none"
+      },
+      {
+        name: "平均成本价",
+        sort: "none"
+      },
+      {
+        name: "最新价格",
+        sort: "none"
+      },
+      {
+        name: "新增数量",
+        sort: "qty"
+      },
+      {
+        name: "新增金额",
+        sort: "amount"
+      },
+      {
+        name: "新增收益",
+        sort: "revenue"
+      },
+      {
+        name: "新增收益占新增金额的占比",
+        sort: "roi"
+      },
+      {
+        name: "新增金额占当前该币种总仓位的占比",
+        sort: "none"
+      },
+      {
+        name: "来源",
+        sort: "none"
+      }
+    ]
+  end
+
+  def adding_positions_remote_params(params, sort)
+    res = {
+      sort: sort,
+      sort_type: "#{change_sort_type(params[:sort_type])}",
+      from_date: params[:from_date],
+      to_date: params[:to_date]
+    }
+    res.merge!(origin_symbol: params[:origin_symbol]) if params[:origin_symbol]
+    res
+  end
+
   def change_sort_type(sort)
     sort == 'asc' ? "desc" : "asc"
   end

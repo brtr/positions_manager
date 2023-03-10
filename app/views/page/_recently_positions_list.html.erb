@@ -1,0 +1,39 @@
+<table class="table">
+  <thead>
+    <tr class="table-container-tr">
+      <% adding_positions_history_headers.each do |h| %>
+        <th scope="col">
+          <% if h[:sort] == "none" %>
+            <%= "#{h[:name]}" %>
+          <% else %>
+            <%= link_to "#{h[:name]}", recently_adding_positions_path(adding_positions_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+          <% end %>
+          <% if h[:sort] == 'revenue' %>
+            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue") %>'>?</span>
+          <% end %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @data.each do |d| %>
+      <tr>
+        <td><%= get_date_format d.event_date %></td>
+        <td><%= link_to d.origin_symbol, position_detail_path(origin_symbol: d.origin_symbol, source: d.source, trade_type: d.trade_type), target: '_blank' %></td>
+        <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
+        <td><%= d.price.round(3) %></td>
+        <td><%= d.current_price.round(3) %></td>
+        <td><%= d.qty %></td>
+        <td><%= d.amount %></td>
+        <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue.round(3) %></td>
+        <td><%= "#{d.roi}%" %></td>
+        <td><%= "#{d.amount_ratio}" %></td>
+        <td><%= d.source %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="p-4">
+  <%= paginate @data, remote: true %>
+</div>
