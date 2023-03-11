@@ -70,7 +70,7 @@ class PageController < ApplicationController
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
     data = AddingPositionsHistory.where('qty > 0 and amount > 1 and event_date between ? and ?', @from_date, @to_date)
-    data = data.where(origin_symbol: @symbol) if @symbol
+    data = data.where(origin_symbol: @symbol) if @symbol.present?
     parts = data.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     data = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
     data = data.reverse if sort_type == "desc"
