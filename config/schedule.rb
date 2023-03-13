@@ -19,6 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 10.minutes, roles: [:job] do
-  runner "MonitorSidekiqService.execute"
+every 10.minutes, roles: [:web] do
+  runner "MonitorSidekiqService.check_enqueued_size"
+  runner "MonitorSidekiqService.check_refresh_time"
 end
