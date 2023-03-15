@@ -1,32 +1,28 @@
 class GetRecentlyAddingPositionsJob < ApplicationJob
   queue_as :daily_job
 
-  def perform
-    $redis.del('recently_adding_positions')
-    result = []
-
-    snapshot_records = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: Date.today - 1.week})
-    UserPosition.where(user_id: nil).available.each do |h|
-      snapshot = snapshot_records.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first
-      margin_qty = h.qty - snapshot&.qty.to_f
-      margin_amount = (h.amount - snapshot&.amount.to_f).round(3)
-      next if margin_amount < 1
-      last_amount = margin_qty * h.current_price
-      revenue = snapshot.nil? ? h.revenue : h.trade_type == 'sell' ? last_amount - margin_amount : margin_amount - last_amount
-      price = margin_amount / margin_qty
-      result.push({
-        symbol: h.origin_symbol,
-        source: h.source,
-        price: price.round(3),
-        current_price: h.current_price.round(3),
-        qty: margin_qty.round(3),
-        revenue: revenue.round(3),
-        amount: margin_amount,
-        roi: ((revenue / margin_amount) * 100).round(3),
-        amount_ratio: ((margin_amount / h.amount) * 100).round(3)
-      })
+  def perform(date: Date.today)
+    SyncedTransaction.where(event_time: (date - 1.day).all_day).group_by{|tx| [tx.origin_symbol, tx.fee_symbol, tx.position_side, tx.source]}.each do |key, txs|
+      from_symbol = key[0].split(key[1])[0]
+      trade_type = key[2] == 'short' ? 'buy' : 'sell'
+      aph = AddingPositionsHistory.where(event_date: date, origin_symbol: key[0], from_symbol: from_symbol,
+                                         fee_symbol: key[1], trade_type: trade_type, source: key[3]).first_or_create
+      qty = txs.sum(&:qty)
+      amount = txs.sum(&:amount)
+      price = amount / qty
+      if qty > 0
+        current_price = UserPosition.where(user_id: nil, origin_symbol: key[0], trade_type: trade_type, source: key[3]).take&.current_price
+      elsif qty < 0
+        current_price = get_history_price(from_symbol.downcase, date)
+      end
+      aph.update(price: price, current_price: current_price, qty: qty, amount: amount)
     end
+  end
 
-    $redis.set('recently_adding_positions', result.to_json) if result.any?
+  def get_history_price(symbol, event_date)
+    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{event_date}&to_date=#{event_date}"
+    response = RestClient.get(url)
+    data = JSON.parse(response.body)
+    data['result'].values[0].to_f rescue nil
   end
 end

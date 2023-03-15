@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_07_093315) do
+ActiveRecord::Schema.define(version: 2023_03_15_080531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 2023_03_07_093315) do
     t.datetime "event_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "position_side"
     t.index ["order_id"], name: "index_synced_transactions_on_order_id"
   end
 

@@ -7,22 +7,32 @@ class GetBinanceFuturesTransactionsJob < ApplicationJob
     SyncedTransaction.transaction do
       binance_data.each do |d|
         revenue = d['realizedPnl'].to_f
-        next if revenue == 0
-        tx = SyncedTransaction.where(order_id: d['orderId']).first_or_create
         amount = d['quoteQty'].to_f + revenue
+        trade_type = d['side'].downcase
+        position_side = if trade_type == 'sell'
+                          revenue == 0 ? 'short' : 'long'
+                        else
+                          revenue == 0 ? 'long' : 'short'
+                        end
+        tx = SyncedTransaction.where(order_id: d['id']).first_or_create
         tx.update(
           source: 'binance',
           origin_symbol: d['symbol'],
           fee_symbol: d['commissionAsset'],
-          trade_type: d['side'].downcase,
+          trade_type: trade_type,
           price: d['price'],
-          qty: d['qty'],
-          amount: amount,
+          qty: get_number(d['qty'].to_f, revenue),
+          amount: get_number(amount, revenue),
           fee: d['commission'],
           revenue: revenue,
+          position_side: position_side,
           event_time: Time.at(d['time'].to_i / 1000)
         )
       end
     end
+  end
+
+  def get_number(num, revenue)
+    revenue == 0 || num == 0 ? num : num * -1
   end
 end
