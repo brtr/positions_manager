@@ -109,6 +109,8 @@
                 <%= current_user.name %>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropdownMenuLink">
+                <li><%= link_to('修改', edit_registration_path(:user),class: "dropdown-item") %></li>
+                <li><hr class="dropdown-divider"></li>
                 <li><%= link_to('退出', destroy_user_session_path, :method => :delete, class: "dropdown-item") %></li>
               </ul>
             </div>
