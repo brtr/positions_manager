@@ -10,17 +10,15 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
       qty = txs.sum(&:qty)
       amount = txs.sum(&:amount)
       price = amount / qty
-      if qty > 0
-        current_price = UserPosition.where(user_id: nil, origin_symbol: key[0], trade_type: trade_type, source: key[3]).take&.current_price
-      elsif qty < 0
-        current_price = get_history_price(from_symbol.downcase, date)
-      end
+      current_price = UserPosition.where(user_id: nil, origin_symbol: key[0], trade_type: trade_type, source: key[3]).take&.current_price
+      current_price = get_history_price(from_symbol.downcase, date) if current_price.nil?
       aph.update(price: price, current_price: current_price, qty: qty, amount: amount)
     end
   end
 
   def get_history_price(symbol, event_date)
-    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{event_date}&to_date=#{event_date}"
+    date = event_date == Date.today ? event_date - 1.day : event_date
+    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{date}&to_date=#{date}"
     response = RestClient.get(url)
     data = JSON.parse(response.body)
     data['result'].values[0].to_f rescue nil
