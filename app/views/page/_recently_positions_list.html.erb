@@ -23,8 +23,8 @@
         <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
         <td><%= d.price.round(3) %></td>
         <td><%= d.current_price.round(3) %></td>
-        <td><%= d.qty.round(3) %></td>
-        <td><%= d.amount.round(3) %></td>
+        <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty.round(3) %></td>
+        <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(3) %></td>
         <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue.round(3) %></td>
         <td><%= "#{d.roi}%" %></td>
         <td><%= "#{d.amount_ratio}" %></td>

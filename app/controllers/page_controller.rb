@@ -67,9 +67,9 @@ class PageController < ApplicationController
     @to_date = Date.parse(params[:to_date]) rescue Date.today
     @from_date = Date.parse(params[:from_date]) + 1.day rescue Date.yesterday
     @symbol = params[:origin_symbol]
-    sort = params[:sort].presence || "revenue"
+    sort = params[:sort].presence || "event_date"
     sort_type = params[:sort_type].presence || "desc"
-    data = AddingPositionsHistory.where('qty > 0 and amount > 1 and event_date between ? and ?', @from_date, @to_date)
+    data = AddingPositionsHistory.where('(amount > ? or amount < ?) and event_date between ? and ?', 1, -1, @from_date, @to_date)
     data = data.where(origin_symbol: @symbol) if @symbol.present?
     parts = data.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     data = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
@@ -121,6 +121,6 @@ class PageController < ApplicationController
   def adding_positions_calendar
     @page_index = 16
     start_date = params.fetch(:start_date, Date.today).to_date
-    @data = AddingPositionsHistory.where('qty > 0 and amount > 1 and event_date between ? and ?', start_date.beginning_of_month.beginning_of_week, start_date.end_of_month.end_of_week).order(event_date: :asc)
+    @data = AddingPositionsHistory.where('(amount > ? or amount < ?) and event_date between ? and ?', 1, -1, start_date.beginning_of_month.beginning_of_week, start_date.end_of_month.end_of_week).order(event_date: :asc)
   end
 end
