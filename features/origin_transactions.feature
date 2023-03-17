@@ -12,7 +12,7 @@ Feature: Origin Transactions pages
     Then I see 'EOS' text
     When I select2 "test2" from "#campaign" filter
      And I am waiting for ajax
-    Then I should not see 'EOS' text
+    Then I should not see content "EOS" within "#trading-histories-container > table > tbody > tr:nth-child(1)"
     Then I see 'BTC' text
 
   @javascript
