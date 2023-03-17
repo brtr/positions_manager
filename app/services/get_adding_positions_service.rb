@@ -47,7 +47,7 @@ class GetAddingPositionsService
     def update_current_price
       AddingPositionsHistory.all.group_by{|aph| [aph.origin_symbol, aph.trade_type, aph.source]}.each do |key, value|
         current_price = UserPosition.where(user_id: nil, origin_symbol: key[0], trade_type: key[1], source: key[2]).take&.current_price
-        AddingPositionsHistory.where('id in (?) and qty > 0', value.map(&:id)).update_all(current_price: current_price) unless current_price.nil?
+        AddingPositionsHistory.where('id in (?)', value.map(&:id)).update_all(current_price: current_price) unless current_price.nil?
       end
     end
 
