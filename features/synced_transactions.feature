@@ -10,9 +10,9 @@ Feature: Synced Transactions pages
     Then I see '总盈利' text
     Then I see '10' text
     Then I see 'ETH' text
-    When I fill 'BTCUSDT' into the 'search' field
+    When I select2 "BTCUSDT" from "#search" filter
      And I click on the button "确定"
-    Then I should not see 'ETH' text
+    Then I should not see content "ETH" within "#trading-histories-container > table > tbody > tr:nth-child(1)"
     Then I see 'BTC' text
 
   @javascript

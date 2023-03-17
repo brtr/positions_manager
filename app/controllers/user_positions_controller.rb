@@ -5,8 +5,9 @@ class UserPositionsController < ApplicationController
     @page_index = 3
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
+    @symbol = params[:search]
     histories = UserPosition.available.where(user_id: current_user.id)
-    histories = histories.where(from_symbol: params[:search].upcase) if params[:search].present?
+    histories = histories.where(origin_symbol: @symbol) if @symbol.present?
     parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
     @histories = @histories.reverse if sort_type == "desc"

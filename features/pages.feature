@@ -12,9 +12,9 @@ Feature: Public pages
     Then I see '(392.55)' text
     Then I see '(3.7202)' text
     Then I see 'EOS' text
-    When I fill 'BTC' into the 'search' field
+    When I select2 "BTCUSDT" from "#search" filter
      And I click on the button "确定"
-    Then I should not see 'EOS' text
+    Then I should not see content "EOS" within "#user-positions-container > table > tbody > tr:nth-child(1)"
     Then I see 'BTC' text
     When I fill '2022-11-05' into the 'compare_date' field
      And I click on the button "确定"

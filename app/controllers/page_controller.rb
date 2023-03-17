@@ -6,8 +6,9 @@ class PageController < ApplicationController
     @daily_market_data = JSON.parse($redis.get('daily_market_data')) rescue {}
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
+    @symbol = params[:search]
     histories = UserPosition.available.where(user_id: nil)
-    histories = histories.where(from_symbol: params[:search].upcase) if params[:search].present?
+    histories = histories.where(origin_symbol: @symbol) if @symbol.present?
     histories = histories.select{|h| h.amount < @max_amount} if @flag && @max_amount > 0
     parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first

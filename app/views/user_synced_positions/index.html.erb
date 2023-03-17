@@ -6,7 +6,7 @@
   <div class="mb-3 mt-3 col-6">
     <%= form_tag user_synced_positions_path, id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
-        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "搜索交易对..." %>
+        <%= select_tag(:search, options_for_select(UserSyncedPosition.available.where(user_id: current_user.id).pluck(:origin_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
         <%= text_field_tag :compare_date, params[:compare_date], class: "form-control datepicker",type: "text", placeholder: "选择对比日期", autocomplete: "off" %>
         <button type="submit" class="btn btn-primary">确定</button>
         <%= link_to "Reset", user_synced_positions_path, class: 'btn btn-default' %>

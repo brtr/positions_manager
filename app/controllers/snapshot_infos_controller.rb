@@ -22,7 +22,8 @@ class SnapshotInfosController < ApplicationController
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
     records = @info.snapshot_positions
-    records = records.where(from_symbol: params[:search]) if params[:search].present?
+    @symbol = params[:search]
+    records = records.where(origin_symbol: @symbol) if @symbol.present?
     @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
     @snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: @info.source_type, user_id: user_id, event_date: @info.event_date - 1.day}).to_a
   end
@@ -30,8 +31,7 @@ class SnapshotInfosController < ApplicationController
   def export_user_positions
     @info = SnapshotInfo.find_by(id: params[:id])
     records = @info.snapshot_positions
-    @total_summary = records.total_summary(nil, @info.synced?)
-    records = records.where(from_symbol: params[:search]) if params[:search].present?
+    records = records.where(origin_symbol: params[:search]) if params[:search].present?
     snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: @info.source_type, user_id: nil, event_date: @info.event_date - 1.day})
 
     file = "合约仓位历史快照 - #{@info.event_date}.csv"
@@ -41,8 +41,8 @@ class SnapshotInfosController < ApplicationController
         snapshot = snapshots.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first
         writer << [ display_symbol(h, snapshot), I18n.t("views.contract_trading.#{h.trade_type}"), "#{h.price.round(4)} #{h.fee_symbol}",
                     "#{h.estimate_price.to_f.round(4)} #{h.fee_symbol}", h.qty.round(4), position_amount_display(h, snapshot, html_safe: false),
-                    "#{(h.cost_ratio(@total_summary[:total_cost]) * 100).round(3)}%", position_revenue_display(h, snapshot, html_safe: false),
-                    "#{h.margin_revenue} #{h.fee_symbol}", "#{(h.roi * 100).round(3)}%", "#{(h.revenue_ratio(@total_summary[:total_revenue]) * 100).round(3)}%",
+                    "#{(h.cost_ratio(@info.total_cost) * 100).round(3)}%", position_revenue_display(h, snapshot, html_safe: false),
+                    "#{h.margin_revenue} #{h.fee_symbol}", "#{(h.roi * 100).round(3)}%", "#{(h.revenue_ratio(@info.total_revenue) * 100).round(3)}%",
                     "#{(h.margin_ratio.to_f * 100).round(3)}%", h.source]
       end
     end

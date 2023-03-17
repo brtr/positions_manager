@@ -6,8 +6,8 @@
   <div class="mb-3 col-2">
     <%= form_tag snapshot_info_path(@info, user_id: params[:user_id]), id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
-        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "搜索交易对..." %>
-        <button type="submit" class="btn btn-primary">确定</button>
+        <%= select_tag(:search, options_for_select(@info.snapshot_positions.pluck(:origin_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+        <button type="submit" class="btn btn-primary ms-3">确定</button>
         <%= link_to "Reset", snapshot_info_path(@info, user_id: params[:user_id]), class: 'btn btn-default' %>
       </div>
     <% end %>

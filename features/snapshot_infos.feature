@@ -20,9 +20,9 @@ Feature: Snapshot Info pages
      And I am waiting for ajax
     Then I see '合约仓位历史快照 - 2022-12-10' text
     Then I see 'EOS' text
-    When I fill "BTC" into the "search" field
+    When I select2 "BTCUSDT" from "#search" filter
      And I click on the button "确定"
-    Then I should not see "EOS" text
+    Then I should not see content "ETH" within "#position-histories-container > table > tbody > tr:nth-child(1)"
      And I should see content "BTC" within "#position-histories-container"
 
   @javascript
