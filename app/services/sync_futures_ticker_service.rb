@@ -2,6 +2,7 @@ require 'openssl'
 require 'rest-client'
 
 class SyncFuturesTickerService
+  SYMBOLS = %w[USDCUSDT BTCDOMUSDT]
   class << self
     def get_24hr_tickers(rank)
       binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
@@ -9,7 +10,7 @@ class SyncFuturesTickerService
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
-        next if ticker["symbol"] == "BTCDOMUSDT"
+        next if ticker["symbol"].in?(SYMBOLS)
         last_price = ticker["lastPrice"].to_f
         from_symbol = fetch_symbol(ticker["symbol"])
         price_ratio = get_price_ratio(from_symbol, last_price, rank)
