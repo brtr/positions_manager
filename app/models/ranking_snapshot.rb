@@ -5,7 +5,7 @@ class RankingSnapshot < ApplicationRecord
       open_price = data.first.open_price
       last_record = data.last
       last_price = last_record.last_price
-      price_change = (last_price - open_price) / open_price
+      price_change = (last_price - open_price) / open_price rescue 0
       {
         "symbol" => key[0],
         "lastPrice" => last_price,

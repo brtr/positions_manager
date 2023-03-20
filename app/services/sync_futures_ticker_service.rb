@@ -11,7 +11,9 @@ class SyncFuturesTickerService
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
         next if ticker["symbol"].in?(SYMBOLS)
+        open_price = ticker["openPrice"].to_f
         last_price = ticker["lastPrice"].to_f
+        margin = ticker["highPrice"].to_f - ticker["lowPrice"].to_f
         from_symbol = fetch_symbol(ticker["symbol"])
         price_ratio = get_price_ratio(from_symbol, last_price, rank)
         {
@@ -21,7 +23,8 @@ class SyncFuturesTickerService
           "bottomPriceRatio" => price_ratio['bottom_ratio'].to_s,
           "risenRatio" => price_ratio['risen_ratio'],
           "topPriceRatio" => price_ratio['top_ratio'],
-          "openPrice" => ticker["openPrice"],
+          "openPrice" => open_price,
+          "amplitude" => get_amplitude(open_price, margin),
           "source" => "binance"
         }
       end
@@ -31,6 +34,7 @@ class SyncFuturesTickerService
         from_symbol, to_symbol = ticker["instId"].split(/-/)
         open_price = ticker["sodUtc8"].to_f
         last_price = ticker["last"].to_f
+        margin = ticker["high24h"].to_f - ticker["low24h"].to_f
         price_change = (ticker["last"].to_f - open_price) / open_price
         price_ratio = get_price_ratio(from_symbol, last_price, rank)
         {
@@ -41,6 +45,7 @@ class SyncFuturesTickerService
           "risenRatio" => price_ratio['risen_ratio'],
           "topPriceRatio" => price_ratio['top_ratio'],
           "openPrice" => open_price,
+          "amplitude" => get_amplitude(open_price, margin),
           "source" => "okx"
         }
       end
@@ -78,6 +83,10 @@ class SyncFuturesTickerService
       response = RestClient.get(url)
       data = JSON.parse(response)
       data
+    end
+
+    def get_amplitude(open_price, margin)
+      ((margin / open_price) * 100).round(3) rescue 0
     end
   end
 end

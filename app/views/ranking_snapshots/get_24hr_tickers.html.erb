@@ -11,6 +11,7 @@
             <th>币种</th>
             <th>24小时涨幅</th>
             <th>一年内底部比例</th>
+            <th>振幅</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -20,6 +21,7 @@
               <td><%= get_symbol_url(d["symbol"], get_top10_count(d["source"], d["symbol"])) %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
+              <td><%= d["amplitude"].to_s + " %" %></td>
               <td><%= d["source"] %></td>
             </tr>
           <% end %>
@@ -33,6 +35,7 @@
             <th>币种</th>
             <th>24小时变动</th>
             <th>一年内底部比例</th>
+            <th>振幅</th>
             <th>来源</th>
           </tr>
         </thead>
@@ -42,6 +45,7 @@
               <td><%= get_symbol_url d["symbol"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
+              <td><%= d["amplitude"].to_s + " %" %></td>
               <td><%= d["source"] %></td>
             </tr>
           <% end %>
