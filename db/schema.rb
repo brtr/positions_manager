@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_15_080531) do
+ActiveRecord::Schema.define(version: 2023_03_21_092747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,10 @@ ActiveRecord::Schema.define(version: 2023_03_15_080531) do
     t.datetime "max_loss_date"
     t.datetime "max_revenue_date"
     t.datetime "min_revenue_date"
+    t.decimal "max_roi"
+    t.datetime "max_roi_date"
+    t.decimal "min_roi"
+    t.datetime "min_roi_date"
     t.index ["event_date", "user_id"], name: "index_snapshot_infos_on_event_date_and_user_id"
     t.index ["event_date"], name: "index_snapshot_infos_on_event_date"
     t.index ["user_id"], name: "index_snapshot_infos_on_user_id"

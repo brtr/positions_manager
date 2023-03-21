@@ -26,7 +26,11 @@ class SnapshotPosition < ApplicationRecord
       max_revenue: infos.max_revenue(user_id: user_id, is_synced: is_synced, date: date),
       max_revenue_date: $redis.get("#{redis_key}_max_revenue_date"),
       min_revenue: infos.min_revenue(user_id: user_id, is_synced: is_synced, date: date),
-      min_revenue_date: $redis.get("#{redis_key}_min_revenue_date")
+      min_revenue_date: $redis.get("#{redis_key}_min_revenue_date"),
+      max_roi: infos.max_roi(user_id: user_id, is_synced: is_synced, date: date),
+      max_roi_date: $redis.get("#{redis_key}_max_roi_date"),
+      min_roi: infos.min_roi(user_id: user_id, is_synced: is_synced, date: date),
+      min_roi_date: $redis.get("#{redis_key}_min_roi_date")
     }
   end
 

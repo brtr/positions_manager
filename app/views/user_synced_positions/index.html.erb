@@ -20,10 +20,9 @@
       <p>总投入: <%= @total_summary[:total_cost].round(3) %> <%= last_summary_display(@last_summary[:total_cost]) %> / 绝对收益: <%= @total_summary[:total_revenue].round(3) %> <%= last_summary_display(@last_summary[:total_revenue]) %> / 绝对收益占总投入的比例: <%= get_roi(@total_summary)  %></p>
       <p>盈利总数量: <%= @total_summary[:profit_count] %> <%= last_summary_display(@last_summary[:profit_count]) %> / 盈利总金额: <%= @total_summary[:profit_amount].round(3) %><%= last_summary_display(@last_summary[:profit_amount]) %> </p>
       <p>亏损总数量: <%= @total_summary[:loss_count] %> <%= last_summary_display(@last_summary[:loss_count]) %> / 亏损总金额: <%= @total_summary[:loss_amount].round(3) %> <%= last_summary_display(@last_summary[:loss_amount]) %> </p>
-      <p>历史最高盈利: <%= @total_summary[:max_profit].round(3) %> ( <%= @total_summary[:max_profit_date] %> )</p>
-      <p>历史最高亏损: <%= @total_summary[:max_loss].round(3) %> ( <%= @total_summary[:max_loss_date] %> )</p>
-      <p>历史最高绝对收益: <%= @total_summary[:max_revenue].round(3) %> ( <%= @total_summary[:max_revenue_date] %> )</p>
-      <p>历史最低绝对收益: <%= @total_summary[:min_revenue].round(3) %> ( <%= @total_summary[:min_revenue_date] %> )</p>
+      <p>历史最高盈利: <%= @total_summary[:max_profit].round(3) %> ( <%= @total_summary[:max_profit_date] %> ) / 历史最高亏损: <%= @total_summary[:max_loss].round(3) %> ( <%= @total_summary[:max_loss_date] %> )</p>
+      <p>历史最高绝对收益: <%= @total_summary[:max_revenue].round(3) %> ( <%= @total_summary[:max_revenue_date] %> ) / 历史最低绝对收益: <%= @total_summary[:min_revenue].round(3) %> ( <%= @total_summary[:min_revenue_date] %> )</p>
+      <p>历史最高绝对收益占总投入的比例: <%= @total_summary[:max_roi].round(3) %>% ( <%= @total_summary[:max_roi_date] %> ) / 历史最低绝对收益占总投入的比例: <%= @total_summary[:min_roi].round(3) %>% ( <%= @total_summary[:min_roi_date] %> )</p>
     </div>
   </div>
   <div id="user-positions-container">

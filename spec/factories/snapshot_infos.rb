@@ -17,5 +17,9 @@ FactoryBot.define do
     max_loss { 1 }
     max_revenue { 1 }
     min_revenue { 1 }
+    max_roi { 1 }
+    max_roi_date { 1 }
+    min_roi { 1 }
+    min_roi_date { 1 }
   end
 end
