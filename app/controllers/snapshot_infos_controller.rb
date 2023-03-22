@@ -18,7 +18,7 @@ class SnapshotInfosController < ApplicationController
   def show
     user_id = params[:user_id].presence
     @info = SnapshotInfo.find_by(id: params[:id])
-    @page_index = user_id.nil? ? 2 : (@info.synced? ? 8 : 4)
+    @page_index = user_id.nil? ? 2 : (@info.synced? ? 13 : 4)
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
     records = @info.snapshot_positions

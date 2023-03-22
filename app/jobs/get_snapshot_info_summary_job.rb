@@ -1,24 +1,7 @@
 class GetSnapshotInfoSummaryJob < ApplicationJob
-  queue_as :daily_job
+  queue_as :default
 
-  def perform(date: Date.today)
-    snapshot_info = SnapshotInfo.synced.where(event_date: date, user_id: nil).first_or_create
-    get_summary(snapshot_info, date, true)
-
-    user_ids = UserPosition.where("qty != ?", 0).pluck(:user_id).compact.uniq
-    user_ids.each do |user_id|
-      snapshot_info = SnapshotInfo.uploaded.where(event_date: date, user_id: user_id).first_or_create
-      get_summary(snapshot_info, date, false)
-    end
-
-    user_ids = UserSyncedPosition.where("qty != ?", 0).pluck(:user_id).compact.uniq
-    user_ids.each do |user_id|
-      snapshot_info = SnapshotInfo.synced.where(event_date: date, user_id: user_id).first_or_create
-      get_summary(snapshot_info, date, true)
-    end
-  end
-
-  def get_summary(snapshot_info, date, is_synced)
+  def perform(snapshot_info, date, is_synced)
     user_id = snapshot_info.user_id
     total_summary = date == Date.today ? UserPosition.total_summary(user_id) : snapshot_info.snapshot_positions.total_summary(user_id: user_id, is_synced: is_synced, date: snapshot_info.event_date)
     ranking_snapshots = RankingSnapshot.where(event_date: snapshot_info.event_date)
