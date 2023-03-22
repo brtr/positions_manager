@@ -4,19 +4,6 @@ class GenerateUserSyncedPositionsSnapshotsJob < ApplicationJob
   def perform(date: Date.today)
     user_ids = UserSyncedPosition.where("qty != ?", 0).pluck(:user_id).compact.uniq
     user_ids.each do |user_id|
-      redis_key = "user_#{user_id}_#{date.to_s}_synced_positions"
-      $redis.del("#{redis_key}_max_profit")
-      $redis.del("#{redis_key}_max_profit_date")
-      $redis.del("#{redis_key}_max_loss")
-      $redis.del("#{redis_key}_max_loss_date")
-      $redis.del("#{redis_key}_max_revenue")
-      $redis.del("#{redis_key}_max_revenue_date")
-      $redis.del("#{redis_key}_min_revenue")
-      $redis.del("#{redis_key}_min_revenue_date")
-      $redis.del("#{redis_key}_max_roi")
-      $redis.del("#{redis_key}_max_roi_date")
-      $redis.del("#{redis_key}_min_roi")
-      $redis.del("#{redis_key}_min_roi_date")
       snapshot_info = SnapshotInfo.synced.where(event_date: date, user_id: user_id).first_or_create
       generate_synced_snapshot(snapshot_info)
       GetSnapshotInfoSummaryJob.perform_later(snapshot_info, date, true)
