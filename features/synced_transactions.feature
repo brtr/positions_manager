@@ -20,10 +20,10 @@ Feature: Synced Transactions pages
     When I visit the '/synced_transactions' page
     Then I see '交易对' text
     Then I see '成本价' text
-    When I click on the '总投入' link
+    When I click on the '成交金额' link
      And I am waiting for ajax
     Then I should see content "ETH" within "#trading-histories-container > table > tbody > tr:nth-child(1)"
-    When I click on the '总投入' link
+    When I click on the '成交金额' link
      And I am waiting for ajax
     Then I should see content "BTC" within "#trading-histories-container > table > tbody > tr:nth-child(1)"
     When I click on the '收益' link

@@ -133,6 +133,14 @@ module ApplicationHelper
       },
       {
         name: "总投入",
+        sort: "none"
+      },
+      {
+        name: "成交价",
+        sort: "none"
+      },
+      {
+        name: "成交金额",
         sort: "amount"
       },
       {

@@ -7,7 +7,7 @@ class GetBinanceFuturesTransactionsJob < ApplicationJob
     SyncedTransaction.transaction do
       binance_data.each do |d|
         revenue = d['realizedPnl'].to_f
-        amount = d['quoteQty'].to_f + revenue
+        amount = d['quoteQty'].to_f
         trade_type = d['side'].downcase
         position_side = if trade_type == 'sell'
                           revenue == 0 ? 'short' : 'long'

@@ -19,8 +19,10 @@
         <td><%= h.event_time.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= h.origin_symbol %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= h.trade_type == 'buy' ? '买入' : '卖出' %></td>
-        <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
+        <td><%= h.cost_price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.qty.round(4) %></td>
+        <td><%= h.total_cost.round(4) %> <%= h.fee_symbol %></td>
+        <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.amount.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.fee.round(4) %> <%= h.fee_symbol %></td>
         <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= "#{h.revenue.round(4)} #{h.fee_symbol}" %></td>
