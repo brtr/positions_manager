@@ -10,7 +10,6 @@ class SyncFuturesTickerService
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
-        next if ticker["symbol"].in?(SYMBOLS)
         open_price = ticker["openPrice"].to_f
         last_price = ticker["lastPrice"].to_f
         margin = ticker["highPrice"].to_f - ticker["lowPrice"].to_f
@@ -53,6 +52,7 @@ class SyncFuturesTickerService
       result = (binance_24hr_tickers + okx_24hr_tickers).group_by do |d|
         next if d.blank?
         symbol = d["symbol"]
+        next if symbol.in?(SYMBOLS)
         from_symbol = symbol.split(/USDT/)[0]
         from_symbol = symbol.split(/BUSD/)[0] if from_symbol == symbol
         from_symbol = symbol.split(/USD/)[0] if from_symbol == symbol
@@ -66,7 +66,7 @@ class SyncFuturesTickerService
 
     def fetch_symbol(symbol)
       from_symbol = symbol
-      fee_symbols = %w[BUSD USDT USD]
+      fee_symbols = %w[USDT BUSD USD]
       fee_symbols.each do |fee_symbol|
         from_symbol = symbol.split(fee_symbol)[0]
         if from_symbol != symbol
