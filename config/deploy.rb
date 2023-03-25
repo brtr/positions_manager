@@ -55,6 +55,8 @@ set :keep_assets, 2
 set :bundler_path, "/home/deploy/.rbenv/shims/bundle"
 
 namespace :deploy do
+  before :starting, 'sidekiq:fast_restart'
+  before :starting, 'web:restart'
   after :publishing, 'sidekiq:fast_restart'
   after :publishing, 'web:restart'
   after :finishing, :cleanup
