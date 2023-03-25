@@ -12,7 +12,7 @@ class GetPositionsChartDataService
       AddingPositionsHistory.where(origin_symbol: origin_symbol, event_date: (from_date..to_date), source: source).order(event_date: :asc).group_by(&:event_date)
                             .map{|date, data| position_data[date.to_s] = data.sum(&:amount)}
 
-      position = UserPosition.find_by(origin_symbol: origin_symbol, trade_type: trade_type, source: source)
+      position = UserPosition.find_by(user_id: nil, origin_symbol: origin_symbol, trade_type: trade_type, source: source)
       qty = position.qty.round(3) rescue 0
       price = position.price.round(3) rescue 0
       amount = position.amount.round(3) rescue 0
