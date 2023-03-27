@@ -49,11 +49,22 @@
                 <td><%= d.source %></td>
               </tr>
             <% end %>
+            <% d = @data.first %>
+            <% total_revenue = @data.total_revenue(d.current_price, d.trade_type) %>
+            <tr>
+              <td>总计</td>
+              <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
+              <td><%= @data.average(:price).round(3) %></td>
+              <td><%= d.current_price.round(3) %></td>
+              <td class="<%= @data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_qty %></td>
+              <td class="<%= @data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_amount.round(3) %></td>
+              <td class="<%= total_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= total_revenue.round(3) %></td>
+              <td><%= ((total_revenue / @data.total_amount.abs) * 100).round(3) %>%</td>
+              <td><%= @data.amount_ratio(d.target_position) %></td>
+              <td><%= d.source %></td>
+            </tr>
           </tbody>
         </table>
-        <div class="p-4">
-          <%= paginate @data %>
-        </div>
       </div>
     </div>
     <div class="col-10 mx-auto">
