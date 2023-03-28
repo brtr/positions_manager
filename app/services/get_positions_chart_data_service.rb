@@ -19,7 +19,7 @@ class GetPositionsChartDataService
 
       result = {}
       price_data["result"].each do |date, daily_price|
-        result[date] = { daily_price: daily_price.to_f.round(3), position_amount: position_data[date].to_f.round(3), date: date, qty: qty, price: price, amount: amount }
+        result[date] = { daily_price: daily_price.to_f.round(4), position_amount: position_data[date].to_f.round(3), date: date, qty: qty, price: price, amount: amount }
       end
 
       $redis.set("#{origin_symbol}_monthly_chart_data", result.to_json)
