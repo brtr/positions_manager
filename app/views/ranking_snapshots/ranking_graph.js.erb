@@ -7,7 +7,6 @@ if(canvas){
   var ctx = canvas.getContext('2d');
   var chart_data = JSON.parse(ctx.canvas.dataset.data)
   const result = Object.values(chart_data)
-  console.log(result)
   var myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -64,7 +63,6 @@ if(canvas){
             },
             footer: function(context) {
               data = result.filter(function(x) {return x.date == context[0].label})
-              console.log(data)
               if(data.length > 0){
                 i = data[0]
                 roi = "涨跌: " + i.rate + "%"

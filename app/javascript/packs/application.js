@@ -25,17 +25,25 @@ window.jQuery = $;
 window.$ = $;
 
 $(document).on("ajax:before ajaxStart page:fetch turbolinks:click turbolinks:load", function(event) {
-  'use strict';
+    'use strict';
 
-  $('[data-bs-toggle="tooltip"]').tooltip({html: true});
-  $('.select2-dropdown').select2();
-  $('.datepicker').datepicker({
-    language: 'zh-CN',
-    format: "yyyy-mm-dd",
-    autoclose: true,
-    forceParse: true,
-    todayBtn: true,
-    endDate: moment().toDate(),
-    initialDate: moment().toDate()
-  })
+    $('[data-bs-toggle="tooltip"]').tooltip({html: true});
+    $('.select2-dropdown').select2();
+    $('.datepicker').datepicker({
+        language: 'zh-CN',
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        forceParse: true,
+        todayBtn: true,
+        endDate: moment().toDate(),
+        initialDate: moment().toDate()
+    })
+
+    if ($('.select_ranking_symbols').length > 0) {
+        $('.select_ranking_symbols').off('change').on('change', function() {
+            $('#rankingModal').modal('hide');
+            var symbol = $(this).val();
+            $.get('/ranking_snapshots/ranking_graph?symbol=' + symbol)
+        })
+    }
 });
