@@ -34,6 +34,9 @@ jobs:
       ACCESS_ID: ''
       ACCESS_KEY: ''
       AWS_REGION: us-east-1
+      BINANCE_SPOT_URL: 'https://api.binance.com'
+      BINANCE_FUTURES_URL: 'https://fapi.binance.com'
+      COIN_ELITE_URL: '127.0.0.1'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

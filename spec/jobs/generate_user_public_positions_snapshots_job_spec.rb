@@ -13,5 +13,13 @@ RSpec.describe GenerateUserPublicPositionsSnapshotsJob, type: :job do
         described_class.perform_later
       }.to have_enqueued_job(GenerateUserPublicPositionsSnapshotsJob).on_queue('daily_job')
     end
+
+    it 'should generate snapshot info' do
+      create(:user_position)
+
+      expect do
+        subject.perform
+      end.to change { SnapshotInfo.count }.by(1)
+    end
   end
 end
