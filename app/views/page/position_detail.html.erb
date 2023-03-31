@@ -39,11 +39,11 @@
               <tr>
                 <td><%= d.event_date.to_s %></td>
                 <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
-                <td><%= d.price.round(3) %></td>
-                <td><%= d.current_price.round(3) %></td>
+                <td><%= d.price.round(4) %></td>
+                <td><%= d.current_price.round(4) %></td>
                 <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty %></td>
-                <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(3) %></td>
-                <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue.round(3) %></td>
+                <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
+                <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue.round(4) %></td>
                 <td><%= "#{d.roi}%" %></td>
                 <td><%= "#{d.amount_ratio}" %></td>
                 <td><%= d.source %></td>
@@ -54,12 +54,12 @@
             <tr>
               <td>总计</td>
               <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
-              <td><%= @data.average(:price).round(3) %></td>
-              <td><%= d.current_price.round(3) %></td>
+              <td><%= @data.average(:price).round(4) %></td>
+              <td><%= d.current_price.round(4) %></td>
               <td class="<%= @data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_qty %></td>
-              <td class="<%= @data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_amount.round(3) %></td>
-              <td class="<%= total_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= total_revenue.round(3) %></td>
-              <td><%= ((total_revenue / @data.total_amount.abs) * 100).round(3) %>%</td>
+              <td class="<%= @data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_amount.round(4) %></td>
+              <td class="<%= total_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= total_revenue.round(4) %></td>
+              <td><%= ((total_revenue / @data.total_amount.abs) * 100).round(4) %>%</td>
               <td><%= @data.amount_ratio(d.target_position) %></td>
               <td><%= d.source %></td>
             </tr>
