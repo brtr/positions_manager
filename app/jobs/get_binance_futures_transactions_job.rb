@@ -1,8 +1,8 @@
 class GetBinanceFuturesTransactionsJob < ApplicationJob
   queue_as :daily_job
 
-  def perform(symbol)
-    binance_data = BinanceFuturesService.new.get_my_trades(symbol)
+  def perform(symbol, user_id=nil)
+    binance_data = BinanceFuturesService.new(user_id: user_id).get_my_trades(symbol)
 
     SyncedTransaction.transaction do
       binance_data.each do |d|
@@ -14,7 +14,7 @@ class GetBinanceFuturesTransactionsJob < ApplicationJob
                         else
                           revenue == 0 ? 'long' : 'short'
                         end
-        tx = SyncedTransaction.where(order_id: d['id']).first_or_create
+        tx = SyncedTransaction.where(order_id: d['id'], user_id: user_id).first_or_create
         tx.update(
           source: 'binance',
           origin_symbol: d['symbol'],

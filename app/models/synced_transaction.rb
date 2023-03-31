@@ -1,8 +1,8 @@
 class SyncedTransaction < ApplicationRecord
   scope :available, -> { where.not(revenue: 0) }
 
-  def self.total_summary
-    records = SyncedTransaction.available
+  def self.total_summary(user_id: nil)
+    records = SyncedTransaction.available.where(user_id: user_id)
     profit_records = records.select{|r| r.revenue > 0}
     loss_records = records.select{|r| r.revenue < 0}
     {

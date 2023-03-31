@@ -36,7 +36,10 @@ Rails.application.routes.draw do
 
   resources :combine_transactions, only: :index
   resources :transactions_snapshot_infos, only: [:index, :show]
-  resources :synced_transactions, only: :index
+  resources :synced_transactions, only: :index do
+    get :users, on: :collection
+  end
+
   resources :ranking_snapshots, only: [:index, :show] do
     collection do
       get :get_24hr_tickers

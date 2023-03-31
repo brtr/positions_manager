@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_21_092747) do
+ActiveRecord::Schema.define(version: 2023_03_31_092952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,7 +173,9 @@ ActiveRecord::Schema.define(version: 2023_03_21_092747) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "position_side"
+    t.integer "user_id"
     t.index ["order_id"], name: "index_synced_transactions_on_order_id"
+    t.index ["user_id"], name: "index_synced_transactions_on_user_id"
   end
 
   create_table "transactions_snapshot_infos", force: :cascade do |t|
