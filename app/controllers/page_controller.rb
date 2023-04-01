@@ -36,9 +36,9 @@ class PageController < ApplicationController
         snapshot = snapshots.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first
         writer << [ display_symbol(h, snapshot), I18n.t("views.contract_trading.#{h.trade_type}"), "#{h.price.round(4)} #{h.fee_symbol}",
                     "#{h.current_price.to_f.round(4)} #{h.fee_symbol}", h.qty.round(4), position_amount_display(h, snapshot, html_safe: false),
-                    "#{(h.cost_ratio(@total_summary[:total_cost]) * 100).round(3)}%", position_revenue_display(h, snapshot, html_safe: false),
-                    "#{h.margin_revenue} #{h.fee_symbol}", "#{(h.roi * 100).round(3)}%", "#{(h.revenue_ratio(@total_summary[:total_revenue]) * 100).round(3)}%",
-                    "#{(h.margin_ratio.to_f * 100).round(3)}%", h.source]
+                    "#{(h.cost_ratio(@total_summary[:total_cost]) * 100).round(4)}%", position_revenue_display(h, snapshot, html_safe: false),
+                    "#{h.margin_revenue} #{h.fee_symbol}", "#{(h.roi * 100).round(4)}%", "#{(h.revenue_ratio(@total_summary[:total_revenue]) * 100).round(4)}%",
+                    "#{(h.margin_ratio.to_f * 100).round(4)}%", h.source]
       end
     end
 

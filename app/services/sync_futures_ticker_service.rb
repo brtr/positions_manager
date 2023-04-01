@@ -39,7 +39,7 @@ class SyncFuturesTickerService
         {
           "symbol" => from_symbol + to_symbol,
           "lastPrice" => last_price,
-          "priceChangePercent" => (price_change * 100).round(3).to_s,
+          "priceChangePercent" => (price_change * 100).round(4).to_s,
           "bottomPriceRatio" => price_ratio['bottom_ratio'].to_s,
           "risenRatio" => price_ratio['risen_ratio'],
           "topPriceRatio" => price_ratio['top_ratio'],
@@ -86,7 +86,7 @@ class SyncFuturesTickerService
     end
 
     def get_amplitude(open_price, margin)
-      ((margin / open_price) * 100).round(3) rescue 0
+      ((margin / open_price) * 100).round(4) rescue 0
     end
   end
 end

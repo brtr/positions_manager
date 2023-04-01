@@ -66,6 +66,6 @@ class SnapshotPosition < ApplicationRecord
 
   private
   def self.display_number(num)
-    num >= 1 || num <= -1 ? num.round(3) : ''
+    num >= 1 || num <= -1 ? num.round(4) : ''
   end
 end

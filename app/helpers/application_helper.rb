@@ -284,7 +284,7 @@ module ApplicationHelper
   end
 
   def get_roi(total_summary)
-    roi = total_summary[:total_cost].to_f == 0 ? 0 : ((total_summary[:total_revenue].to_f / total_summary[:total_cost].to_f) * 100).round(3)
+    roi = total_summary[:total_cost].to_f == 0 ? 0 : ((total_summary[:total_revenue].to_f / total_summary[:total_cost].to_f) * 100).round(4)
     "<span class=#{roi > 0 ? 'pos-num' : 'neg-num'}>#{roi}%</span>".html_safe
   end
 

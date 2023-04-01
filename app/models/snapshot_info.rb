@@ -21,11 +21,11 @@ class SnapshotInfo < ApplicationRecord
   end
 
   def increase_ratio
-    total_symbol_count.zero? ? 0 : ((increase_count / total_symbol_count.to_f) * 100).round(3)
+    total_symbol_count.zero? ? 0 : ((increase_count / total_symbol_count.to_f) * 100).round(4)
   end
 
   def decrease_ratio
-    total_symbol_count.zero? ? 0 : ((decrease_count / total_symbol_count.to_f) * 100).round(3)
+    total_symbol_count.zero? ? 0 : ((decrease_count / total_symbol_count.to_f) * 100).round(4)
   end
 
   def margin_summary
@@ -138,6 +138,6 @@ class SnapshotInfo < ApplicationRecord
 
   private
   def display_number(num)
-    num >= 1 || num <= -1 ? num.round(3) : ''
+    num >= 1 || num <= -1 ? num.round(4) : ''
   end
 end

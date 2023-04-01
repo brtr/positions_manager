@@ -5,12 +5,12 @@ class AddingPositionsHistory < ApplicationRecord
   end
 
   def roi
-    ((revenue / amount.abs) * 100).round(3)
+    ((revenue / amount.abs) * 100).round(4)
   end
 
   def amount_ratio
     if target_position.present? && target_position.qty != 0
-      "#{((amount / target_position.amount) * 100).round(3)}%"
+      "#{((amount / target_position.amount) * 100).round(4)}%"
     else
       'N/A'
     end
@@ -35,7 +35,7 @@ class AddingPositionsHistory < ApplicationRecord
 
   def self.amount_ratio(up)
     if up.present? && up.qty != 0
-      "#{((total_amount / up.amount) * 100).round(3)}%"
+      "#{((total_amount / up.amount) * 100).round(4)}%"
     else
       'N/A'
     end

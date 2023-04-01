@@ -10,8 +10,8 @@ class GetAddingPositionsService
 
       to_date_records.available.each do |h|
         snapshot = from_date_records.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first
-        margin_qty = (h.qty - snapshot&.qty.to_f).round(3)
-        margin_amount = (h.amount - snapshot&.amount.to_f).round(3)
+        margin_qty = (h.qty - snapshot&.qty.to_f).round(4)
+        margin_amount = (h.amount - snapshot&.amount.to_f).round(4)
         next if margin_qty.zero? || margin_amount.zero?
         if h.is_a?(UserPosition)
           current_price = h.current_price

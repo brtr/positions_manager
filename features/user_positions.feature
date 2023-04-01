@@ -8,9 +8,9 @@ Feature: User Positions pages
   Scenario: Visit User positions page
     When I visit the '/user_positions' page
     Then I see '总投入' text
-    Then I see '(-124.799)' text
+    Then I see '(-124.7985)' text
     Then I see '绝对收益' text
-    Then I see '(392.55)' text
+    Then I see '(392.5504)' text
     Then I see '(3.7202)' text
     Then I see 'EOS' text
     When I select2 "BTCUSDT" from "#search" filter

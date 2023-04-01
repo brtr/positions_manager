@@ -9,7 +9,7 @@ class RankingSnapshot < ApplicationRecord
       {
         "symbol" => key[0],
         "lastPrice" => last_price,
-        "priceChangePercent" => (price_change * 100).round(3).to_s,
+        "priceChangePercent" => (price_change * 100).round(4).to_s,
         "bottomPriceRatio" => last_record.bottom_price_ratio.to_s,
         "source" => key[1]
       }

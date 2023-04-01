@@ -13,13 +13,13 @@ class GetPositionsChartDataService
                             .map{|date, data| position_data[date.to_s] = data.sum(&:amount)}
 
       position = UserPosition.find_by(user_id: nil, origin_symbol: origin_symbol, trade_type: trade_type, source: source)
-      qty = position.qty.round(3) rescue 0
-      price = position.price.round(3) rescue 0
-      amount = position.amount.round(3) rescue 0
+      qty = position.qty.round(4) rescue 0
+      price = position.price.round(4) rescue 0
+      amount = position.amount.round(4) rescue 0
 
       result = {}
       price_data["result"].each do |date, daily_price|
-        result[date] = { daily_price: daily_price.to_f.round(4), position_amount: position_data[date].to_f.round(3), date: date, qty: qty, price: price, amount: amount }
+        result[date] = { daily_price: daily_price.to_f.round(4), position_amount: position_data[date].to_f.round(4), date: date, qty: qty, price: price, amount: amount }
       end
 
       $redis.set("#{origin_symbol}_monthly_chart_data", result.to_json)

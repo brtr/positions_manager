@@ -86,7 +86,7 @@
               <% @open_orders.first(20).each do |d| %>
                 <tr>
                   <td class="<%= trade_type_style(d['side'].downcase) %>"><%= I18n.t("views.trading.#{d['side'].downcase}") %></td>
-                  <td><%= d['price'].to_f.round(3) %></td>
+                  <td><%= d['price'].to_f.round(4) %></td>
                   <td><%= d['origQty'] %></td>
                   <td><%= d['origType'] %></td>
                 </tr>

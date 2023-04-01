@@ -9,7 +9,7 @@ class GetSnapshotInfoSummaryJob < ApplicationJob
     btc_change = btc_data.last_price - btc_data.open_price rescue nil
     total_revenue = total_summary[:total_revenue].to_f
     total_cost = total_summary[:total_cost].to_f
-    total_roi = total_cost == 0 ? 0 : ((total_revenue / total_cost) * 100).round(3)
+    total_roi = total_cost == 0 ? 0 : ((total_revenue / total_cost) * 100).round(4)
     snapshot_info.update(
       increase_count: ranking_snapshots.count{|s| s.price_change_rate > 0},
       decrease_count: ranking_snapshots.count{|s| s.price_change_rate < 0},
