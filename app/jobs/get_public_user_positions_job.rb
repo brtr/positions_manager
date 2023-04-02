@@ -63,6 +63,8 @@ class GetPublicUserPositionsJob < ApplicationJob
 
     GetAddingPositionsService.update_current_price
     $redis.set("get_user_positions_refresh_time", Time.now)
+
+    ForceGcJob.perform_later
   end
 
   def get_contract_size(symbol)

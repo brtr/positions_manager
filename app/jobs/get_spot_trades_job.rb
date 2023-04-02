@@ -34,6 +34,7 @@ class GetSpotTradesJob < ApplicationJob
       combine_trades(origin_symbol)
     end
 
+    ForceGcJob.perform_later
     $redis.del('origin_transactions_total_summary')
   end
 

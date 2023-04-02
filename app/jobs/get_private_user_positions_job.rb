@@ -33,6 +33,7 @@ class GetPrivateUserPositionsJob < ApplicationJob
       get_info(up, user_id)
     end
 
+    ForceGcJob.perform_later
     $redis.set("get_user_#{user_id}_synced_positions_refresh_time", Time.now)
   end
 

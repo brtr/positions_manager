@@ -5,5 +5,7 @@ class GetPriceChartDataJob < ApplicationJob
 
   def perform
     GetPriceChartDataService.execute
+
+    ForceGcJob.perform_later
   end
 end

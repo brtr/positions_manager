@@ -4,6 +4,7 @@ class GenerateOriginTransactionsSnapshotsJob < ApplicationJob
   def perform(date: Date.today)
     snapshot_info = TransactionsSnapshotInfo.where(event_date: date).first_or_create
     generate_snapshot(snapshot_info)
+    ForceGcJob.perform_later
   end
 
   def generate_snapshot(snapshot_info)

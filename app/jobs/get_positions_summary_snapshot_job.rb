@@ -5,5 +5,6 @@ class GetPositionsSummarySnapshotJob < ApplicationJob
 
   def perform(date = Date.today)
     GetPositionsSummarySnapshotsService.execute(date)
+    ForceGcJob.perform_later
   end
 end

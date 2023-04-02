@@ -11,5 +11,6 @@ class GenerateRankingSnapshotsJob < ApplicationJob
                         price_change_rate: d["priceChangePercent"], bottom_price_ratio: d["bottomPriceRatio"])
       end
     end
+    ForceGcJob.perform_later
   end
 end

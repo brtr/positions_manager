@@ -30,6 +30,8 @@ class GetBinanceFuturesTransactionsJob < ApplicationJob
         )
       end
     end
+
+    ForceGcJob.perform_later
   end
 
   def get_number(num, revenue)

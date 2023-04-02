@@ -4,5 +4,7 @@ class GetAddingPositionsHistoriesJob < ApplicationJob
   def perform
     to_date = Date.current
     GetAddingPositionsService.execute(to_date - 1.day, to_date)
+
+    ForceGcJob.perform_later
   end
 end
