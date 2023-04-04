@@ -30,7 +30,17 @@ if(canvas){
           backgroundColor: 'rgb(54, 162, 235)',
           type: 'bar',
           yAxisID: 'y1'
-
+        },
+        {
+          label: "新增仓位平均成本价(每天)",
+          data: result.map(i => {
+            return i.price
+          }),
+          tension: 0.4,
+          backgroundColor: 'rgb(54, 162, 35)',
+          type: 'line',
+          yAxisID: 'y',
+          order: 1
         },
       ],
     },
@@ -63,12 +73,26 @@ if(canvas){
             },
             footer: function(context) {
               data = result.filter(function(x) {return x.date == context[0].label})
-              if(data.length > 0){
-                i = data[0]
-                roi = "涨跌: " + i.rate + "%"
-                return [roi]
+              chart_type = context[0].dataset.type
+              console.log(context[0])
+
+              if (context[0].dataset.type == 'line') {
+                if(data.length > 0){
+                  i = data[0]
+                  price = "成本价: " + i.price
+                  qty = "数量: " + i.qty
+                  return [price, qty]
+                } else {
+                  return context.label
+                }
               } else {
-                return context.label
+                if(data.length > 0){
+                  i = data[0]
+                  roi = "涨跌: " + i.rate + "%"
+                  return [roi]
+                } else {
+                  return context.label
+                }
               }
             }
           }
