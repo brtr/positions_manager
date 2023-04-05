@@ -2,7 +2,10 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5><%= symbol %></h5>
+        <h5>
+          <%= symbol %>
+          <%= link_to '历史投入', position_detail_path(origin_symbol: symbol, source: source, trade_type: 'buy'), target: '_blank' %>
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

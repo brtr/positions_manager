@@ -24,9 +24,10 @@ class RankingSnapshotsController < ApplicationController
 
   def ranking_graph
     @symbol = params[:symbol]
+    @source = params[:source]
     to_date = Date.today
     from_date = to_date - 3.months
-    @data = GetRankingChartDataService.execute(@symbol, params[:source])
+    @data = GetRankingChartDataService.execute(@symbol, @source)
   end
 
   private

@@ -1,6 +1,5 @@
-$('#ranking-modal-block').html("<%= j render partial: "modal", locals: { data: @data, symbol: @symbol } %>");
+$('#ranking-modal-block').html("<%= j render partial: "modal", locals: { data: @data, symbol: @symbol, source: @source } %>");
 $('#rankingModal').modal('show');
-
 
 var canvas = document.getElementById('priceChart');
 if(canvas){
@@ -19,17 +18,8 @@ if(canvas){
           }),
           tension: 0.4,
           backgroundColor: 'rgb(255, 99, 132)',
-          yAxisID: 'y'
-        },
-        {
-          label: "是否进入涨幅前10(每天)",
-          data: result.map(i => {
-            return i.is_top10
-          }),
-          tension: 0.4,
-          backgroundColor: 'rgb(54, 162, 235)',
-          type: 'bar',
-          yAxisID: 'y1'
+          yAxisID: 'y',
+          order: 1
         },
         {
           label: "新增仓位平均成本价(每天)",
@@ -40,8 +30,19 @@ if(canvas){
           backgroundColor: 'rgb(54, 162, 35)',
           type: 'line',
           yAxisID: 'y',
-          order: 1
+          order: 0
         },
+        {
+          label: "是否进入涨幅前10(每天)",
+          data: result.map(i => {
+            return i.is_top10
+          }),
+          tension: 0.4,
+          backgroundColor: 'rgb(230, 230, 230)',
+          type: 'bar',
+          yAxisID: 'y1',
+          order: 2
+        }
       ],
     },
     options: {
@@ -74,7 +75,6 @@ if(canvas){
             footer: function(context) {
               data = result.filter(function(x) {return x.date == context[0].label})
               chart_type = context[0].dataset.type
-              console.log(context[0])
 
               if (context[0].dataset.type == 'line') {
                 if(data.length > 0){
