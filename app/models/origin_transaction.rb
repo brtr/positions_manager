@@ -1,7 +1,8 @@
 class OriginTransaction < ApplicationRecord
-  def self.total_summary
-    records = OriginTransaction.where(trade_type: 'buy')
-    result = $redis.get("origin_transactions_total_summary")
+  def self.total_summary(user_id=nil)
+    records = OriginTransaction.all
+    redis_key = "origin_transactions_total_summary_#{user_id}"
+    result = $redis.get(redis_key)
     if result.nil?
       profit_records = records.select{|r| r.revenue > 0}
       loss_records = records.select{|r| r.revenue < 0}
@@ -13,7 +14,7 @@ class OriginTransaction < ApplicationRecord
         total_cost: records.sum(&:amount),
         total_revenue: records.sum(&:revenue)
       }.to_json
-      $redis.set("origin_transactions_total_summary", result, ex: 5.hours)
+      $redis.set(redis_key, result, ex: 5.hours)
     end
     JSON.parse result
   end

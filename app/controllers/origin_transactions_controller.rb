@@ -4,12 +4,27 @@ class OriginTransactionsController < ApplicationController
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
     @symbol = params[:search]
-    txs = OriginTransaction.where(trade_type: 'buy').order("#{sort} #{sort_type}")
+    txs = OriginTransaction.where(trade_type: 'buy', user_id: nil).order("#{sort} #{sort_type}")
+    @total_txs = txs
     txs = txs.where(campaign: params[:campaign]) if params[:campaign].present?
     txs = txs.where(source: params[:source]) if params[:source].present?
     txs = txs.where(original_symbol: @symbol) if @symbol.present?
     @txs = txs.page(params[:page]).per(20)
     @total_summary = txs.total_summary
+  end
+
+  def users
+    @page_index = 19
+    sort = params[:sort].presence || "event_time"
+    sort_type = params[:sort_type].presence || "desc"
+    @symbol = params[:search]
+    txs = OriginTransaction.where(trade_type: 'buy', user_id: current_user.id).order("#{sort} #{sort_type}")
+    @total_txs = txs
+    txs = txs.where(campaign: params[:campaign]) if params[:campaign].present?
+    txs = txs.where(source: params[:source]) if params[:source].present?
+    txs = txs.where(original_symbol: @symbol) if @symbol.present?
+    @txs = txs.page(params[:page]).per(20)
+    @total_summary = txs.total_summary(current_user.id)
   end
 
   def edit
@@ -25,13 +40,21 @@ class OriginTransactionsController < ApplicationController
       flash[:alert] = "campaign不能为空，请重新输入"
     end
 
-    redirect_to origin_transactions_path
+    url = @tx.user_id.present? ? users_origin_transactions_path : origin_transactions_path
+
+    redirect_to url
   end
 
   def refresh
-    GetSpotTransactionsJob.perform_later
+    if params[:user_id].present?
+      GetUsersSpotTransactionsJob.perform_later(params[:user_id])
+      url = users_origin_transactions_path
+    else
+      GetSpotTransactionsJob.perform_later
+      url = origin_transactions_path
+    end
 
-    redirect_to origin_transactions_path, notice: "正在更新，请稍等刷新查看最新价格以及其他信息..."
+    redirect_to url, notice: "正在更新，请稍等刷新查看最新价格以及其他信息..."
   end
 
   private

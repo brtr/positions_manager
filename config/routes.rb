@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   resources :origin_transactions, only: [:index, :edit, :update] do
     get :refresh, on: :collection
+    get :users, on: :collection
   end
 
   resources :combine_transactions, only: :index

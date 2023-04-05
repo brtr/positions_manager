@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_31_092952) do
+ActiveRecord::Schema.define(version: 2023_04_05_091742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,9 +74,11 @@ ActiveRecord::Schema.define(version: 2023_03_31_092952) do
     t.datetime "event_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
     t.index ["campaign"], name: "index_origin_transactions_on_campaign"
     t.index ["order_id"], name: "index_origin_transactions_on_order_id"
     t.index ["source"], name: "index_origin_transactions_on_source"
+    t.index ["user_id"], name: "index_origin_transactions_on_user_id"
   end
 
   create_table "positions_summary_snapshots", force: :cascade do |t|
