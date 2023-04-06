@@ -77,17 +77,19 @@
             <tr class="table-container-tr">
               <th>类别</th>
               <th>委托价</th>
-              <th>委托数量</th>
+              <th>委托金额</th>
               <th>订单类型</th>
             </tr>
           </thead>
           <tbody>
             <% if @open_orders %>
               <% @open_orders.first(20).each do |d| %>
+                <% price = d['price'].to_f %>
+                <% amount = price * d['origQty'].to_f %>
                 <tr>
                   <td class="<%= trade_type_style(d['side'].downcase) %>"><%= I18n.t("views.trading.#{d['side'].downcase}") %></td>
-                  <td><%= d['price'].to_f.round(4) %></td>
-                  <td><%= d['origQty'] %></td>
+                  <td><%= price.round(4) %></td>
+                  <td><%= amount.round(4) %></td>
                   <td><%= d['origType'] %></td>
                 </tr>
               <% end %>
