@@ -35,11 +35,13 @@ class OkxFuturesService
     def get_pending_orders(symbol)
       request_path = "/api/v5/trade/orders-pending?instType=SWAP&instId=#{symbol}"
       response = do_request("get", request_path)
+      result = OkxFuturesService.get_contract_value(symbol)
+      rate = result["data"][0]["ctVal"].to_f rescue 1
       response["data"].map do |order|
         {
           "side" => order["side"],
           "price" => order["px"],
-          "origQty" => order["sz"],
+          "origQty" => order["sz"].to_f * rate,
           "origType" => order["ordType"].upcase
         }
       end rescue nil
