@@ -19,7 +19,7 @@ class GetUsersSpotTransactionsJob < ApplicationJob
     return if data.nil?
 
     data[:balances].select{|i| i[:free].to_f != 0 || i[:locked].to_f != 0}.each do |i|
-      GetSpotTradesJob.perform_later(i[:asset], user_id)
+      GetSpotTradesJob.perform_later(i[:asset], user_id: user_id)
     end
   end
 end

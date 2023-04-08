@@ -4,11 +4,11 @@ class GetSpotTradesJob < ApplicationJob
   SOURCE = 'binance'.freeze
   SKIP_SYMBOLS = ['BUSD'].freeze
 
-  def perform(symbol, user_id=nil)
+  def perform(symbol, user_id: nil, date: Date.yesterday - 3.months)
     return if symbol.in?(SKIP_SYMBOLS)
     origin_symbol = "#{symbol}#{TRADE_SYMBOL}"
     txs = OriginTransaction.where(source: SOURCE, original_symbol: origin_symbol, user_id: user_id)
-    trades = BinanceSpotsService.new(user_id: user_id).get_my_trades(origin_symbol, from_date: Date.yesterday)
+    trades = BinanceSpotsService.new(user_id: user_id).get_my_trades(origin_symbol, from_date: date)
     current_price = get_current_price(origin_symbol, user_id)
     if trades.is_a?(String) || trades.blank?
       Rails.logger.debug "获取不到#{origin_symbol}的交易记录"
@@ -21,9 +21,9 @@ class GetSpotTradesJob < ApplicationJob
     OriginTransaction.transaction do
       trades.each do |trade|
         trade_type = trade[:isBuyer] ? 'buy' : 'sell'
-        tx = OriginTransaction.where(source: SOURCE, order_id: trade[:orderId], user_id: user_id)
-                              .first_or_create(original_symbol: trade[:symbol], from_symbol: symbol, to_symbol: TRADE_SYMBOL, fee_symbol: trade[:commissionAsset], trade_type: trade_type,
-                                               price: trade[:price], qty: trade[:qty], amount: trade[:quoteQty], fee: trade[:commission], event_time: Time.at(trade[:time] / 1000))
+        tx = OriginTransaction.where(source: SOURCE, order_id: trade[:orderId], user_id: user_id, event_time: Time.at(trade[:time] / 1000))
+                              .first_or_create(original_symbol: trade[:symbol], from_symbol: symbol, to_symbol: TRADE_SYMBOL, fee_symbol: trade[:commissionAsset],
+                                               price: trade[:price], qty: trade[:qty], amount: trade[:quoteQty], fee: trade[:commission], trade_type: trade_type)
         update_tx(tx, current_price)
         ids.push(tx.id)
       end
@@ -35,8 +35,7 @@ class GetSpotTradesJob < ApplicationJob
       combine_trades(origin_symbol, current_price) if user_id.nil?
     end
 
-    ForceGcJob.perform_later
-    $redis.del('origin_transactions_total_summary')
+    $redis.del("origin_transactions_total_summary_#{user_id}")
   end
 
   def get_current_price(symbol, user_id)
