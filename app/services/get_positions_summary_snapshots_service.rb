@@ -6,7 +6,7 @@ class GetPositionsSummarySnapshotsService
       last_summary = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: info.event_date - 1.day}).last_summary(data: total_summary)
       total_revenue = total_summary[:total_revenue]
       roi = total_revenue / total_summary[:total_cost]
-      snapshot = PositionsSummarySnapshot.where(event_date: date).first_or_create
+      snapshot = PositionsSummarySnapshot.where(event_date: date).first_or_initialize
       snapshot.update(
         total_cost: total_summary[:total_cost],
         total_revenue: total_revenue,

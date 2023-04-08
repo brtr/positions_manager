@@ -46,7 +46,7 @@ class GetSpotTradesJob < ApplicationJob
       $redis.set("binance_spot_price_#{symbol}", price, ex: 2.hours)
     end
 
-    price
+    price.to_f
   end
 
   def update_tx(tx, current_price)

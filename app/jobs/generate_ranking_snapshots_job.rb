@@ -2,15 +2,30 @@ class GenerateRankingSnapshotsJob < ApplicationJob
   queue_as :daily_job
 
   def perform(date: Date.today)
+    # 开始数据库事务
     RankingSnapshot.transaction do
-      data = JSON.parse($redis.get("get_24hr_tickers")) rescue []
-      data.sort_by{|d| d["priceChangePercent"].to_f}.reverse.each_with_index do |d, idx|
-        snapshot = RankingSnapshot.where(event_date: date, symbol: d["symbol"], source: d["source"]).first_or_create
-        is_top10 = idx < 10 && d["priceChangePercent"].to_f > 10
-        snapshot.update(open_price: d["openPrice"], last_price: d["lastPrice"], is_top10: is_top10,
-                        price_change_rate: d["priceChangePercent"], bottom_price_ratio: d["bottomPriceRatio"])
+      # 从 Redis 中获取数据
+      tickers = JSON.parse($redis.get("get_24hr_tickers")) rescue []
+
+      # 根据价格变化率排序并处理每个元素
+      tickers.sort_by { |ticker| -ticker["priceChangePercent"].to_f }.each_with_index do |ticker, idx|
+        # 查找或创建快照记录
+        ranking_snapshot = RankingSnapshot.find_or_initialize_by(event_date: date, symbol: ticker["symbol"], source: ticker["source"])
+
+        # 更新快照记录
+        is_top10 = idx < 10 && ticker["priceChangePercent"].to_f > 10
+        price_change_percent = ticker["priceChangePercent"].to_f
+        ranking_snapshot.update(
+          open_price: ticker["openPrice"],
+          last_price: ticker["lastPrice"],
+          is_top10: is_top10,
+          price_change_rate: price_change_percent,
+          bottom_price_ratio: ticker["bottomPriceRatio"]
+        )
       end
     end
+
+    # 触发垃圾回收任务
     ForceGcJob.perform_later
   end
 end
