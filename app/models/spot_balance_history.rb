@@ -1,0 +1,2 @@
+class SpotBalanceHistory < ApplicationRecord
+end

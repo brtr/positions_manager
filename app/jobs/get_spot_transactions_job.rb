@@ -4,8 +4,12 @@ class GetSpotTransactionsJob < ApplicationJob
   def perform
     data = BinanceSpotsService.new.get_account
 
-    data[:balances].select{|i| i[:free].to_f != 0 || i[:locked].to_f != 0}.each do |i|
-      GetSpotTradesJob.perform_later(i[:asset])
+    assets = data[:balances].select{|i| i[:free].to_f != 0 || i[:locked].to_f != 0}.map{|i| i[:asset]}
+
+    assets += SpotBalanceHistory.where(event_date: Date.yesterday, user_id: nil).pluck(:asset)
+
+    assets.uniq.each do |asset|
+      GetSpotTradesJob.perform_later(asset)
     end
 
     ForceGcJob.perform_later

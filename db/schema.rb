@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_05_091742) do
+ActiveRecord::Schema.define(version: 2023_04_08_101131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,20 @@ ActiveRecord::Schema.define(version: 2023_04_05_091742) do
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "margin_ratio"
     t.decimal "last_revenue"
+  end
+
+  create_table "spot_balance_histories", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "asset"
+    t.string "source"
+    t.decimal "free"
+    t.decimal "locked"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_date"], name: "index_spot_balance_histories_on_event_date"
+    t.index ["source"], name: "index_spot_balance_histories_on_source"
+    t.index ["user_id"], name: "index_spot_balance_histories_on_user_id"
   end
 
   create_table "synced_transactions", force: :cascade do |t|

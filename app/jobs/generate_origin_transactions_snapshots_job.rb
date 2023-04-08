@@ -16,7 +16,7 @@ class GenerateOriginTransactionsSnapshotsJob < ApplicationJob
 
   def generate_snapshot(transactions_snapshot_info)
     # 查找符合条件的原始交易记录
-    origin_transactions = OriginTransaction.where(trade_type: 'buy')
+    origin_transactions = OriginTransaction.where(trade_type: 'buy', user_id: nil)
 
     # 批量处理原始交易记录
     origin_transactions.find_each(batch_size: 100) do |origin_transaction|

@@ -18,8 +18,12 @@ class GetUsersSpotTransactionsJob < ApplicationJob
     data = BinanceSpotsService.new(user_id: user_id).get_account rescue nil
     return if data.nil?
 
-    data[:balances].select{|i| i[:free].to_f != 0 || i[:locked].to_f != 0}.each do |i|
-      GetSpotTradesJob.perform_later(i[:asset], user_id: user_id)
+    assets = data[:balances].select{|i| i[:free].to_f != 0 || i[:locked].to_f != 0}.map{|i| i[:asset]}
+
+    assets += SpotBalanceHistory.where(event_date: Date.yesterday, user_id: user_id).pluck(:asset)
+
+    assets.uniq.each do |asset|
+      GetSpotTradesJob.perform_later(asset, user_id: user_id)
     end
   end
 end
