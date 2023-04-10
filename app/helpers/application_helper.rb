@@ -7,7 +7,7 @@ module ApplicationHelper
       },
       {
         name: "最新排名",
-        sort: "none"
+        sort: "ranking"
       },
       {
         name: "类别",
