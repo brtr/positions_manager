@@ -68,4 +68,8 @@ class UserPosition < ApplicationRecord
     }
   end
 
+  def ranking
+    CoinRanking.find_by(symbol: from_symbol.downcase)&.rank
+  end
+
 end

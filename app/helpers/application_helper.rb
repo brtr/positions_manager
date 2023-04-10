@@ -6,6 +6,10 @@ module ApplicationHelper
         sort: "none"
       },
       {
+        name: "最新排名",
+        sort: "none"
+      },
+      {
         name: "类别",
         sort: "none"
       },

@@ -61,4 +61,8 @@ class UserSyncedPosition < ApplicationRecord
       min_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_synced_positions_min_roi_date")
     }
   end
+
+  def ranking
+    CoinRanking.find_by(symbol: from_symbol.downcase)&.rank
+  end
 end

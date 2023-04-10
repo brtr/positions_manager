@@ -28,6 +28,7 @@
             <%= display_symbol(h, snapshot) %>
           <% end %>
         </td>
+        <td><%= h.ranking %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
         <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.current_price.to_f.round(4) %> <%= h.fee_symbol %></td>

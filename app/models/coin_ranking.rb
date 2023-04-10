@@ -1,0 +1,2 @@
+class CoinRanking < ApplicationRecord
+end
