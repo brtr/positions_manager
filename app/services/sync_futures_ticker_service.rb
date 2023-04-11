@@ -62,8 +62,6 @@ class SyncFuturesTickerService
       $redis.set("get_24hr_tickers", result.to_json)
     end
 
-    private
-
     def fetch_symbol(symbol)
       from_symbol = symbol
       fee_symbols = %w[USDT BUSD USD]
@@ -76,6 +74,8 @@ class SyncFuturesTickerService
       end
       from_symbol
     end
+
+    private
 
     def get_price_ratio(symbol, price, rank)
       url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}"

@@ -332,4 +332,9 @@ module ApplicationHelper
   def get_date_format(date)
     date.strftime('%Y-%m-%d') rescue ''
   end
+
+  def ranking(symbol)
+    symbol = SyncFuturesTickerService.fetch_symbol(symbol)
+    CoinRanking.find_by(symbol: symbol.downcase)&.rank
+  end
 end

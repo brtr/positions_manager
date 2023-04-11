@@ -14,6 +14,7 @@
         <thead>
           <tr class="table-container-tr">
             <th>币种</th>
+            <th>排名</th>
             <th>24小时涨幅</th>
             <th>一年内底部比例</th>
             <th>振幅</th>
@@ -24,6 +25,7 @@
           <% @daily_ranking.sort_by{|d| d["priceChangePercent"].to_f}.reverse.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url(d["symbol"], d["source"], get_top10_count(d["source"], d["symbol"])) %></td>
+              <td><%= ranking(d["symbol"]) %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["amplitude"].to_s + " %" %></td>
@@ -38,6 +40,7 @@
         <thead>
           <tr class="table-container-tr">
             <th>币种</th>
+            <th>排名</th>
             <th>24小时变动</th>
             <th>一年内底部比例</th>
             <th>振幅</th>
@@ -48,6 +51,7 @@
           <% @daily_ranking.select{|d| d["priceChangePercent"].to_f < 0}.sort_by{|d| d["bottomPriceRatio"].to_f}.reverse.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url d["symbol"], d["source"] %></td>
+              <td><%= ranking(d["symbol"]) %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["amplitude"].to_s + " %" %></td>
