@@ -72,4 +72,8 @@ class UserPosition < ApplicationRecord
     CoinRanking.find_by(symbol: from_symbol.downcase)&.rank
   end
 
+  def funding_fee
+    FundingFeeHistory.where(user_id: user_id, origin_symbol: origin_symbol).sum(&:amount).round(4)
+  end
+
 end

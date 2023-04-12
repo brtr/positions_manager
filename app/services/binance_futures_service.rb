@@ -70,6 +70,12 @@ class BinanceFuturesService
     end.map{|k,v| v[0]}
   end
 
+  def get_funding_rate(symbol, start_time=nil)
+    url = BASE_URL + "/fapi/v1/fundingRate?"
+    payload = {symbol: symbol, limit: 1000, startTime: start_time}
+    do_request("get", url, payload)
+  end
+
   private
   def do_request(method, url, payload)
     sign = signed_data(build_query(payload))

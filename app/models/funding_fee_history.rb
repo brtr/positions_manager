@@ -1,0 +1,2 @@
+class FundingFeeHistory < ApplicationRecord
+end

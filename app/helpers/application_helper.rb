@@ -10,6 +10,10 @@ module ApplicationHelper
         sort: "ranking"
       },
       {
+        name: "资金费用",
+        sort: "funding_fee"
+      },
+      {
         name: "类别",
         sort: "none"
       },

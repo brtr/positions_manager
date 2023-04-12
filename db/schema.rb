@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_10_093126) do
+ActiveRecord::Schema.define(version: 2023_04_12_092419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,20 @@ ActiveRecord::Schema.define(version: 2023_04_10_093126) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["original_symbol"], name: "index_combine_transactions_on_original_symbol"
     t.index ["source"], name: "index_combine_transactions_on_source"
+  end
+
+  create_table "funding_fee_histories", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "origin_symbol"
+    t.string "source"
+    t.decimal "rate"
+    t.decimal "amount"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_date"], name: "index_funding_fee_histories_on_event_date"
+    t.index ["origin_symbol"], name: "index_funding_fee_histories_on_origin_symbol"
+    t.index ["user_id"], name: "index_funding_fee_histories_on_user_id"
   end
 
   create_table "origin_transactions", force: :cascade do |t|

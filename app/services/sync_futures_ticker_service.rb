@@ -2,7 +2,7 @@ require 'openssl'
 require 'rest-client'
 
 class SyncFuturesTickerService
-  SYMBOLS = %w[USDCUSDT BTCDOMUSDT]
+  SYMBOLS = %w[USDCUSDT BTCDOMUSDT USTCUSDT]
   class << self
     def get_24hr_tickers(rank)
       binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
