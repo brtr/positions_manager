@@ -341,4 +341,10 @@ module ApplicationHelper
     symbol = SyncFuturesTickerService.fetch_symbol(symbol)
     CoinRanking.find_by(symbol: symbol.downcase)&.rank
   end
+
+  def trade_type_display(trade_type, qty)
+    str = I18n.t("views.contract_trading.#{trade_type}")
+    str += "(平仓)" if qty < 0
+    str
+  end
 end

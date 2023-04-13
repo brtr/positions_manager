@@ -47,6 +47,7 @@ class UserSyncedPosition < ApplicationRecord
       loss_amount: loss_records.sum(&:revenue),
       total_cost: records.sum(&:amount),
       total_revenue: records.sum(&:revenue),
+      total_funding_fee: FundingFeeHistory.where(user_id: user_id).sum(&:amount),
       max_profit: infos.max_profit(user_id: user_id, is_synced: true, date: date),
       max_profit_date: $redis.get("user_#{user_id}_#{date.to_s}_synced_positions_max_profit_date"),
       max_loss: infos.max_loss(user_id: user_id, is_synced: true, date: date),
@@ -64,5 +65,9 @@ class UserSyncedPosition < ApplicationRecord
 
   def ranking
     CoinRanking.find_by(symbol: from_symbol.downcase)&.rank
+  end
+
+  def funding_fee
+    FundingFeeHistory.where(user_id: user_id, origin_symbol: origin_symbol).sum(&:amount).round(4)
   end
 end

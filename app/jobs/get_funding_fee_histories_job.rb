@@ -4,12 +4,20 @@ class GetFundingFeeHistoriesJob < ApplicationJob
   def perform
     date = Date.yesterday
     UserPosition.available.where(user_id: nil).each do |up|
-      rate = get_rate(up.origin_symbol, up.source, date)
-      ffh = FundingFeeHistory.where(origin_symbol: up.origin_symbol, event_date: date, source: up.source).first_or_initialize
-      ffh.update(rate: rate, amount: rate * up.amount * 3)
+      generate_history(up, date)
+    end
+
+    UserSyncedPosition.available.each do |up|
+      generate_history(up, date)
     end
 
     ForceGcJob.perform_later
+  end
+
+  def generate_history(up, date)
+    rate = get_rate(up.origin_symbol, up.source, date)
+    ffh = FundingFeeHistory.where(origin_symbol: up.origin_symbol, event_date: date, source: up.source, user_id: up.user_id).first_or_initialize
+    ffh.update(rate: rate, amount: rate * up.amount * 3)
   end
 
   def get_rate(symbol, source, date)

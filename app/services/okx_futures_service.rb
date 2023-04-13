@@ -71,10 +71,10 @@ class OkxFuturesService
       end
     end
 
-    def get_funding_rate(symbol, after=nil)
+    def get_funding_rate(symbol, before=nil)
       begin
         request_path = "/api/v5/public/funding-rate-history?instId=#{symbol}"
-        request_path += "&after=#{after}" if after
+        request_path += "&before=#{before}" if before
         do_request("get", request_path)
       rescue => e
         format_error_msg(e)
