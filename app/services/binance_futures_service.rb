@@ -47,9 +47,9 @@ class BinanceFuturesService
     do_request("get", url, payload)
   end
 
-  def get_my_trades(symbol)
+  def get_my_trades(symbol, start_time=nil)
     url = BASE_URL + "/fapi/v1/userTrades?"
-    payload = {timestamp: get_timestamp, symbol: symbol}
+    payload = {timestamp: get_timestamp, symbol: symbol, startTime: start_time}
     do_request("get", url, payload)
   end
 

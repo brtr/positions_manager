@@ -1,11 +1,12 @@
 class AddingPositionsHistory < ApplicationRecord
-  def revenue
+  def get_revenue
+    return revenue.to_f if qty < 0
     last_amount = qty.abs * current_price
     trade_type == 'sell' ? last_amount - amount.abs : amount.abs - last_amount
   end
 
   def roi
-    ((revenue / amount.abs) * 100).round(4)
+    ((get_revenue / amount.abs) * 100).round(4)
   end
 
   def amount_ratio
@@ -18,6 +19,10 @@ class AddingPositionsHistory < ApplicationRecord
 
   def target_position
     UserPosition.find_by(user_id: nil, origin_symbol: origin_symbol, source: source, trade_type: trade_type)
+  end
+
+  def cost
+    trade_type == 'buy' ? (amount.abs + revenue.to_f) / qty.abs : (amount.abs - revenue.to_f) / qty.abs
   end
 
   def self.total_qty
