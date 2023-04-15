@@ -3,7 +3,7 @@ module PageHelper
     return {} if data.empty?
     max_amount_record = data.sort_by{|d| d.amount}.reverse.first
     total_amount = data.sum{|d| d.amount}
-    rate = data.sum{|d| d.revenue} / total_amount
+    rate = data.sum{|d| d.get_revenue} / total_amount
     {
       total_amount: total_amount.round(4),
       max_symbol: max_amount_record.origin_symbol,

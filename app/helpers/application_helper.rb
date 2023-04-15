@@ -202,7 +202,7 @@ module ApplicationHelper
       },
       {
         name: "新增收益",
-        sort: "revenue"
+        sort: "get_revenue"
       },
       {
         name: "新增收益占新增金额的占比",

@@ -8,7 +8,7 @@
           <% else %>
             <%= link_to "#{h[:name]}", recently_adding_positions_path(adding_positions_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
           <% end %>
-          <% if h[:sort] == 'revenue' %>
+          <% if h[:sort] == 'get_revenue' %>
             <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue") %>'>?</span>
           <% end %>
         </th>
@@ -25,7 +25,7 @@
         <td><%= d.current_price.round(4) %></td>
         <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty.round(4) %></td>
         <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
-        <td class="<%= d.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.revenue.round(4) %></td>
+        <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
         <td><%= "#{d.roi}%" %></td>
         <td><%= "#{d.amount_ratio}" %></td>
         <td><%= d.source %></td>
