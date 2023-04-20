@@ -1,0 +1,29 @@
+<!-- Modal -->
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">OKX API KEY管理</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with url: add_key_origin_transactions_path, method: :post do |f| %>
+        <div class="modal-body">
+          <div class="field mb-4">
+            <%= f.text_field :okx_api_key, value: current_user.okx_api_key, class: "input-sm form-control", placeholder: '请输入API KEY' %>
+          </div>
+          <div class="field mb-4">
+            <%= f.password_field :okx_secret_key, class: "input-sm form-control", placeholder: '请输入SECRET KEY' %>
+          </div>
+          <div class="field mb-4">
+            <%= f.password_field :okx_passphrase, class: "input-sm form-control", placeholder: '请输入PASSPHRASE' %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <%= f.submit "确定", class: "btn btn-primary", data: {disable_with: "提交中..."}%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

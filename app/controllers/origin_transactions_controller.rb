@@ -57,6 +57,26 @@ class OriginTransactionsController < ApplicationController
     redirect_to url, notice: "正在更新，请稍等刷新查看最新价格以及其他信息..."
   end
 
+  def add_key
+    if params[:okx_api_key].blank? || params[:okx_secret_key].blank? || params[:okx_passphrase].blank?
+      flash[:alert] = 'API KEY / SECRET KEY / PASSPHRASE 不能为空'
+    else
+      if current_user.update(okx_api_key: params[:okx_api_key], okx_secret_key: Base64.encode64(params[:okx_secret_key]), okx_passphrase: Base64.encode64(params[:okx_passphrase]))
+        is_valid = OkxSpotsService.new(user_id: current_user.id).get_orders rescue nil
+        if is_valid
+          flash[:notice] = 'OKX API KEY绑定成功'
+        else
+          current_user.update(okx_api_key: nil, okx_secret_key: nil)
+          flash[:alert] = 'OKX API KEY绑定失败，请检查后重试'
+        end
+      else
+        flash[:alert] = current_user.errors.full_messages
+      end
+    end
+
+    redirect_to users_origin_transactions_path
+  end
+
   private
   def tx_params
     params.require(:origin_transaction).permit(:campaign)

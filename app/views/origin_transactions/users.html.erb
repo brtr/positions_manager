@@ -1,5 +1,8 @@
 <div class="m-3">
   <h3>个人现货交易记录列表</h3>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+    OKX API KEY管理
+  </button>
   <div class="mb-3 mt-3 col-5">
     <%= form_tag users_origin_transactions_path, id: "search_targets", class: "position-relative", method: "GET" do %>
       <div class="input-group mb-3 position-filter">
@@ -28,3 +31,5 @@
 
 <div id="transactions-campaign-modal">
 </div>
+
+<%= render partial: "upload_modal" %>
