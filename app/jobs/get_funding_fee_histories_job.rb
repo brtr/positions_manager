@@ -26,7 +26,7 @@ class GetFundingFeeHistoriesJob < ApplicationJob
       daily_rates = rate_list.select{|r| Time.at(r['fundingTime']/1000).to_date == date}
       daily_rates.sum{|r| r['fundingRate'].to_f} / 3
     elsif source == 'okx'
-      rate_list = OkxFuturesService.get_funding_rate(symbol, date.strftime('%Q'))
+      rate_list = OkxFuturesService.new.get_funding_rate(symbol, date.strftime('%Q'))
       daily_rates = rate_list['data'].select{|r| Time.at(r['fundingTime'].to_f/1000).to_date == date}
       daily_rates.sum{|r| r['realizedRate'].to_f} / 3
     else

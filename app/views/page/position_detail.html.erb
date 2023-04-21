@@ -21,6 +21,7 @@
             <tr class="table-container-tr">
               <th>时间</th>
               <th>类别</th>
+              <th>平均成交价</th>
               <th>平均成本价</th>
               <th>最新价格 / 平仓价格</th>
               <th>新增数量</th>
@@ -40,6 +41,7 @@
                 <td><%= d.event_date.to_s %></td>
                 <td class="<%= trade_type_style(d.trade_type) %>"><%= trade_type_display(d.trade_type, d.qty) %></td>
                 <td><%= d.qty > 0 ? d.price.round(4) : d.cost.round(4) %></td>
+                <td><%= d.unit_cost.round(4) %></td>
                 <td><%= d.qty > 0 ? d.current_price.round(4) : d.price.round(4) %></td>
                 <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty %></td>
                 <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
@@ -55,6 +57,7 @@
               <td>总计</td>
               <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
               <td><%= @data.average(:price).round(4) %></td>
+              <td><%= @data.average(:unit_cost).round(4) %></td>
               <td><%= d.current_price.round(4) %></td>
               <td class="<%= @data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_qty %></td>
               <td class="<%= @data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_amount.round(4) %></td>

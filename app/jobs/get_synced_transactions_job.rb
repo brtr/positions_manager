@@ -23,7 +23,7 @@ class GetSyncedTransactionsJob < ApplicationJob
 
 
     # Get OKX transactions
-    result = OkxFuturesService.get_orders
+    result = OkxFuturesService.new.get_orders
 
     SyncedTransaction.transaction do
       result['data'].each do |d|
@@ -57,7 +57,7 @@ class GetSyncedTransactionsJob < ApplicationJob
   end
 
   def get_contract_value(symbol)
-    result = OkxFuturesService.get_contract_value(symbol)
+    result = OkxFuturesService.new.get_contract_value(symbol)
     result["data"][0]["ctVal"].to_f rescue 1
   end
 

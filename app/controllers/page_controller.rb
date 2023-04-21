@@ -87,7 +87,7 @@ class PageController < ApplicationController
   def account_balance
     @page_index = 14
     @binance_data = BinanceFuturesService.new.get_positions
-    @okx_data = OkxFuturesService.get_account
+    @okx_data = OkxFuturesService.new.get_account
   end
 
   def price_chart
@@ -112,7 +112,7 @@ class PageController < ApplicationController
       @open_orders = if params[:source] == 'binance'
                       BinanceFuturesService.new.get_pending_orders(@symbol)
                     else
-                      OkxFuturesService.get_pending_orders(@symbol)
+                      OkxFuturesService.new.get_pending_orders(@symbol)
                     end
       GetPositionsChartDataService.execute(@symbol, @source, @trade_type)
       @chart_data = JSON.parse($redis.get("#{@symbol}_monthly_chart_data")) rescue []

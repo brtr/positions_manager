@@ -35,7 +35,7 @@ module ApplicationHelper
       },
       {
         name: "币种投入/总投入",
-        sort: "cost_ratio"
+        sort: "none"
       },
       {
         name: "预计收益",
@@ -51,7 +51,7 @@ module ApplicationHelper
       },
       {
         name: "预计收益/总收益",
-        sort: "revenue_ratio"
+        sort: "none"
       },
       {
         name: "下跌/上升比例",

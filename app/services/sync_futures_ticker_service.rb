@@ -6,7 +6,7 @@ class SyncFuturesTickerService
   class << self
     def get_24hr_tickers(rank)
       binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
-      okx_24hr_tickers = OkxFuturesService.get_24hr_tickers
+      okx_24hr_tickers = OkxFuturesService.new.get_24hr_tickers
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today

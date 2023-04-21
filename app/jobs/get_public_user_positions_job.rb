@@ -3,7 +3,7 @@ class GetPublicUserPositionsJob < ApplicationJob
 
   def perform
     binance_data = BinanceFuturesService.new.get_positions
-    okx_data = OkxFuturesService.get_positions
+    okx_data = OkxFuturesService.new.get_positions
     huobi_data = HuobiFuturesService.get_positions
     ids = []
 

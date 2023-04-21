@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_18_233707) do
+ActiveRecord::Schema.define(version: 2023_04_21_093204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2023_04_18_233707) do
     t.date "event_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "unit_cost", default: "0.0"
     t.index ["event_date"], name: "index_adding_positions_histories_on_event_date"
     t.index ["origin_symbol"], name: "index_adding_positions_histories_on_origin_symbol"
   end

@@ -2,6 +2,8 @@ class SnapshotInfo < ApplicationRecord
   has_many :snapshot_positions, dependent: :destroy
   belongs_to :user, optional: true
 
+  before_create :set_columns
+
   enum source_type: [:synced, :uploaded]
 
   def total_profit
@@ -139,5 +141,9 @@ class SnapshotInfo < ApplicationRecord
   private
   def display_number(num)
     num >= 1 || num <= -1 ? num.round(4) : ''
+  end
+
+  def set_columns
+    self.total_roi = 0 if total_roi.nil?
   end
 end
