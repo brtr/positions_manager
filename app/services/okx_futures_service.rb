@@ -10,8 +10,8 @@ class OkxFuturesService
 
     if @user.present?
       @api_key = @user.okx_api_key
-      @secret_key = Base64.decode64(@user.okx_secret_key)
-      @passphrase = Base64.decode64(@user.okx_passphrase)
+      @secret_key = Base64.decode64(@user.okx_secret_key) rescue nil
+      @passphrase = Base64.decode64(@user.okx_passphrase) rescue nil
     else
       @api_key = ENV["OKX_API_KEY"]
       @secret_key = ENV["OKX_SECERT_KEY"]
@@ -101,10 +101,10 @@ class OkxFuturesService
     timestamp = get_timestamp
     sign = signed_data("#{timestamp}#{method.upcase}#{request_path}")
     headers = {
-      "OK-ACCESS-KEY" => ENV["OKX_API_KEY"],
+      "OK-ACCESS-KEY" => @api_key,
       "OK-ACCESS-SIGN" => sign,
       "OK-ACCESS-TIMESTAMP" => timestamp,
-      "OK-ACCESS-PASSPHRASE" => ENV["OKX_PASSPHRASE"],
+      "OK-ACCESS-PASSPHRASE" => @passphrase,
       "Content-Type" => "application/json",
       "accept" => "application/json"
     }
@@ -114,7 +114,7 @@ class OkxFuturesService
   end
 
   def signed_data(data)
-    Base64.strict_encode64(OpenSSL::HMAC.digest('sha256', ENV["OKX_SECERT_KEY"], data))
+    Base64.strict_encode64(OpenSSL::HMAC.digest('sha256', @secret_key, data))
   end
 
   def get_timestamp

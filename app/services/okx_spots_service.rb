@@ -10,8 +10,8 @@ class OkxSpotsService
 
     if @user.present?
       @api_key = @user.okx_api_key
-      @secret_key = Base64.decode64(@user.okx_secret_key)
-      @passphrase = Base64.decode64(@user.okx_passphrase)
+      @secret_key = Base64.decode64(@user.okx_secret_key) rescue nil
+      @passphrase = Base64.decode64(@user.okx_passphrase) rescue nil
     else
       @api_key = ENV["OKX_API_KEY"]
       @secret_key = ENV["OKX_SECERT_KEY"]
