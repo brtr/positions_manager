@@ -32,7 +32,7 @@ class GetUsersSpotTransactionsJob < ApplicationJob
 
   def get_okx_orders(user_id)
     result = OkxSpotsService.new(user_id: user_id).get_orders rescue nil
-    return if result.nil?
+    return if result.nil? || result['data'].nil?
 
     OriginTransaction.transaction do
       result['data'].each do |d|
