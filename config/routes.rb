@@ -52,6 +52,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :user_spot_balances, only: :index
+
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/export_user_positions', to: 'page#export_user_positions', as: :export_user_positions
   get '/refresh_user_positions', to: 'page#refresh_user_positions', as: :refresh_public_user_positions

@@ -8,10 +8,10 @@ class OriginTransaction < ApplicationRecord
       loss_records = records.select{|r| r.revenue < 0}
       result = {
         profit_count: profit_records.count,
-        profit_amount: profit_records.sum(&:revenue),
+        profit_amount: calculate_field(profit_records),
         loss_count: loss_records.count,
-        loss_amount: loss_records.sum(&:revenue),
-        total_cost: records.sum(&:amount),
+        loss_amount: calculate_field(loss_records),
+        total_cost: calculate_field(records, :amount),
         total_revenue: records.sum(&:revenue)
       }.to_json
       $redis.set(redis_key, result, ex: 5.hours)
@@ -26,5 +26,11 @@ class OriginTransaction < ApplicationRecord
 
   def cost_ratio(total_cost)
     amount / total_cost
+  end
+
+  private
+  def self.calculate_field(records, field_name = :revenue)
+    buys, sells = records.partition { |record| record.trade_type == "buy" }
+    buys.sum { |record| record.send(field_name) } - sells.sum { |record| record.send(field_name) }
   end
 end

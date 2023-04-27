@@ -219,6 +219,35 @@ module ApplicationHelper
     ]
   end
 
+  def spots_table_headers
+    [
+      {
+        name: "币种",
+        sort: "none"
+      },
+      {
+        name: "成本价",
+        sort: "price"
+      },
+      {
+        name: "当前价",
+        sort: "none"
+      },
+      {
+        name: "数量",
+        sort: "qty"
+      },
+      {
+        name: "总投入",
+        sort: "amount"
+      },
+      {
+        name: "来源",
+        sort: "none"
+      }
+    ]
+  end
+
   def adding_positions_remote_params(params, sort)
     res = {
       sort: sort,
