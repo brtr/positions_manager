@@ -79,7 +79,7 @@ module ApplicationHelper
         sort: "none"
       },
       {
-        name: "成本价",
+        name: "成交价",
         sort: "none"
       },
       {
@@ -91,7 +91,7 @@ module ApplicationHelper
         sort: "none"
       },
       {
-        name: "总投入",
+        name: "交易金额",
         sort: "amount"
       },
       {
@@ -99,15 +99,15 @@ module ApplicationHelper
         sort: "none"
       },
       {
-        name: "预计收益",
+        name: "预计收益 / 实际收益",
         sort: "revenue"
       },
       {
-        name: "预计ROI",
+        name: "预计ROI / 实际ROI",
         sort: "roi"
       },
       {
-        name: "预计收益/总收益",
+        name: "收益/总收益",
         sort: "none"
       },
       {

@@ -45,7 +45,7 @@ class GetUsersSpotTransactionsJob < ApplicationJob
         trade_type = d['side'].downcase
         from_symbol = original_symbol.split("-#{FEE_SYMBOL}")[0]
         current_price = get_current_price(original_symbol, user_id)
-        revenue = current_price * qty - amount if revenue.to_f.zero?
+        revenue = get_revenue(trade_type, user_id, original_symbol, amount, qty, current_price) if revenue.to_f == 0
         roi = revenue / amount
         tx = OriginTransaction.where(order_id: d['ordId'], user_id: user_id).first_or_initialize
         tx.update(
@@ -76,5 +76,14 @@ class GetUsersSpotTransactionsJob < ApplicationJob
     end
 
     price.to_f
+  end
+
+  def get_revenue(trade_type, user_id, original_symbol, amount, qty, current_price)
+    if trade_type == 'sell'
+      price = UserSpotBalance.find_by(user_id: user_id, origin_symbol: original_symbol)&.price.to_f
+      amount - price * qty
+    else
+      current_price * qty - amount
+    end
   end
 end

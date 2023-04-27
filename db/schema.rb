@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_21_093204) do
+ActiveRecord::Schema.define(version: 2023_04_26_111314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,6 +262,20 @@ ActiveRecord::Schema.define(version: 2023_04_21_093204) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_user_positions_on_user_id"
+  end
+
+  create_table "user_spot_balances", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "source"
+    t.string "origin_symbol"
+    t.string "from_symbol"
+    t.string "to_symbol"
+    t.decimal "amount"
+    t.decimal "price"
+    t.decimal "qty"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_spot_balances_on_user_id"
   end
 
   create_table "user_synced_positions", force: :cascade do |t|

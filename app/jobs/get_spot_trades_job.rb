@@ -50,7 +50,7 @@ class GetSpotTradesJob < ApplicationJob
 
   def update_tx(tx, current_price)
     tx.current_price = current_price
-    tx.revenue = current_price * tx.qty - tx.amount
+    tx.revenue = get_revenue(tx.trade_type, tx.user_id, tx.original_symbol, tx.amount, tx.qty, current_price)
     tx.roi = tx.revenue / tx.amount
     tx.save
   end
@@ -84,6 +84,15 @@ class GetSpotTradesJob < ApplicationJob
       roi = revenue / total_cost.abs
 
       combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: current_price, revenue: revenue, roi: roi)
+    end
+  end
+
+  def get_revenue(trade_type, user_id, original_symbol, amount, qty, current_price)
+    if trade_type == 'sell'
+      price = UserSpotBalance.find_by(user_id: user_id, origin_symbol: original_symbol)&.price.to_f
+      amount - price * qty
+    else
+      current_price * qty - amount
     end
   end
 end
