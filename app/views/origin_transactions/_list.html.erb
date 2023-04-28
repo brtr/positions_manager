@@ -27,7 +27,7 @@
         <td><%= "#{(h.cost_ratio(@total_summary['total_cost'].to_f) * 100).round(4)}%" %></td>
         <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= "#{h.revenue.round(4)} #{h.to_symbol}" %></td>
         <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(4)}%" %></td>
-        <td><%= "#{(h.revenue_ratio(@total_summary['total_revenue'].to_f) * 100).round(4)}%" %></td>
+        <td><%= "#{(h.revenue_ratio(@total_summary['total_estimated_revenue'].to_f) * 100).round(4)}%" %></td>
         <td><%= h.source %></td>
         <td><%= h.campaign %></td>
         <td><%= link_to "编辑", edit_origin_transaction_path(id: h.id), remote: true %></td>

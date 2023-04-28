@@ -12,7 +12,8 @@ class OriginTransaction < ApplicationRecord
         loss_count: loss_records.count,
         loss_amount: calculate_field(loss_records),
         total_cost: calculate_field(records, :amount),
-        total_revenue: records.sum(&:revenue)
+        total_revenue: records.where(trade_type: 'sell').sum(&:revenue),
+        total_estimated_revenue: records.where(trade_type: 'buy').sum(&:revenue)
       }.to_json
       $redis.set(redis_key, result, ex: 5.hours)
     end
