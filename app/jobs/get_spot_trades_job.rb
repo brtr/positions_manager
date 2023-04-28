@@ -21,7 +21,7 @@ class GetSpotTradesJob < ApplicationJob
     OriginTransaction.transaction do
       trades.each do |trade|
         trade_type = trade[:isBuyer] ? 'buy' : 'sell'
-        tx = OriginTransaction.where(source: SOURCE, order_id: trade[:orderId], user_id: user_id, event_time: Time.at(trade[:time] / 1000))
+        tx = OriginTransaction.where(source: SOURCE, order_id: trade[:id], user_id: user_id, event_time: Time.at(trade[:time] / 1000))
                               .first_or_create(original_symbol: trade[:symbol], from_symbol: symbol, to_symbol: TRADE_SYMBOL, fee_symbol: trade[:commissionAsset],
                                                price: trade[:price], qty: trade[:qty], amount: trade[:quoteQty], fee: trade[:commission], trade_type: trade_type)
         update_tx(tx, current_price)
