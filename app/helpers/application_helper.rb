@@ -72,7 +72,7 @@ module ApplicationHelper
       },
       {
         name: "交易对",
-        sort: "none"
+        sort: "from_symbol"
       },
       {
         name: "类别",
@@ -350,6 +350,14 @@ module ApplicationHelper
       user_synced_positions_path(params)
     else
       user_positions_path(params)
+    end
+  end
+
+  def get_origin_list_url(source_type, params)
+    if source_type == :public
+      origin_transactions_path(params)
+    else
+      users_origin_transactions_path(params)
     end
   end
 

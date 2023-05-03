@@ -6,7 +6,8 @@
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
           <% else %>
-            <%= link_to "#{h[:name]}", origin_transactions_path(ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+            <% url = get_origin_list_url(source_type, ch_remote_params(params, h[:sort])) %>
+            <%= link_to "#{h[:name]}", url, remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
           <% end %>
         </th>
       <% end %>

@@ -1,2 +1,2 @@
-$("#trading-histories-container").html("<%= j render partial: "list" %>");
+$("#trading-histories-container").html("<%= j render partial: "list", locals: { source_type: :public } %>");
 $('[data-bs-toggle="tooltip"]').tooltip();
