@@ -4,7 +4,7 @@ class OriginTransactionsController < ApplicationController
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
     @symbol = params[:search]
-    txs = OriginTransaction.where(trade_type: 'buy', user_id: nil).order("#{sort} #{sort_type}")
+    txs = OriginTransaction.available.where(trade_type: 'buy', user_id: nil).order("#{sort} #{sort_type}")
     @total_txs = txs
     txs = txs.where(campaign: params[:campaign]) if params[:campaign].present?
     txs = txs.where(source: params[:source]) if params[:source].present?
@@ -18,7 +18,7 @@ class OriginTransactionsController < ApplicationController
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
     @symbol = params[:search]
-    txs = OriginTransaction.where(user_id: current_user.id).order("#{sort} #{sort_type}")
+    txs = OriginTransaction.available.where(user_id: current_user.id).order("#{sort} #{sort_type}")
     @total_txs = txs
     txs = txs.where(campaign: params[:campaign]) if params[:campaign].present?
     txs = txs.where(source: params[:source]) if params[:source].present?

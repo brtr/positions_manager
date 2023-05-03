@@ -1,6 +1,10 @@
 class OriginTransaction < ApplicationRecord
+  SKIP_SYMBOLS = %w(USDC).freeze
+
+  scope :available, -> { where.not(from_symbol: SKIP_SYMBOLS) }
+
   def self.total_summary(user_id=nil)
-    records = OriginTransaction.all
+    records = OriginTransaction.available
     redis_key = "origin_transactions_total_summary_#{user_id}"
     result = $redis.get(redis_key)
     if result.nil?
