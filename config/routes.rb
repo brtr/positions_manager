@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   end
 
   resources :user_spot_balances, only: :index
+  resources :spot_balance_snapshot_infos, only: [:index, :show]
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/export_user_positions', to: 'page#export_user_positions', as: :export_user_positions

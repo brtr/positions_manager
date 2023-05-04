@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_26_111314) do
+ActiveRecord::Schema.define(version: 2023_05_04_092749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -195,6 +195,30 @@ ActiveRecord::Schema.define(version: 2023_04_26_111314) do
     t.index ["event_date"], name: "index_spot_balance_histories_on_event_date"
     t.index ["source"], name: "index_spot_balance_histories_on_source"
     t.index ["user_id"], name: "index_spot_balance_histories_on_user_id"
+  end
+
+  create_table "spot_balance_snapshot_infos", force: :cascade do |t|
+    t.integer "user_id"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_date"], name: "index_spot_balance_snapshot_infos_on_event_date"
+    t.index ["user_id"], name: "index_spot_balance_snapshot_infos_on_user_id"
+  end
+
+  create_table "spot_balance_snapshot_records", force: :cascade do |t|
+    t.integer "spot_balance_snapshot_info_id"
+    t.string "source"
+    t.string "origin_symbol"
+    t.string "from_symbol"
+    t.string "to_symbol"
+    t.decimal "price", default: "0.0", null: false
+    t.decimal "qty", default: "0.0", null: false
+    t.decimal "amount", default: "0.0", null: false
+    t.datetime "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["spot_balance_snapshot_info_id"], name: "index_spot_balance_snapshot_info_id"
   end
 
   create_table "synced_transactions", force: :cascade do |t|

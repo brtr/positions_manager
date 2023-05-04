@@ -1,0 +1,31 @@
+<table class="table">
+  <thead>
+    <tr class="table-container-tr">
+      <% spots_table_headers.each do |h| %>
+        <th scope="col">
+          <% if h[:sort] == "none" %>
+            <%= "#{h[:name]}" %>
+          <% else %>
+            <%= link_to "#{h[:name]}", spot_balance_snapshot_info_path(ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+          <% end %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @records.each do |h| %>
+      <tr>
+        <td><%= h.origin_symbol %></td>
+        <td><%= h.price.round(4) %> <%= h.to_symbol %></td>
+        <td><%= h.current_price.to_f.round(4) %> <%= h.to_symbol %></td>
+        <td><%= h.qty.round(4) %></td>
+        <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>
+        <td><%= h.source %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="paginationBox p-4">
+  <%= paginate @records %>
+</div>

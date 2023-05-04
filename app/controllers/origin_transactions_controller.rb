@@ -1,4 +1,6 @@
 class OriginTransactionsController < ApplicationController
+  before_action :authenticate_user!, only: :users
+
   def index
     @page_index = 8
     sort = params[:sort].presence || "event_time"
