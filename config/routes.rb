@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   resources :spot_balance_snapshot_infos, only: [:index, :show]
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
+  get '/public_spot_balances', to: 'page#spot_balances', as: :public_spot_balances
   get '/export_user_positions', to: 'page#export_user_positions', as: :export_user_positions
   get '/refresh_user_positions', to: 'page#refresh_user_positions', as: :refresh_public_user_positions
   get "/refresh_24hr_ticker" => "page#refresh_24hr_ticker", as: :refresh_24hr_ticker

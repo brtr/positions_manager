@@ -1,15 +1,20 @@
 class SpotBalanceSnapshotInfosController < ApplicationController
-  before_action :authenticate_user!
-
   def index
-    @page_index = 21
-    infos = SpotBalanceSnapshotInfo.where(user_id: current_user.id).pluck(:id, :event_date)
+    if params[:user_id].present?
+      @page_index = 21
+      infos = SpotBalanceSnapshotInfo.where(user_id: current_user.id)
+    else
+      @page_index = 22
+      infos = SpotBalanceSnapshotInfo.where(user_id: nil)
+    end
+    infos = infos.pluck(:id, :event_date)
     @results = split_event_dates(infos)
   end
 
   def show
+    user_id = params[:user_id].presence
     @info = SpotBalanceSnapshotInfo.find_by(id: params[:id])
-    @page_index = 21
+    @page_index = user_id.nil? ? 22 : 21
     sort = params[:sort].presence || "amount"
     sort_type = params[:sort_type].presence || "desc"
     records = @info.spot_balance_snapshot_records

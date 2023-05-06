@@ -1,6 +1,6 @@
 <div class="m-3">
   <h2 class="mb-4 text-center">现货仓位历史快照 - <%= @info.event_date.to_s %></h2>
-  <div class="mb-3 col-6">
+  <div class="mb-3 col-3">
     <%= form_tag spot_balance_snapshot_info_path(@info), id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
         <%= select_tag(:search, options_for_select(@records.pluck(:origin_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>

@@ -13,7 +13,7 @@
               <div class="row">
                 <% m[:dates].each do |d| %>
                   <div class="text-center col-2 p-3">
-                    <%= link_to d[:day], spot_balance_snapshot_info_path(d[:id]) %>
+                    <%= link_to d[:day], spot_balance_snapshot_info_path(d[:id], user_id: params[:user_id]) %>
                   </div>
                 <% end %>
               </div>

@@ -124,4 +124,17 @@ class PageController < ApplicationController
     start_date = params.fetch(:start_date, Date.today).to_date
     @data = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and event_date between ? and ?', 1, -1, start_date.beginning_of_month.beginning_of_week, start_date.end_of_month.end_of_week).order(event_date: :asc)
   end
+
+  def spot_balances
+    @page_index = 23
+    sort = params[:sort].presence || "amount"
+    sort_type = params[:sort_type].presence || "desc"
+    @symbol = params[:search]
+    histories = UserSpotBalance.where(user_id: nil)
+    histories = histories.where(origin_symbol: @symbol) if @symbol.present?
+    parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
+    @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
+    @histories = @histories.reverse if sort_type == "desc"
+    @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
+  end
 end
