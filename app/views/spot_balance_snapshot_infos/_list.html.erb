@@ -17,9 +17,10 @@
       <tr>
         <td><%= h.origin_symbol %></td>
         <td><%= h.price.round(4) %> <%= h.to_symbol %></td>
-        <td><%= h.current_price.to_f.round(4) %> <%= h.to_symbol %></td>
+        <td><%= h.estimate_price.to_f.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.qty.round(4) %></td>
         <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>
+        <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>" ><%= h.revenue.round(4) %></td>
         <td><%= h.source %></td>
       </tr>
     <% end %>

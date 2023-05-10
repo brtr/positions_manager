@@ -242,6 +242,10 @@ module ApplicationHelper
         sort: "amount"
       },
       {
+        name: "预计收益",
+        sort: "revenue"
+      },
+      {
         name: "来源",
         sort: "none"
       }
