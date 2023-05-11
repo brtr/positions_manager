@@ -1,11 +1,12 @@
 <div class="m-3">
   <h3>现货仓位管理</h3>
-  <div class="mb-3 mt-3 col-3">
+  <div class="mb-3 mt-3 col-4">
     <%= form_tag public_spot_balances_path, id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
-        <%= select_tag(:search, options_for_select(UserSpotBalance.where(user_id: current_user.id).pluck(:origin_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
-        <button type="submit" class="btn btn-primary">确定</button>
-        <%= link_to "Reset", public_spot_balances_path, class: 'btn btn-default' %>
+        <%= select_tag(:search, options_for_select(@symbols.uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+        <button type="submit" class="btn btn-primary ms-3">确定</button>
+        <%= link_to "Reset", public_spot_balances_path, class: 'btn btn-warning mx-3' %>
+        <%= link_to "Refresh", refresh_public_spot_balances_path, class: 'btn btn-success' %>
       </div>
     <% end %>
   </div>

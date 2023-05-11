@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   get "/refresh_24hr_ticker" => "page#refresh_24hr_ticker", as: :refresh_24hr_ticker
   get "/recently_adding_positions" => "page#recently_adding_positions", as: :recently_adding_positions
   get "/refresh_recently_adding_positions" => "page#refresh_recently_adding_positions", as: :refresh_recently_adding_positions
+  get "/refresh_public_spot_balances" => "page#refresh_public_spot_balances", as: :refresh_public_spot_balances
   get "/account_balance" => "page#account_balance", as: :account_balance
   get "/price_chart" => "page#price_chart", as: :price_chart
   get "/position_detail" => "page#position_detail", as: :position_detail

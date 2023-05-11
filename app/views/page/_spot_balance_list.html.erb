@@ -15,7 +15,7 @@
   <tbody>
     <% @histories.each do |h| %>
       <tr>
-        <td><%= h.origin_symbol %></td>
+        <td><%= link_to h.origin_symbol, origin_transactions_path(search: h.origin_symbol, source: h.source) %></td>
         <td><%= h.price.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.current_price.to_f.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.qty.round(4) %></td>
