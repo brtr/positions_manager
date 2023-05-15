@@ -22,6 +22,7 @@
         <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>
         <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>" ><%= h.revenue.round(4) %></td>
         <td><%= h.source %></td>
+        <td><%= UserSpotBalance::LEVEL[h.level] if h.level %></td>
       </tr>
     <% end %>
   </tbody>

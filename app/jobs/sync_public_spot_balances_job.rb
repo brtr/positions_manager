@@ -2,7 +2,7 @@ class SyncPublicSpotBalancesJob < ApplicationJob
   queue_as :daily_job
 
   def perform
-    OriginTransaction.where('user_id is null and event_time > ?', Date.parse('2023-01-01')).group_by{|tx| [tx.original_symbol, tx.to_symbol, tx.source]}.each do |key, txs|
+    OriginTransaction.where('user_id is null and original_symbol = ?', 'BTCUSDT').group_by{|tx| [tx.original_symbol, tx.to_symbol, tx.source]}.each do |key, txs|
       from_symbol = key[0].split(key[1])[0]
       usb = UserSpotBalance.where(user_id: nil, origin_symbol: key[0], from_symbol: from_symbol, to_symbol: key[1], source: key[2]).first_or_initialize
       total_cost = 0

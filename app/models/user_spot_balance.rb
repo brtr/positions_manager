@@ -1,4 +1,6 @@
 class UserSpotBalance < ApplicationRecord
+  LEVEL = %w[一级 二级 三级]
+
   belongs_to :user, optional: true
 
   enum source: [:binance, :okx, :huobi]
