@@ -1,4 +1,6 @@
 class UserPosition < ApplicationRecord
+  LEVEL = %w[一级 二级 三级]
+
   belongs_to :user, optional: true
 
   scope :available, -> { where("qty > 0") }

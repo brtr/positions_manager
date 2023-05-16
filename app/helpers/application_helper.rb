@@ -60,6 +60,10 @@ module ApplicationHelper
       {
         name: "来源",
         sort: "none"
+      },
+      {
+        name: "强势等级",
+        sort: "level"
       }
     ]
   end

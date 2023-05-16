@@ -1,5 +1,5 @@
 class UserPositionsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:edit, :update]
 
   def index
     @page_index = 3
@@ -38,5 +38,22 @@ class UserPositionsController < ApplicationController
     GetPrivateUserPositionsInfoJob.perform_later(current_user.id)
 
     redirect_to user_positions_path, notice: "正在更新，请稍等刷新查看最新价格以及其他信息..."
+  end
+
+  def edit
+    @record = UserPosition.find_by_id params[:id]
+  end
+
+  def update
+    @record = UserPosition.find_by_id params[:id]
+    @record.update(record_params)
+    url = @record.user_id.present? ? user_positions_path : public_user_positions_path
+
+    redirect_to url, notice: "更新成功"
+  end
+
+  private
+  def record_params
+    params.require(:user_position).permit(:level)
   end
 end

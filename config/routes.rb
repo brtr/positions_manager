@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   root 'page#user_positions'
   mount Sidekiq::Web => "/sidekiq"
 
-  resources :user_positions, only: :index do
+  resources :user_positions, only: [:index, :edit, :update] do
     collection do
       get  :refresh
       post :import_csv
