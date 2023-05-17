@@ -20,6 +20,7 @@ class SpotBalanceSnapshotInfosController < ApplicationController
     records = @info.spot_balance_snapshot_records
     @symbol = params[:search]
     records = records.where(origin_symbol: @symbol) if @symbol.present?
+    records = records.where(level: params[:level]) if params[:level].present?
     @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
   end
 

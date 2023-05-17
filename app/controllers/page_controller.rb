@@ -9,6 +9,7 @@ class PageController < ApplicationController
     @symbol = params[:search]
     histories = UserPosition.available.where(user_id: nil)
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?
+    histories = histories.where(level: params[:level]) if params[:level].present?
     histories = histories.select{|h| h.amount < @max_amount} if @flag && @max_amount > 0
     parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
@@ -133,6 +134,7 @@ class PageController < ApplicationController
     histories = UserSpotBalance.where(user_id: nil)
     @symbols = histories.pluck(:origin_symbol)
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?
+    histories = histories.where(level: params[:level]) if params[:level].present?
     parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
     @histories = @histories.reverse if sort_type == "desc"

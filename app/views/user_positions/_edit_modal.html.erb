@@ -11,7 +11,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="recipient-name" class="control-label">强势等级:</label>
-            <%= f.select :level, options_for_select( UserSpotBalance::LEVEL.map.with_index{ |level, idx| [level, idx]}, @record.level), {}, {class: "form-control"} %>
+            <%= f.select :level, options_for_select(UserPosition::LEVEL.map.with_index{ |level, idx| [level, idx]}, @record.level), {}, {class: "form-control"} %>
           </div>
         </div>
         <div class="modal-footer">

@@ -10,6 +10,7 @@
     <%= form_tag public_user_positions_path, id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
         <%= select_tag(:search, options_for_select(UserPosition.available.where(user_id: nil).pluck(:origin_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+        <%= select_tag(:level, options_for_select(UserPosition::LEVEL.map.with_index{ |level, idx| [level, idx]}, params[:level]), { prompt: '请选择强势等级...', class: 'select2-dropdown form-control' }) %>
         <%= text_field_tag :compare_date, params[:compare_date], class: "form-control datepicker",type: "text", placeholder: "选择对比日期", autocomplete: "off" %>
         <button type="submit" class="btn btn-primary">确定</button>
         <%= link_to "Reset", public_user_positions_path, class: 'btn btn-default' %>

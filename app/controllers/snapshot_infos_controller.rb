@@ -24,6 +24,7 @@ class SnapshotInfosController < ApplicationController
     records = @info.snapshot_positions
     @symbol = params[:search]
     records = records.where(origin_symbol: @symbol) if @symbol.present?
+    records = records.where(level: params[:level]) if params[:level].present?
     @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
     @snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: @info.source_type, user_id: user_id, event_date: @info.event_date - 1.day}).to_a
   end
