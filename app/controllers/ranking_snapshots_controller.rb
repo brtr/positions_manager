@@ -16,8 +16,8 @@ class RankingSnapshotsController < ApplicationController
       SyncFutures24hrTickerJob.perform_later(params[:select].to_i)
       flash[:notice] = "正在更新，请稍等刷新查看最新排名..."
     end
-    @symbols = RankingSnapshot.pluck(:symbol).uniq
     @daily_ranking = JSON.parse($redis.get("get_24hr_tickers")) rescue []
+    @symbols = @daily_ranking.map{|r| [r["symbol"], r["source"]] }
     @three_days_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 3.days).get_rankings
     @weekly_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 1.week).get_rankings
   end

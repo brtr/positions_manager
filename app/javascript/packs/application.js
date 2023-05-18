@@ -42,8 +42,9 @@ $(document).on("ajax:before ajaxStart page:fetch turbolinks:click turbolinks:loa
     if ($('.select_ranking_symbols').length > 0) {
         $('.select_ranking_symbols').off('change').on('change', function() {
             $('#rankingModal').modal('hide');
-            var symbol = $(this).val();
-            $.get('/ranking_snapshots/ranking_graph?symbol=' + symbol)
+            var symbol = $(this).find("option:selected").text();
+            var source = $(this).val();
+            $.get('/ranking_snapshots/ranking_graph?symbol=' + symbol + '&source=' + source)
         })
     }
 });
