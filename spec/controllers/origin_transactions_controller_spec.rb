@@ -26,4 +26,16 @@ RSpec.describe OriginTransactionsController, type: :controller do
       expect(response.code).to eq ('302')
     end
   end
+
+  describe "GET users" do
+    before { 10.times{ create(:origin_transaction, user_id: user.id) } }
+
+    it "renders a successful response" do
+      get :users
+
+      expect(assigns(:txs).count).to eq(10)
+      expect(response).to be_successful
+      expect(response).to render_template(:users)
+    end
+  end
 end

@@ -7,6 +7,7 @@ FactoryBot.define do
     source { "binance" }
     price { 1.7965 }
     qty { 17.1 }
+    amount { 30.72015 }
     current_price { 0.919 }
   end
 end
