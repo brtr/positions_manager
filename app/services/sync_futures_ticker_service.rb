@@ -53,6 +53,7 @@ class SyncFuturesTickerService
         next if d.blank?
         symbol = d["symbol"]
         next if symbol.in?(SYMBOLS)
+        next if symbol.match(/1000/)
         next unless symbol.match(/.*(?:USDT|BUSD).*/) # 排除非BUSD 和 USDT 的货币对
         from_symbol = symbol.split(/USDT/)[0]
         from_symbol = symbol.split(/BUSD/)[0] if from_symbol == symbol
