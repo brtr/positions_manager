@@ -400,4 +400,16 @@ module ApplicationHelper
     str += "(平仓)" if qty < 0
     str
   end
+
+  def display_spot_tx_revenue(revenue, to_symbol, trade_type)
+    str = "#{revenue.round(4)} #{to_symbol}"
+    str += "(预计)" if trade_type == 'buy'
+    str
+  end
+
+  def display_spot_tx_roi(roi, trade_type)
+    str = "#{(roi * 100).round(4)}%"
+    str += "(预计)" if trade_type == 'buy'
+    str
+  end
 end

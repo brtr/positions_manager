@@ -3,6 +3,8 @@ class UserSpotBalance < ApplicationRecord
 
   belongs_to :user, optional: true
 
+  scope :available, -> { where("qty > 0") }
+
   enum source: [:binance, :okx, :huobi]
 
   def current_price

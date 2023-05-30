@@ -71,10 +71,10 @@
                     <%= link_to "上传仓位快照", snapshot_infos_path(user_id: current_user.id), class: "nav-link #{@page_index == 4 ? 'active' : ''}" %>
                   </li>
                   <li class="nav-item">
-                    <%= link_to "同步仓位列表", user_synced_positions_path, class: "nav-link #{@page_index == 7 ? 'active' : ''}" %>
+                    <%= link_to "合约仓位列表", user_synced_positions_path, class: "nav-link #{@page_index == 7 ? 'active' : ''}" %>
                   </li>
                   <li class="nav-item">
-                    <%= link_to "同步仓位快照", snapshot_infos_path(user_id: current_user.id, is_synced: 1), class: "nav-link #{@page_index == 13 ? 'active' : ''}" %>
+                    <%= link_to "合约仓位快照", snapshot_infos_path(user_id: current_user.id, is_synced: 1), class: "nav-link #{@page_index == 13 ? 'active' : ''}" %>
                   </li>
                   <li class="nav-item">
                     <%= link_to "合约交易记录", users_synced_transactions_path, class: "nav-link #{@page_index == 18 ? 'active' : ''}" %>

@@ -2,6 +2,7 @@
   <thead>
     <tr class="table-container-tr">
       <% spots_table_headers.each do |h| %>
+        <% next if h[:sort] == 'level' %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
