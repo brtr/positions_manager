@@ -87,6 +87,10 @@ module ApplicationHelper
         sort: "none"
       },
       {
+        name: "成本价",
+        sort: "none"
+      },
+      {
         name: "当前价",
         sort: "none"
       },

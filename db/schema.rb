@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_16_084220) do
+ActiveRecord::Schema.define(version: 2023_05_29_110013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 2023_05_16_084220) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
+    t.decimal "cost", default: "0.0"
     t.index ["campaign"], name: "index_origin_transactions_on_campaign"
     t.index ["order_id"], name: "index_origin_transactions_on_order_id"
     t.index ["source"], name: "index_origin_transactions_on_source"

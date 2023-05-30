@@ -22,6 +22,7 @@
         <td><%= h.from_symbol %> / <%= h.to_symbol %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= h.trade_type == 'buy' ? '买入' : '卖出' %></td>
         <td><%= h.price.round(4) %> <%= h.to_symbol %></td>
+        <td><%= h.cost.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.current_price.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.qty.round(4) %></td>
         <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>

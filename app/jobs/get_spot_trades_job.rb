@@ -50,7 +50,8 @@ class GetSpotTradesJob < ApplicationJob
 
   def update_tx(tx, current_price)
     tx.current_price = current_price
-    tx.revenue = get_revenue(tx.trade_type, tx.user_id, tx.original_symbol, tx.amount, tx.qty, current_price)
+    tx.cost = get_spot_cost(tx.user_id, tx.original_symbol, tx.event_time.to_date) || tx.price
+    tx.revenue = get_revenue(tx.trade_type, tx.amount, tx.cost, tx.qty, current_price)
     tx.roi = tx.revenue / tx.amount
     tx.save
   end
@@ -87,12 +88,18 @@ class GetSpotTradesJob < ApplicationJob
     end
   end
 
-  def get_revenue(trade_type, user_id, original_symbol, amount, qty, current_price)
+  def get_revenue(trade_type, amount, cost, qty, current_price)
     if trade_type == 'sell'
-      price = UserSpotBalance.find_by(user_id: user_id, origin_symbol: original_symbol)&.price.to_f
-      amount - price * qty
+      amount - cost * qty
     else
       current_price * qty - amount
     end
+  end
+
+  def get_spot_cost(user_id, origin_symbol, date)
+    cost = SpotBalanceSnapshotRecord.joins(:spot_balance_snapshot_info)
+            .find_by(spot_balance_snapshot_info: {user_id: user_id, event_date: date}, origin_symbol: origin_symbol, source: SOURCE)&.price.to_f
+    cost = UserSpotBalance.find_by(user_id: user_id, origin_symbol: origin_symbol, source: SOURCE)&.price.to_f if cost.zero? && date == Date.today
+    cost
   end
 end

@@ -44,12 +44,13 @@ class GetUsersSpotTransactionsJob < ApplicationJob
         revenue = d['pnl'].to_f
         trade_type = d['side'].downcase
         from_symbol = original_symbol.split("-#{FEE_SYMBOL}")[0]
+        event_time = Time.at(d['cTime'].to_i / 1000)
+        cost = get_spot_cost(user_id, original_symbol, event_time.to_date) || price
         current_price = get_current_price(original_symbol, user_id)
-        revenue = get_revenue(trade_type, user_id, original_symbol, amount, qty, current_price) if revenue.to_f == 0
+        revenue = get_revenue(trade_type, amount, cost, qty, current_price) if revenue.to_f == 0
         roi = revenue / amount
-        tx = OriginTransaction.where(order_id: d['ordId'], user_id: user_id).first_or_initialize
+        tx = OriginTransaction.where(order_id: d['ordId'], user_id: user_id, source: 'okx').first_or_initialize
         tx.update(
-          source: 'okx',
           original_symbol: original_symbol,
           from_symbol: from_symbol,
           to_symbol: FEE_SYMBOL,
@@ -59,10 +60,11 @@ class GetUsersSpotTransactionsJob < ApplicationJob
           qty: qty,
           amount: amount,
           fee: d['fee'].to_f.abs,
+          cost: cost,
           revenue: revenue,
           roi: roi,
           current_price: current_price,
-          event_time: Time.at(d['cTime'].to_i / 1000)
+          event_time: event_time
         )
       end
     end
@@ -78,12 +80,18 @@ class GetUsersSpotTransactionsJob < ApplicationJob
     price.to_f
   end
 
-  def get_revenue(trade_type, user_id, original_symbol, amount, qty, current_price)
+  def get_revenue(trade_type, amount, cost, qty, current_price)
     if trade_type == 'sell'
-      price = UserSpotBalance.find_by(user_id: user_id, origin_symbol: original_symbol)&.price.to_f
-      amount - price * qty
+      amount - cost
     else
       current_price * qty - amount
     end
+  end
+
+  def get_spot_cost(user_id, origin_symbol, date)
+    cost = SpotBalanceSnapshotRecord.joins(:spot_balance_snapshot_info)
+            .find_by(spot_balance_snapshot_info: {user_id: user_id, event_date: date}, origin_symbol: origin_symbol, source: 'okx')&.price.to_f
+    cost = UserSpotBalance.find_by(user_id: user_id, origin_symbol: origin_symbol, source: 'okx')&.price.to_f if cost.zero? && date == Date.today
+    cost
   end
 end
