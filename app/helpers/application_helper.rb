@@ -64,6 +64,10 @@ module ApplicationHelper
       {
         name: "强势等级",
         sort: "level"
+      },
+      {
+        name: "备注",
+        sort: "notes"
       }
     ]
   end

@@ -4,7 +4,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="importModalLabel">编辑强势等级</h5>
+        <h5 class="modal-title" id="importModalLabel">编辑仓位</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <%= form_for @record do |f| %>
@@ -12,6 +12,10 @@
           <div class="form-group">
             <label for="recipient-name" class="control-label">强势等级:</label>
             <%= f.select :level, options_for_select(UserPosition::LEVEL.map.with_index{ |level, idx| [level, idx]}, @record.level), {}, {class: "form-control"} %>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">备注:</label>
+            <%= f.text_area :notes, class: "form-control" %>
           </div>
         </div>
         <div class="modal-footer">

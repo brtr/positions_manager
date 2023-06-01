@@ -54,6 +54,6 @@ class UserPositionsController < ApplicationController
 
   private
   def record_params
-    params.require(:user_position).permit(:level)
+    params.require(:user_position).permit(:level, :notes)
   end
 end

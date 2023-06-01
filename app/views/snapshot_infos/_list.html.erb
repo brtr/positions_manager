@@ -3,6 +3,7 @@
     <tr class="table-container-tr">
       <% positions_table_headers.each do |h| %>
         <% next if h[:sort].in?(['ranking', 'funding_fee'])%>
+        <% next if h[:sort].in?(['level', 'notes']) && @info.user_id.present? %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
@@ -31,6 +32,7 @@
         <td><%= "#{(h.margin_ratio.to_f * 100).round(4)}%" %></td>
         <td><%= h.source %></td>
         <td><%= UserPosition::LEVEL[h.level] if h.level %></td>
+        <td data-bs-toggle="tooltip" title='<%= h.notes %>'><%= h.notes&.truncate(10) if h.notes %></td>
       </tr>
     <% end %>
   </tbody>
