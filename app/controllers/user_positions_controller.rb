@@ -47,7 +47,13 @@ class UserPositionsController < ApplicationController
   def update
     @record = UserPosition.find_by_id params[:id]
     @record.update(record_params)
-    url = @record.user_id.present? ? user_positions_path : public_user_positions_path
+    url = if @record.user_id.present?
+            user_positions_path
+          elsif params[:only_notes].present?
+            position_detail_path(origin_symbol: @record.origin_symbol, source: @record.source, trade_type: @record.trade_type)
+          else
+            public_user_positions_path
+          end
 
     redirect_to url, notice: "更新成功"
   end
