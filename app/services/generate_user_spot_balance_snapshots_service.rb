@@ -1,6 +1,6 @@
 class GenerateUserSpotBalanceSnapshotsService
   class << self
-    def execute(from_date: '2023-01-01', user_id: nil)
+    def execute(from_date: '2022-01-01', user_id: nil)
       SpotBalanceSnapshotInfo.transaction do
         (Date.parse(from_date)..Date.today).each do |date|
           info = SpotBalanceSnapshotInfo.where(user_id: user_id, event_date: date).first_or_create

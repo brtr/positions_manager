@@ -4,11 +4,11 @@ class GetSpotTradesJob < ApplicationJob
   SOURCE = 'binance'.freeze
   SKIP_SYMBOLS = ['BUSD'].freeze
 
-  def perform(symbol, user_id: nil, date: Date.yesterday - 3.months)
+  def perform(symbol, user_id: nil)
     return if symbol.in?(SKIP_SYMBOLS)
     origin_symbol = "#{symbol}#{TRADE_SYMBOL}"
     txs = OriginTransaction.where(source: SOURCE, original_symbol: origin_symbol, user_id: user_id)
-    trades = BinanceSpotsService.new(user_id: user_id).get_my_trades(origin_symbol, from_date: date)
+    trades = BinanceSpotsService.new(user_id: user_id).get_my_trades(origin_symbol)
     current_price = get_current_price(origin_symbol, user_id)
     if trades.is_a?(String) || trades.blank?
       Rails.logger.debug "获取不到#{origin_symbol}的交易记录"

@@ -49,7 +49,7 @@ class BinanceSpotsService
     end
   end
 
-  def get_my_trades(symbol, limit: 500, from_date: 1.year.ago.to_date)
+  def get_my_trades(symbol, limit: 500, from_date: 2.year.ago.to_date)
     begin
       @client.my_trades(symbol: symbol, limit: limit, startTime: from_date.to_time.to_i * 1000)
     rescue => e
