@@ -52,7 +52,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :user_spot_balances, only: [:index, :edit, :update]
+  resources :user_spot_balances, only: [:index, :edit, :update] do
+    get :refresh, on: :collection
+  end
+
   resources :spot_balance_snapshot_infos, only: [:index, :show]
 
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions

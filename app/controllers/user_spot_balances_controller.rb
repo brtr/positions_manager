@@ -1,5 +1,5 @@
 class UserSpotBalancesController < ApplicationController
-  before_action :authenticate_user!, only: :index
+  before_action :authenticate_user!, only: [:index, :refresh]
 
   def index
     @page_index = 20
@@ -24,6 +24,12 @@ class UserSpotBalancesController < ApplicationController
     url = @record.user_id.present? ? user_spot_balances_path : public_spot_balances_path
 
     redirect_to url, notice: "更新成功"
+  end
+
+  def refresh
+    SyncUsersSpotBalancesJob.perform_later(current_user.id)
+
+    redirect_to user_spot_balances_path, notice: "正在更新，请稍等刷新查看最新结果..."
   end
 
   private

@@ -6,6 +6,7 @@
         <%= select_tag(:search, options_for_select(UserSpotBalance.where(user_id: current_user.id).pluck(:origin_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
         <button type="submit" class="btn btn-primary">确定</button>
         <%= link_to "Reset", user_spot_balances_path, class: 'btn btn-default' %>
+        <%= link_to "Refresh", refresh_user_spot_balances_path, class: 'btn btn-success' %>
       </div>
     <% end %>
   </div>

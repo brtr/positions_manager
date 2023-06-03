@@ -15,7 +15,8 @@ class SyncUsersSpotBalancesJob < ApplicationJob
   end
 
   def sync_user_spot_balances(user_id)
-    OriginTransaction.where(user_id: user_id, event_time: Date.yesterday.all_day).group_by{|tx| [tx.original_symbol, tx.to_symbol, tx.source]}.each do |key, txs|
+    maximum_tx_id = UserSpotBalance.where(user_id: user_id).maximum(:tx_id).to_i
+    OriginTransaction.where('user_id = ? and id > ?', user_id, maximum_tx_id).group_by{|tx| [tx.original_symbol, tx.to_symbol, tx.source]}.each do |key, txs|
       from_symbol = key[0].split(key[1])[0]
       usb = UserSpotBalance.where(user_id: user_id, origin_symbol: key[0], from_symbol: from_symbol, to_symbol: key[1], source: key[2]).first_or_initialize
       total_cost = usb.amount.to_f
@@ -33,7 +34,7 @@ class SyncUsersSpotBalancesJob < ApplicationJob
       total_qty -= sold_qty
       total_cost = total_qty * price
 
-      usb.update(price: price, qty: total_qty, amount: total_cost)
+      usb.update(price: price, qty: total_qty, amount: total_cost, tx_id: txs.max_by(&:id).id)
     end
   end
 end
