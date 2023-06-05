@@ -15,7 +15,7 @@
     </div>
     <h2>
       <%= @symbol %>
-      <%= link_to "编辑", edit_user_position_path(id: @target_position.id, only_notes: true), remote: true, class: 'text-sm' if @target_position.present? %>
+      <%= link_to "增加备注", new_user_positions_notes_history_path(user_position_id: @target_position.id, position_detail: true), remote: true, class: 'text-sm' if @target_position.present? %>
     </h2>
     <div>备注: <%= @target_position&.notes %></div>
     <div class="p-2"></div>
@@ -118,5 +118,4 @@
   <% end %>
 </div>
 
-<div id="positions-level-modal">
-</div>
+<div id="notes-modal"></div>

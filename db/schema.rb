@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_03_093700) do
+ActiveRecord::Schema.define(version: 2023_06_05_094332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -294,6 +294,16 @@ ActiveRecord::Schema.define(version: 2023_06_03_093700) do
     t.integer "level"
     t.text "notes"
     t.index ["user_id"], name: "index_user_positions_on_user_id"
+  end
+
+  create_table "user_positions_notes_histories", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "user_position_id"
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_positions_notes_histories_on_user_id"
+    t.index ["user_position_id"], name: "index_user_positions_notes_histories_on_user_position_id"
   end
 
   create_table "user_spot_balances", force: :cascade do |t|

@@ -2,6 +2,7 @@ class UserPosition < ApplicationRecord
   LEVEL = %w[一级 二级 三级]
 
   belongs_to :user, optional: true
+  has_many :user_positions_notes_histories
 
   scope :available, -> { where("qty > 0") }
 
@@ -77,6 +78,10 @@ class UserPosition < ApplicationRecord
 
   def funding_fee
     FundingFeeHistory.where(user_id: user_id, origin_symbol: origin_symbol).sum(&:amount).round(4)
+  end
+
+  def notes
+    user_positions_notes_histories.order(created_at: :asc).last&.notes
   end
 
 end
