@@ -47,7 +47,7 @@
         <% if h.is_a?(UserPosition) && h.user_id.nil? %>
           <td><%= UserPosition::LEVEL[h.level] if h.level %></td>
           <td data-bs-toggle="tooltip" title='<%= h.notes %>'><%= link_to (h.notes&.truncate(10) || '备注历史'), user_positions_notes_histories_path(user_position_id: h.id) %></td>
-          <td><%= link_to "增加备注", new_user_positions_notes_history_path(user_position_id: h.id), remote: true %></td>
+          <td><%= link_to "编辑", edit_user_position_path(id: h.id), remote: true %></td>
         <% end %>
       </tr>
     <% end %>

@@ -47,6 +47,7 @@ class UserPositionsController < ApplicationController
   def update
     @record = UserPosition.find_by_id params[:id]
     @record.update(record_params)
+    @record.user_positions_notes_histories.create(user_id: current_user.id, notes: record_params[:notes])
     url = if @record.user_id.present?
             user_positions_path
           elsif params[:only_notes].present?

@@ -17,7 +17,7 @@
           <% end %>
           <div class="form-group">
             <label for="recipient-name" class="control-label">备注:</label>
-            <%= f.text_area :notes, class: "form-control" %>
+            <%= f.text_area :notes, class: "form-control", value: '' %>
           </div>
           <%= hidden_field_tag :only_notes, params[:only_notes] %>
         </div>

@@ -18,7 +18,7 @@
             <td><%= n.notes %></td>
             <td>
               <%= link_to '编辑', edit_user_positions_notes_history_path(n), remote: true if current_user == n.user %>
-              <%= link_to '删除', user_positions_notes_history_path(n) if current_user == n.user %>
+              <%= link_to '删除', user_positions_notes_history_path(n), method: :delete, data: { confirm: "确定要删除吗，删除后不可恢复?" } if current_user == n.user %>
             </td>
           </tr>
         <% end %>
