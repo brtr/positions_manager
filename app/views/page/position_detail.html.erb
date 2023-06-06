@@ -16,6 +16,7 @@
     <h2>
       <%= @symbol %>
       <%= link_to "增加备注", edit_user_position_path(id: @target_position.id, only_notes: true), remote: true, class: 'text-sm' if @target_position.present? %>
+      <%= link_to "备注历史", user_positions_notes_histories_path(user_position_id: @target_position.id), class: 'text-sm', target: '_blank' if @target_position.present? %>
     </h2>
     <div>备注: <%= @target_position&.notes %></div>
     <div class="p-2"></div>
@@ -29,7 +30,7 @@
               <th>类别</th>
               <th>平均成交价</th>
               <th>平均成本价</th>
-              <th>最新价格 / 平仓价格</th>
+              <th>最新价格</th>
               <th>新增数量</th>
               <th>新增金额</th>
               <th>
@@ -46,9 +47,9 @@
               <tr>
                 <td><%= d.event_date.to_s %></td>
                 <td class="<%= trade_type_style(d.trade_type) %>"><%= trade_type_display(d.trade_type, d.qty) %></td>
-                <td><%= d.qty > 0 ? d.price.round(4) : d.cost.round(4) %></td>
-                <td><%= d.unit_cost.round(4) %></td>
-                <td><%= d.qty > 0 ? d.current_price.round(4) : d.price.round(4) %></td>
+                <td><%= d.price.round(4) %></td>
+                <td><%= d.unit_cost&.round(4) %></td>
+                <td><%= d.current_price.round(4) %></td>
                 <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty %></td>
                 <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
                 <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
