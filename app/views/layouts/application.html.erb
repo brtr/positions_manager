@@ -27,14 +27,24 @@
             <li class="nav-item">
               <%= link_to "首页", public_user_positions_path, class: "nav-link #{@page_index == 1 ? 'active' : ''}" %>
             </li>
-            <li class="nav-item">
-              <%= link_to "公开合约仓位快照", snapshot_infos_path, class: "nav-link #{@page_index == 2 ? 'active' : ''}" %>
-            </li>
-            <li class="nav-item">
-              <%= link_to "公开合约交易记录", synced_transactions_path, class: "nav-link #{@page_index == 11 ? 'active' : ''}" %>
-            </li>
-            <li class="nav-item">
-              <%= link_to "历史仓位变化曲线图", positions_graphs_snapshot_infos_path, class: "nav-link #{@page_index == 6 ? 'active' : ''}" %>
+            <li class="nav-item dropdown">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([2, 6, 11, 24]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                合约交易记录
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
+                <li class="nav-item">
+                  <%= link_to "公开合约仓位快照", snapshot_infos_path, class: "nav-link #{@page_index == 2 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "公开合约交易记录", synced_transactions_path, class: "nav-link #{@page_index == 11 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "历史仓位变化曲线图", positions_graphs_snapshot_infos_path, class: "nav-link #{@page_index == 6 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "合约备注历史记录", user_positions_notes_histories_path, class: "nav-link #{@page_index == 24 ? 'active' : ''}" %>
+                </li>
+              </ul>
             </li>
             <li class="nav-item dropdown">
               <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([8, 9, 10, 22, 23]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">

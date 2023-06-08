@@ -48,15 +48,14 @@ class UserPositionsController < ApplicationController
     @record = UserPosition.find_by_id params[:id]
     @record.update(record_params)
     @record.user_positions_notes_histories.create(user_id: current_user.id, notes: record_params[:notes])
-    url = if @record.user_id.present?
-            user_positions_path
-          elsif params[:only_notes].present?
-            position_detail_path(origin_symbol: @record.origin_symbol, source: @record.source, trade_type: @record.trade_type)
-          else
-            public_user_positions_path
-          end
 
-    redirect_to url, notice: "更新成功"
+    if params[:only_notes].present?
+      redirect_to position_detail_path(origin_symbol: @record.origin_symbol, source: @record.source, trade_type: @record.trade_type), notice: "添加备注成功"
+    else
+      respond_to do |format|
+        format.js
+      end
+    end
   end
 
   private

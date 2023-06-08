@@ -268,6 +268,35 @@ module ApplicationHelper
     ]
   end
 
+  def notes_histories_headers
+    [
+      {
+        name: '交易对',
+        sort: 'origin_symbol'
+      },
+      {
+        name: '交易类型',
+        sort: 'trade_type'
+      },
+      {
+        name: '添加人',
+        sort: 'user'
+      },
+      {
+        name: '添加时间',
+        sort: 'created_at'
+      },
+      {
+        name: '内容',
+        sort: 'notes'
+      },
+      {
+        name: '来源',
+        sort: 'none'
+      },
+    ]
+  end
+
   def adding_positions_remote_params(params, sort)
     res = {
       sort: sort,

@@ -1,10 +1,23 @@
 class UserPositionsNotesHistoriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_user_position, except: [:edit, :update]
+  before_action :get_user_position, except: [:index, :edit, :update]
   before_action :get_note, only: [:edit, :update, :destroy]
 
   def index
-    @notes = UserPositionsNotesHistory.where(user_position_id: @record.id).order(created_at: :desc).page(params[:page]).per(15)
+    @page_index = 24
+    sort = params[:sort].presence || "created_at"
+    sort_type = params[:sort_type].presence || "desc"
+    @symbol = params[:origin_symbol]
+    @source = params[:source]
+    @trade_type = params[:trade_type]
+    histories = UserPositionsNotesHistory.includes(:user, :user_position)
+    histories = histories.select{|h| h.origin_symbol == @symbol} if @symbol.present?
+    histories = histories.select{|h| h.source == @source} if @source.present?
+    histories = histories.select{|h| h.trade_type == @trade_type} if @trade_type.present?
+    parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
+    @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
+    @histories = @histories.reverse if sort_type == "desc"
+    @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
   end
 
   def new

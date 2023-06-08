@@ -7,7 +7,7 @@
         <h5 class="modal-title" id="importModalLabel">编辑仓位</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <%= form_for @record do |f| %>
+      <%= form_for @record, remote: params[:only_notes].blank? do |f| %>
         <div class="modal-body">
           <% unless params[:only_notes] %>
             <div class="form-group">

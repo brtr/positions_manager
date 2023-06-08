@@ -1,0 +1,36 @@
+<table class="table">
+  <thead>
+    <tr class="table-container-tr">
+      <% notes_histories_headers.each do |h| %>
+        <th scope="col">
+          <% if h[:sort] == "none" %>
+            <%= "#{h[:name]}" %>
+          <% else %>
+            <%= link_to "#{h[:name]}", user_positions_notes_histories_path(ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+          <% end %>
+        </th>
+      <% end %>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @histories.each do |n| %>
+      <tr>
+        <td style="width: 10%"><%= n.origin_symbol %></td>
+        <td><%= I18n.t("views.contract_trading.#{n.trade_type}") %></td>
+        <td><%= n.user.email %></td>
+        <td><%= n.created_at.strftime('%Y-%m-%d %H:%M') %></td>
+        <td><%= n.notes %></td>
+        <td><%= n.source %></td>
+        <td>
+          <%= link_to '编辑', edit_user_positions_notes_history_path(n), remote: true if current_user == n.user %>
+          <%= link_to '删除', user_positions_notes_history_path(n), method: :delete, data: { confirm: "确定要删除吗，删除后不可恢复?" } if current_user == n.user %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="p-4">
+  <%= paginate @histories %>
+</div>

@@ -16,7 +16,7 @@
     <h2>
       <%= @symbol %>
       <%= link_to "增加备注", edit_user_position_path(id: @target_position.id, only_notes: true), remote: true, class: 'text-sm' if @target_position.present? %>
-      <%= link_to "备注历史", user_positions_notes_histories_path(user_position_id: @target_position.id), class: 'text-sm', target: '_blank' if @target_position.present? %>
+      <%= link_to "备注历史", user_positions_notes_histories_path(origin_symbol: @symbol, trade_type: @trade_type, source: @source), class: 'text-sm', target: '_blank' if @target_position.present? %>
     </h2>
     <div>备注: <%= @target_position&.notes %></div>
     <div class="p-2"></div>
