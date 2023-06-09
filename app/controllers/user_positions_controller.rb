@@ -47,7 +47,7 @@ class UserPositionsController < ApplicationController
   def update
     @record = UserPosition.find_by_id params[:id]
     @record.update(record_params)
-    @record.user_positions_notes_histories.create(user_id: current_user.id, notes: record_params[:notes])
+    @record.user_positions_notes_histories.create(user_id: current_user.id, notes: record_params[:notes], images: record_params[:images])
 
     if params[:only_notes].present?
       redirect_to position_detail_path(origin_symbol: @record.origin_symbol, source: @record.source, trade_type: @record.trade_type), notice: "添加备注成功"
@@ -60,6 +60,6 @@ class UserPositionsController < ApplicationController
 
   private
   def record_params
-    params.require(:user_position).permit(:level, :notes)
+    params.require(:user_position).permit(:level, :notes, images: [])
   end
 end

@@ -1,5 +1,5 @@
 class UserPosition < ApplicationRecord
-  LEVEL = %w[一级 二级 三级]
+  LEVEL = %w[弱 中 强 最强]
 
   belongs_to :user, optional: true
   has_many :user_positions_notes_histories
@@ -82,6 +82,10 @@ class UserPosition < ApplicationRecord
 
   def notes
     user_positions_notes_histories.order(created_at: :asc).last&.notes
+  end
+
+  def images=(files=[])
+    # TODO
   end
 
 end

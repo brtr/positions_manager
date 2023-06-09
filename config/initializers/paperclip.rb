@@ -1,0 +1,1 @@
+Paperclip::Attachment.default_options[:path] = '/positions_manager/:class/:attachment/:id_partition/:style/:filename'

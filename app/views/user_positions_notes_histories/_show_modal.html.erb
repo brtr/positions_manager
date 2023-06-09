@@ -1,0 +1,29 @@
+<!-- Modal -->
+
+<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">备注详情</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="notes-section">
+          <h6 class="notes-heading">内容：</h6>
+          <p id="notesContent"><%= @note.notes %></p>
+        </div>
+        <div class="image-section">
+          <h6 class="image-heading">图片：</h6>
+          <div id="imageContainer">
+            <% @note.attachments.each do |atta| %>
+              <span><%= image_tag atta.image.expiring_url, width: '300px' %></span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

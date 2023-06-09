@@ -1,3 +1,8 @@
 $("#notes-modal").html("<%= j render partial: "modal" %>");
 $("#spinner").addClass("hide");
 $('#editModal').modal('show')
+
+$('#editModal').on('click', '#submitBtn', function(e) {
+  $('#editModal').modal('hide')
+  $("#spinner").removeClass("hide");
+})

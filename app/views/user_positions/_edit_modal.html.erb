@@ -7,7 +7,7 @@
         <h5 class="modal-title" id="importModalLabel">编辑仓位</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <%= form_for @record, remote: params[:only_notes].blank? do |f| %>
+      <%= form_for @record, multipart: true, remote: params[:only_notes].blank? do |f| %>
         <div class="modal-body">
           <% unless params[:only_notes] %>
             <div class="form-group">
@@ -19,11 +19,15 @@
             <label for="recipient-name" class="control-label">备注:</label>
             <%= f.text_area :notes, class: "form-control", value: '' %>
           </div>
+          <div class="form-group mt-5">
+            <label for="recipient-name" class="control-label">附件:</label>
+            <%= f.file_field :images, multiple: true %>
+          </div>
           <%= hidden_field_tag :only_notes, params[:only_notes] %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-          <%= f.submit "确定", class: "btn btn-primary" %>
+          <%= f.submit "确定", class: "btn btn-primary", id: "submitBtn" %>
         </div>
       <% end %>
     </div>

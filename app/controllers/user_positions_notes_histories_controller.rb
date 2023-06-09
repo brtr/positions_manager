@@ -1,7 +1,7 @@
 class UserPositionsNotesHistoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :get_user_position, except: [:index, :edit, :update]
-  before_action :get_note, only: [:edit, :update, :destroy]
+  before_action :get_note, only: [:show, :edit, :update, :destroy]
 
   def index
     @page_index = 24
@@ -38,11 +38,15 @@ class UserPositionsNotesHistoriesController < ApplicationController
     redirect_to url, notice: "添加备注成功"
   end
 
+  def show
+  end
+
   def edit
     @record = @note.user_position
   end
 
   def update
+    @note.attachments.delete_all if note_params[:images].present?
     @note.update(note_params)
 
     redirect_to user_positions_notes_histories_path(user_position_id: @note.user_position_id), notice: "更新成功"
@@ -57,7 +61,7 @@ class UserPositionsNotesHistoriesController < ApplicationController
 
   private
   def note_params
-    params.require(:user_positions_notes_history).permit(:notes, :user_position_id)
+    params.require(:user_positions_notes_history).permit(:notes, :user_position_id, images: [])
   end
 
   def get_user_position
