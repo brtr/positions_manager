@@ -1,7 +1,7 @@
 class UserPositionsNotesHistoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :get_user_position, except: [:index, :edit, :update]
-  before_action :get_note, only: [:show, :edit, :update, :destroy]
+  before_action :get_note, only: [:edit, :update, :destroy]
 
   def index
     @page_index = 24
@@ -39,6 +39,7 @@ class UserPositionsNotesHistoriesController < ApplicationController
   end
 
   def show
+    @note = UserPositionsNotesHistory.find_by(id: params[:id])
   end
 
   def edit
