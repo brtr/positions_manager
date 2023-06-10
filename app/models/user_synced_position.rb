@@ -70,4 +70,8 @@ class UserSyncedPosition < ApplicationRecord
   def funding_fee
     FundingFeeHistory.where(user_id: user_id, origin_symbol: origin_symbol).sum(&:amount).round(4)
   end
+
+  def last_funding_fee
+    FundingFeeHistory.where(user_id: user_id, origin_symbol: origin_symbol).where('event_date < ?', Date.yesterday).sum(&:amount).round(4)
+  end
 end

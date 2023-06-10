@@ -445,4 +445,14 @@ module ApplicationHelper
     str += "(预计)" if trade_type == 'buy'
     str
   end
+
+  def display_funding_fee(h)
+    margin = h.funding_fee.to_f - h.last_funding_fee.to_f
+
+    if margin != 0
+      "#{h.funding_fee}(<span class=#{margin > 0 ? 'pos-num' : 'neg-num'}>#{margin.round(3)}</span>)".html_safe
+    else
+      h.funding_fee
+    end
+  end
 end

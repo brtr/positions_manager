@@ -147,4 +147,20 @@ class PageController < ApplicationController
 
     redirect_to public_spot_balances_path, notice: "正在更新，请稍等刷新查看最新结果..."
   end
+
+  def funding_fee_chart
+    @symbol = params[:symbol]
+    @source = params[:source]
+    @to_date = Date.parse(params[:to_date]) rescue Date.today
+    @from_date = Date.parse(params[:from_date]) + 1.day rescue @to_date - 3.months
+
+    histories = FundingFeeHistory.where('user_id is null and event_date >= ? and event_date <= ?', @from_date, @to_date).order(event_date: :asc)
+    histories = histories.where(origin_symbol: @symbol) if @symbol.present?
+    histories = histories.where(source: @source) if @source.present?
+    @data_summary = histories.data_summary
+    @data = {}
+    histories.group_by(&:event_date).each do |date, value|
+      @data[date] = { amount: value.sum(&:amount), date: date }
+    end
+  end
 end
