@@ -1,0 +1,41 @@
+<div class="m-3">
+  <h2>合约仓位收益排行榜</h2>
+  <div class="row mt-3">
+    <div class="col-6">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>日期</th>
+            <th>单日收益</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @data.order(profit_amount: :desc).first(10).each do |d| %>
+            <tr>
+              <td><%= d.event_date %></td>
+              <td><%= d.profit_amount.round(4) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-6">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>日期</th>
+            <th>单日亏损</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @data.order(loss_amount: :asc).first(10).each do |d| %>
+            <tr>
+              <td><%= d.event_date %></td>
+              <td><%= d.loss_amount.round(4) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

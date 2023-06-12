@@ -105,7 +105,7 @@
               </li>
             <% end %>
             <li class="nav-item dropdown">
-              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([5, 17]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([5, 17, 26]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 币种涨跌排名
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
@@ -114,6 +114,9 @@
                 </li>
                 <li class="nav-item">
                   <%= link_to "历史币种涨跌排名数据快照", ranking_snapshots_path, class: "nav-link #{@page_index == 17 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "合约仓位收益排行榜", revenue_ranking_snapshot_infos_path, class: "nav-link #{@page_index == 26 ? 'active' : ''}" %>
                 </li>
               </ul>
             </li>

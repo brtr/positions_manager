@@ -81,6 +81,11 @@ class SnapshotInfosController < ApplicationController
     end
   end
 
+  def revenue_ranking
+    @page_index = 26
+    @data = SnapshotInfo.synced.where(user_id: nil)
+  end
+
   private
 
   def period_date

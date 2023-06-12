@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     collection do
       get :positions_graphs
       get :export_roi
+      get :revenue_ranking
     end
 
     get :export_user_positions, on: :member

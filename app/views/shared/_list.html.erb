@@ -31,7 +31,7 @@
           <% end %>
         </td>
         <td><%= h.ranking %></td>
-        <td><%= display_funding_fee(h) %></td>
+        <td><%= link_to display_funding_fee(h), funding_fee_chart_path(symbol: h.origin_symbol, source: h.source), target: '_blank' %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
         <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.current_price.to_f.round(4) %> <%= h.fee_symbol %></td>
