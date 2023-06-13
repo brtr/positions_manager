@@ -76,6 +76,36 @@ class BinanceFuturesService
     do_request("get", url, payload)
   end
 
+  def get_open_interest_hist(symbol)
+    url = BASE_URL + "/futures/data/openInterestHist?symbol=#{symbol}&period=4h"
+    response = RestClient.get(url)
+    JSON.parse(response).last
+  end
+
+  def get_top_long_short_account_ratio(symbol)
+    url = BASE_URL + "/futures/data/topLongShortAccountRatio?symbol=#{symbol}&period=4h"
+    response = RestClient.get(url)
+    JSON.parse(response).last
+  end
+
+  def get_top_long_short_position_ratio(symbol)
+    url = BASE_URL + "/futures/data/topLongShortPositionRatio?symbol=#{symbol}&period=4h"
+    response = RestClient.get(url)
+    JSON.parse(response).last
+  end
+
+  def get_global_long_short_account_ratio(symbol)
+    url = BASE_URL + "/futures/data/globalLongShortAccountRatio?symbol=#{symbol}&period=4h"
+    response = RestClient.get(url)
+    JSON.parse(response).last
+  end
+
+  def get_taker_long_short_ratio(symbol)
+    url = BASE_URL + "/futures/data/takerlongshortRatio?symbol=#{symbol}&period=4h"
+    response = RestClient.get(url)
+    JSON.parse(response).last
+  end
+
   private
   def do_request(method, url, payload)
     sign = signed_data(build_query(payload))
