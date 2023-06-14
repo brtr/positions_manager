@@ -150,6 +150,7 @@ class PageController < ApplicationController
   end
 
   def funding_fee_chart
+    @page_index = 25
     @symbol = params[:symbol]
     @source = params[:source]
     @to_date = Date.parse(params[:to_date]) rescue Date.today
@@ -163,5 +164,16 @@ class PageController < ApplicationController
     histories.group_by(&:event_date).each do |date, value|
       @data[date] = { amount: value.sum(&:amount), date: date }
     end
+  end
+
+  def funding_fee_ranking
+    @page_index = 27
+    @data = GetFundingFeeRankingService.execute.sort_by{|x| x['fundingRate'].to_f}
+  end
+
+  def refresh_funding_fee_list
+    $redis.del('binance_future_funding_fee_list')
+
+    redirect_to funding_fee_ranking_path, notice: '资金费率刷新成功'
   end
 end
