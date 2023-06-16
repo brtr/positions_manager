@@ -21,7 +21,10 @@
       <div class="mt-3">
         <h4>资金费用中位数: <%= @data_summary[:median].round(2) %> / 最高: <%= @data_summary[:max].round(2) %> / 最低: <%= @data_summary[:min].round(2) %></h4>
       </div>
-      <%= render partial: "funding_fee_chart" %>
+      <%= render partial: "funding_fee_chart/funding_fee_chart" %>
+    </div>
+    <div>
+      <%= render partial: "funding_fee_chart/revenue_chart" %>
     </div>
   </div>
 </div>

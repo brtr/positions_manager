@@ -156,13 +156,16 @@ class PageController < ApplicationController
     @to_date = Date.parse(params[:to_date]) rescue Date.today
     @from_date = Date.parse(params[:from_date]) + 1.day rescue @to_date - 3.months
 
-    histories = FundingFeeHistory.where('user_id is null and event_date >= ? and event_date <= ?', @from_date, @to_date).order(event_date: :asc)
+    histories = FundingFeeHistory.includes(:snapshot_position).where('funding_fee_histories.user_id is null and funding_fee_histories.event_date >= ? and funding_fee_histories.event_date <= ?', @from_date, @to_date).order(event_date: :asc)
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?
     histories = histories.where(source: @source) if @source.present?
     @data_summary = histories.data_summary
     @data = {}
+    total_revenue = 0
     histories.group_by(&:event_date).each do |date, value|
-      @data[date] = { amount: value.sum(&:amount), date: date }
+      revenue = value.sum(&:revenue)
+      total_revenue += revenue
+      @data[date] = { amount: value.sum(&:amount), revenue: revenue, total_revenue: total_revenue, date: date }
     end
   end
 

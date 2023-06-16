@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_08_112810) do
+ActiveRecord::Schema.define(version: 2023_06_16_092003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2023_06_08_112810) do
     t.date "event_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "snapshot_position_id"
     t.index ["event_date"], name: "index_funding_fee_histories_on_event_date"
     t.index ["origin_symbol"], name: "index_funding_fee_histories_on_origin_symbol"
     t.index ["user_id"], name: "index_funding_fee_histories_on_user_id"

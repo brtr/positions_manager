@@ -111,7 +111,7 @@
                 <td><%= d.price.round(4) %></td>
                 <td><%= d.unit_cost&.round(4) %></td>
                 <td><%= d.current_price.round(4) %></td>
-                <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty %></td>
+                <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty.round(4) %></td>
                 <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
                 <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
                 <td><%= "#{d.roi}%" %></td>
