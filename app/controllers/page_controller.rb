@@ -179,4 +179,15 @@ class PageController < ApplicationController
 
     redirect_to funding_fee_ranking_path, notice: '资金费率刷新成功'
   end
+
+  def liquidations_ranking
+    @page_index = 28
+    @data = GetLiquidationsRankingService.execute.sort_by{|x| x['rate'].to_f}
+  end
+
+  def refresh_liquidations_list
+    $redis.del('top_liquidatioins_list')
+
+    redirect_to liquidations_ranking_path, notice: '爆仓数据刷新成功'
+  end
 end

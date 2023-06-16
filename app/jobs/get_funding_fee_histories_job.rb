@@ -17,7 +17,8 @@ class GetFundingFeeHistoriesJob < ApplicationJob
   def generate_history(up, date)
     rate = get_rate(up.origin_symbol, up.source, date)
     ffh = FundingFeeHistory.where(origin_symbol: up.origin_symbol, event_date: date, source: up.source, user_id: up.user_id).first_or_initialize
-    ffh.update(rate: rate, amount: rate * up.amount * 3)
+    snapshot = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: { user_id: h.user_id }, event_date: ffh.event_date, origin_symbol: ffh.origin_symbol, source: ffh.source).take
+    ffh.update(rate: rate, amount: rate * up.amount * 3, snapshot_position_id: snapshot&.id)
   end
 
   def get_rate(symbol, source, date)

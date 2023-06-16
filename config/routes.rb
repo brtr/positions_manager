@@ -76,6 +76,8 @@ Rails.application.routes.draw do
   get "/funding_fee_chart" => "page#funding_fee_chart", as: :funding_fee_chart
   get "/funding_fee_ranking" => "page#funding_fee_ranking", as: :funding_fee_ranking
   get "/refresh_funding_fee_list" => "page#refresh_funding_fee_list", as: :refresh_funding_fee_list
+  get "/liquidations_ranking" => "page#liquidations_ranking", as: :liquidations_ranking
+  get "/refresh_liquidations_list" => "page#refresh_liquidations_list", as: :refresh_liquidations_list
   post "/set_public_positions_filter" => "page#set_public_positions_filter", as: :set_public_positions_filter
 
   get "/healthcheck", to: "page#health_check"
