@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_16_092003) do
+ActiveRecord::Schema.define(version: 2023_06_17_101229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,22 @@ ActiveRecord::Schema.define(version: 2023_06_16_092003) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_positions_notes_history_id"], name: "index_attachments_on_user_positions_notes_history_id"
+  end
+
+  create_table "coin_data_histories", force: :cascade do |t|
+    t.string "symbol"
+    t.string "source"
+    t.json "open_interest"
+    t.json "top_long_short_account_ratio"
+    t.json "top_long_short_position_ratio"
+    t.json "global_long_short_account_ratio"
+    t.json "taker_long_short_ratio"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_date"], name: "index_coin_data_histories_on_event_date"
+    t.index ["source"], name: "index_coin_data_histories_on_source"
+    t.index ["symbol"], name: "index_coin_data_histories_on_symbol"
   end
 
   create_table "coin_rankings", force: :cascade do |t|
