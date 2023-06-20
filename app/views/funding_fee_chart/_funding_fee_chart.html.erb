@@ -27,9 +27,9 @@ document.addEventListener('turbolinks:load', () => {
             yAxisID: 'y'
           },
           {
-            label: "每日收益累积",
+            label: "资金费用累积",
             data: result.map(i => {
-              return i.total_revenue
+              return i.total_amount
             }),
             tension: 0.4,
             backgroundColor: value => {

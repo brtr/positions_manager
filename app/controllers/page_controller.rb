@@ -162,11 +162,11 @@ class PageController < ApplicationController
     histories = histories.where(source: @source) if @source.present?
     @data_summary = histories.data_summary
     @data = {}
-    total_revenue = 0
+    total_amount = 0
     histories.group_by(&:event_date).each do |date, value|
-      revenue = value.sum(&:revenue)
-      total_revenue += revenue
-      @data[date] = { amount: value.sum(&:amount), revenue: revenue, total_revenue: total_revenue, date: date }
+      amount = value.sum(&:amount)
+      total_amount += amount
+      @data[date] = { amount: amount, revenue: value.sum(&:revenue), total_amount: total_amount, date: date }
     end
   end
 
