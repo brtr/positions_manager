@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_17_101229) do
+ActiveRecord::Schema.define(version: 2023_06_19_103054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,17 @@ ActiveRecord::Schema.define(version: 2023_06_17_101229) do
     t.index ["event_date"], name: "index_coin_data_histories_on_event_date"
     t.index ["source"], name: "index_coin_data_histories_on_source"
     t.index ["symbol"], name: "index_coin_data_histories_on_symbol"
+  end
+
+  create_table "coin_holding_durations", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "symbol"
+    t.string "source"
+    t.string "trade_type"
+    t.bigint "duration"
+    t.datetime "start_trading_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "coin_rankings", force: :cascade do |t|

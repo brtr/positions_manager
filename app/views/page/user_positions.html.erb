@@ -26,6 +26,7 @@
   </div>
   <div>
     <div class="p-3">
+      <p>全部仓位平均持仓时间: <%= distance_of_time_in_words(@average_holding_durations, 0, { include_seconds: false, accumulate_on: :days }) %></p>
       <p>当日上涨币种数量: <%= @daily_market_data['risen'] %> (<%= daily_market_display(@daily_market_data['risen_ratio'], true) %>%) 下跌数量: <%= @daily_market_data['fallen'] %> (<%= daily_market_display(@daily_market_data['fallen_ratio'], false) %>%) BTC涨跌 <%= price_change_style(@daily_market_data['btc_change']) %>( <%= price_change_style(@daily_market_data['btc_change_ratio']) %>%)</p>
       <p>总投入: <%= @total_summary[:total_cost].round(4) %> <%= last_summary_display(@last_summary[:total_cost]) %> / 绝对收益: <%= @total_summary[:total_revenue].round(4) %> <%= last_summary_display(@last_summary[:total_revenue]) %> / 绝对收益占总投入的比例: <%= get_roi(@total_summary)  %></p>
       <p>盈利总数量: <%= @total_summary[:profit_count] %> <%= last_summary_display(@last_summary[:profit_count]) %> / 盈利总金额: <%= @total_summary[:profit_amount].round(4) %><%= last_summary_display(@last_summary[:profit_amount]) %> </p>
