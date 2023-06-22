@@ -18,7 +18,7 @@ class GetSyncedTransactionsJob < ApplicationJob
                        map{|snapshot| [snapshot.origin_symbol, snapshot.snapshot_info.user_id]}
 
     binance_symbols.uniq.each do |data|
-      GetBinanceFuturesTransactionsJob.perform_later(data[0], data[1])
+      GetBinanceFuturesTransactionsJob.perform_later(data[0], user_id: data[1])
     end
 
 
