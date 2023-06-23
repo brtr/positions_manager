@@ -47,4 +47,11 @@ $(document).on("ajax:before ajaxStart page:fetch turbolinks:click turbolinks:loa
             $.get('/ranking_snapshots/ranking_graph?symbol=' + symbol + '&source=' + source)
         })
     }
+
+    if ($('.select_ranking_source').length > 0) {
+        $('.select_ranking_source').on('change', function() {
+            var source = $(this).val();
+            location.href = '?source=' + source
+        })
+    }
 });
