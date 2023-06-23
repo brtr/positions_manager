@@ -163,7 +163,7 @@ class PageController < ApplicationController
     histories = histories.where(source: @source) if @source.present?
     @data_summary = histories.data_summary
     @data = {}
-    total_amount = 0
+    total_amount = FundingFeeHistory.where('user_id is null and event_date < ?', @from_date).sum(&:amount)
     histories.group_by(&:event_date).each do |date, value|
       amount = value.sum(&:amount)
       total_amount += amount
