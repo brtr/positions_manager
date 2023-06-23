@@ -43,6 +43,17 @@ class UserPosition < ApplicationRecord
                                                  origin_symbol: origin_symbol, trade_type: trade_type, source: source).take
   end
 
+  def average_durations
+    redis_key = "user_positions_duration_#{origin_symbol}_#{trade_type}_#{source}_#{user_id}"
+    duration = $redis.get(redis_key).to_f
+    if duration == 0
+      duration = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, origin_symbol, source, trade_type).average_holding_duration
+      $redis.set(redis_key, duration, ex: 2.hours)
+    end
+
+    duration.to_f
+  end
+
   def self.total_summary(user_id=nil)
     records = user_id ? UserPosition.where(user_id: user_id) : UserPosition.where(user_id: nil)
     profit_records = records.select{|r| r.revenue > 0}

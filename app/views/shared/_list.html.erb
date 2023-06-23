@@ -2,7 +2,7 @@
   <thead>
     <tr class="table-container-tr">
       <% positions_table_headers.each do |h| %>
-        <% next if h[:sort].in?(['level', 'notes']) && source_type != :public %>
+        <% next if h[:sort].in?(['level', 'notes', 'average_durations']) && source_type != :public %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
@@ -30,6 +30,7 @@
             <%= display_symbol(h, snapshot) %>
           <% end %>
         </td>
+        <td><%= get_average_holding_duration(h.average_durations) if h.user_id.nil? %></td>
         <td><%= h.ranking %></td>
         <td><%= link_to display_funding_fee(h), funding_fee_chart_path(symbol: h.origin_symbol, source: h.source), target: '_blank' %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>

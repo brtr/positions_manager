@@ -119,6 +119,7 @@ class PageController < ApplicationController
                     end
       GetPositionsChartDataService.execute(@symbol, @source, @trade_type)
       @chart_data = JSON.parse($redis.get("#{@symbol}_monthly_chart_data")) rescue []
+      @average_durations = @data.average_holding_duration
     end
     @binance_trading_data = GetBinanceTradingDataService.execute(@symbol)
   end

@@ -6,6 +6,10 @@ module ApplicationHelper
         sort: "none"
       },
       {
+        name: '平均持仓时间',
+        sort: "average_durations"
+      },
+      {
         name: "最新排名",
         sort: "ranking"
       },

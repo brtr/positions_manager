@@ -25,6 +25,11 @@ class AddingPositionsHistory < ApplicationRecord
     trade_type == 'buy' ? (amount.abs + revenue.to_f) / qty.abs : (amount.abs - revenue.to_f) / qty.abs
   end
 
+  def holding_duration
+    return 0 if qty < 0
+    Time.current - event_date.to_time
+  end
+
   def self.total_qty
     AddingPositionsHistory.sum(&:qty)
   end
@@ -46,4 +51,9 @@ class AddingPositionsHistory < ApplicationRecord
     end
   end
 
+  def self.average_holding_duration
+    data = AddingPositionsHistory.where('qty > 0')
+    return 0 if data.blank?
+    data.sum(&:holding_duration) / data.count
+  end
 end
