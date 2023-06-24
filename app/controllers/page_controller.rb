@@ -20,7 +20,6 @@ class PageController < ApplicationController
     snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: compare_date})
     @last_summary = snapshots.last_summary(data: @total_summary)
     @snapshots = snapshots.to_a
-    @average_holding_durations = CoinHoldingDuration.average_durations
     flash[:alert] = "找不到相应的快照" if params[:compare_date].present? && @snapshots.blank?
   end
 
