@@ -1,5 +1,5 @@
 class UserPosition < ApplicationRecord
-  LEVEL = %w[弱 中 强 最强]
+  LEVEL = %w[弱 中 强 最强 大资金长期关注]
 
   belongs_to :user, optional: true
   has_many :user_positions_notes_histories
