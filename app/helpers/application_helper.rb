@@ -461,7 +461,7 @@ module ApplicationHelper
   end
 
   def get_average_holding_duration(duration)
-    duration ||= 0
+    return '' if duration.to_i.zero?
     distance_of_time_in_words(duration, 0, { include_seconds: false, accumulate_on: :days })
   end
 end
