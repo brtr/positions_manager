@@ -3,7 +3,7 @@
     <tr class="table-container-tr">
       <% positions_table_headers.each do |h| %>
         <% next if h[:sort].in?(['ranking', 'funding_fee'])%>
-        <% next if h[:sort].in?(['level', 'notes']) && @info.user_id.present? %>
+        <% next if h[:sort].in?(['level', 'notes', 'average_durations']) && @info.user_id.present? %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
@@ -19,6 +19,9 @@
       <% snapshot = @snapshots.select{|s| s.origin_symbol == h.origin_symbol && s.trade_type == h.trade_type && s.source == h.source}.first %>
       <tr>
         <td><%= link_to display_symbol(h, snapshot), position_detail_path(origin_symbol: h.origin_symbol, source: h.source, trade_type: h.trade_type), target: '_blank' %></td>
+        <% if @info.user_id.nil? %>
+          <td><%= get_average_holding_duration(h.average_durations) %></td>
+        <% end %>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
         <td><%= h.price.round(4) %> <%= h.fee_symbol %></td>
         <td><%= h.estimate_price.to_f.round(4) %> <%= h.fee_symbol %></td>
