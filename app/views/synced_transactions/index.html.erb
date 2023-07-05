@@ -1,6 +1,6 @@
 <div class="m-3 row">
   <h3>合约交易记录列表</h3>
-  <div class="mb-3 col-3">
+  <div class="mb-3">
     <%= form_tag synced_transactions_path, id: "search_targets", class: "position-relative", method: "GET" do %>
       <div class="input-group mb-3">
         <%= select_tag(:search, options_for_select(@total_symbols, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>

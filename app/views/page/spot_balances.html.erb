@@ -1,10 +1,12 @@
 <div class="m-3">
   <h3>现货仓位管理</h3>
-  <div class="mb-3 col-5">
+  <div class="mb-3">
     <%= form_tag public_spot_balances_path, class: 'position-relative', method: "GET" do %>
       <div class="input-group mb-3 position-filter">
         <%= select_tag(:search, options_for_select(@symbols.uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+        <span class='ms-3'></span>
         <%= select_tag(:level, options_for_select(UserSpotBalance::LEVEL.map.with_index{ |level, idx| [level, idx]}, params[:level]), { prompt: '请选择强势等级...', class: 'select2-dropdown form-control' }) %>
+        <span class='ms-3'></span>
         <button type="submit" class="btn btn-primary">确定</button>
         <%= link_to "Reset", public_spot_balances_path, class: 'btn btn-default' %>
         <%= link_to "Refresh", refresh_public_spot_balances_path, class: 'btn btn-success' %>

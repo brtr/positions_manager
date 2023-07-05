@@ -3,11 +3,13 @@
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
     上传交易记录
   </button>
-  <div class="mb-3 mt-3 col-6">
+  <div class="mb-3 mt-3">
     <%= form_tag user_positions_path, id: "search_targets", method: "GET" do %>
-      <div class="input-group mb-3">
+      <div class="input-group mb-3 position-filter">
         <%= select_tag(:search, options_for_select(UserPosition.available.where(user_id: current_user.id).pluck(:origin_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+        <span class='ms-3'></span>
         <%= text_field_tag :compare_date, params[:compare_date], class: "form-control datepicker",type: "text", placeholder: "选择对比日期", autocomplete: "off" %>
+        <span class='ms-3'></span>
         <button type="submit" class="btn btn-primary">确定</button>
         <%= link_to "Reset", user_positions_path, class: 'btn btn-default' %>
         <%= link_to "Refresh", refresh_user_positions_path, class: 'btn btn-warning' %>

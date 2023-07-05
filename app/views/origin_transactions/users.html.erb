@@ -3,7 +3,7 @@
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
     OKX API KEY管理
   </button>
-  <div class="mb-3 mt-3 col-5">
+  <div class="mb-3 mt-3">
     <%= form_tag users_origin_transactions_path, id: "search_targets", class: "position-relative", method: "GET" do %>
       <div class="input-group mb-3 position-filter">
         <%= select_tag(:search, options_for_select(@total_txs.pluck(:original_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>

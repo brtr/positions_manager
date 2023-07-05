@@ -54,6 +54,7 @@
   flex-wrap: nowrap;
   button {
     width: 10%;
+    min-width: 100px;
   }
 }
 
@@ -62,3 +63,5 @@
 #spinner{position: fixed;z-index: 9999;top: 45%;left: 45%;padding: 0 20px;min-width: 100px;border-radius: 8px;}
 
 #user-positions-container, #position-histories-container { width: 1800px; }
+
+.select2, #compare_date { min-width: 200px; max-width: 350px; }
