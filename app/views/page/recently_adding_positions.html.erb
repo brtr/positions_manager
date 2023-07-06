@@ -3,12 +3,15 @@
     <h3>
       <%= "#{@from_date} - #{@to_date} 期间新增投入" %>
     </h3>
-    <div class="mb-3 mt-3 col-6">
+    <div class="mb-3 mt-3">
       <%= form_tag recently_adding_positions_path, id: "search_targets", method: "GET" do %>
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 position-filter">
           <%= text_field_tag :from_date, params[:from_date], class: "form-control datepicker",type: "text", placeholder: "选择过滤开始日期", autocomplete: "off" %>
+          <span class='ms-3'></span>
           <%= text_field_tag :to_date, params[:to_date], class: "form-control datepicker",type: "text", placeholder: "选择过滤结束日期", autocomplete: "off" %>
+          <span class='ms-3'></span>
           <%= select_tag(:origin_symbol, options_for_select(@data.pluck(:origin_symbol).uniq, @symbol),{ prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+          <span class='ms-3'></span>
           <button type="submit" class="btn btn-primary">确定</button>
           <%= link_to "Reset", recently_adding_positions_path, class: 'btn btn-default' %>
           <%= link_to "Refresh", refresh_recently_adding_positions_path, class: 'btn btn-warning' %>
