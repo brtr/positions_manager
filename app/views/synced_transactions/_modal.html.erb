@@ -1,0 +1,29 @@
+<!-- Modal -->
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">上传文件</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with url: import_csv_synced_transactions_path, method: :post, html: {multipart: true} do |f| %>
+        <div class="modal-body">
+          <div class="field mb-4">
+            <%= f.file_field :file, class: "input-sm form-control",accept: ".xlsx, .csv", placeholder: '请选择文件' %>
+          </div>
+          <div class="field mb-4">
+            <%= f.select :source, options_for_select(["Binance"]), {}, {class: "input-sm form-control select2-dropdown"} %>
+          </div>
+          <div class="field mb-3 fs-12">
+            <em>*支持 csv 和 xlsx 格式</em>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <%= f.submit "确定", class: "btn btn-primary", data: {disable_with: "导入中..."}%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

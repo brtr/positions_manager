@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   resources :transactions_snapshot_infos, only: [:index, :show]
   resources :synced_transactions, only: :index do
     get :users, on: :collection
+    post :import_csv, on: :collection
   end
 
   resources :ranking_snapshots, only: [:index, :show] do
