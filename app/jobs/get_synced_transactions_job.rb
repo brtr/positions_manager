@@ -12,7 +12,7 @@ class GetSyncedTransactionsJob < ApplicationJob
     end
 
     # Get Users Binance transactions
-    binance_symbols = UserSyncedPosition.where(source: 'binance').pluck(:origin_symbol, :user_id)
+    binance_symbols = UserSyncedPosition.where(source: 'binance').where.not(user_id: nil).pluck(:origin_symbol, :user_id)
     binance_symbols += SnapshotPosition.joins(:snapshot_info).where('snapshot_info.user_id is not null').where(source: 'binance',
                        snapshot_info: {source_type: 'synced', event_date: Date.yesterday}).
                        map{|snapshot| [snapshot.origin_symbol, snapshot.snapshot_info.user_id]}

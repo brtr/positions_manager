@@ -1,7 +1,7 @@
 class GetBinanceFuturesTransactionsJob < ApplicationJob
   queue_as :daily_job
 
-  def perform(symbol, user_id: nil, from_date: nil)
+  def perform(symbol, user_id: nil, from_date: Date.yesterday)
     binance_data = BinanceFuturesService.new(user_id: user_id).get_my_trades(symbol, from_date)
 
     SyncedTransaction.transaction do
