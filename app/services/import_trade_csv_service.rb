@@ -40,20 +40,14 @@ class ImportTradeCsvService
         tables = File.read(@file, options)
       end
 
-      origin_count = SyncedTransaction.count
-
       csv_data = CSV.parse(tables)
       csv_data.shift
 
-      SyncedTransaction.transaction do
-        csv_data.each do |row|
-          store_model(row)
-        end
+      csv_data.each do |row|
+        store_model(row)
       end
 
-      @total_count = SyncedTransaction.count - origin_count
-
-      import_status[:message] = "成功导入 #{@records.count} 条合约交易记录. 新增 #{@total_count}条"
+      import_status[:message] = "正在同步合约交易记录，请稍后刷新页面"
     end
     import_status
   rescue => e
@@ -65,36 +59,12 @@ class ImportTradeCsvService
   private
 
   def store_model(row)
-    trade_type = row[3].downcase
-    revenue = row[8].to_f
-    position_side = if trade_type == 'sell'
-      revenue == 0 ? 'short' : 'long'
-    else
-      revenue == 0 ? 'long' : 'short'
-    end
-    fee, fee_symbol = row[7].split(' ')
-    tx = SyncedTransaction.where(user_id: @user_id, event_time: DateTime.parse(row[1])).first_or_create
-    tx.update(
-      source: 'binance',
-      origin_symbol: row[2],
-      fee_symbol: fee_symbol,
-      trade_type: trade_type,
-      price: row[4],
-      qty: get_number(row[5].to_f, revenue),
-      amount: get_number(row[6].to_f, revenue),
-      fee: fee,
-      revenue: revenue,
-      position_side: position_side
-    )
-
-    @records.push(tx)
+    symbol = row[2]
+    event_time = DateTime.parse(row[1])
+    GetBinanceFuturesTransactionsJob.perform_later(symbol, user_id: @user_id, from_date: event_time - 1.day)
   end
 
   def is_valid_file?(file_name)
     %w(csv xlsx).include?(file_name.to_s.split(".").last)
-  end
-
-  def get_number(num, revenue)
-    revenue == 0 || num == 0 ? num : num * -1
   end
 end

@@ -51,7 +51,8 @@ class BinanceFuturesService
     url = BASE_URL + "/fapi/v1/userTrades?"
     from_date ||= 2.year.ago.to_date
     to_date = from_date + 6.days
-    payload = {timestamp: get_timestamp, symbol: symbol, startTime: from_date.to_time.to_i * 1000, endTime: to_date.to_time.to_i * 1000}
+    payload = {timestamp: get_timestamp, symbol: symbol, startTime: from_date.to_time.to_i * 1000}
+    payload[:endTime] = to_date.to_time.to_i * 1000 if to_date <= Date.today
     do_request("get", url, payload)
   end
 
