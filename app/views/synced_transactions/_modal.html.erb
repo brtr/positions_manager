@@ -15,6 +15,7 @@
           <div class="field mb-4">
             <%= f.select :source, options_for_select(["Binance"]), {}, {class: "input-sm form-control select2-dropdown"} %>
           </div>
+          <%= f.hidden_field :source_type, value: source_type %>
           <div class="field mb-3 fs-12">
             <em>*支持 csv 和 xlsx 格式</em>
           </div>

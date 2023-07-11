@@ -34,17 +34,22 @@ class SyncedTransactionsController < ApplicationController
   end
 
   def import_csv
+    source_type = params[:source_type]
+    url = source_type == 'private' ? users_synced_transactions_path : synced_transactions_path
+
     if params[:file].blank?
       flash[:alert] = "请选择文件"
-      redirect_to users_synced_transactions_path
+      redirect_to url
     else
-      import_status = ImportTradeCsvService.new(params[:file], params[:source], current_user.id).call
+      user_id = current_user.id if source_type == 'private'
+      import_status = ImportTradeCsvService.new(params[:file], params[:source], user_id).call
       if import_status[:status].to_i == 1
         flash[:notice] = import_status[:message]
       else
         flash[:alert] = import_status[:message]
       end
-      redirect_to users_synced_transactions_path
+
+      redirect_to url
     end
   end
 end

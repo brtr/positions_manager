@@ -1,5 +1,10 @@
 <div class="m-3 row">
-  <h3>合约交易记录列表</h3>
+  <h3>
+    合约交易记录列表
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+      上传交易记录
+    </button>
+  </h3>
   <div class="mb-3">
     <%= form_tag synced_transactions_path, id: "search_targets", class: "position-relative", method: "GET" do %>
       <div class="input-group mb-3">
@@ -25,3 +30,5 @@
     <%= render partial: "list" %>
   </div>
 </div>
+
+<%= render partial: "modal", locals: { source_type: :public } %>

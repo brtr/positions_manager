@@ -42,10 +42,7 @@ class ImportTradeCsvService
 
       csv_data = CSV.parse(tables)
       csv_data.shift
-
-      csv_data.each do |row|
-        store_model(row)
-      end
+      fetch_transactions(csv_data)
 
       import_status[:message] = "正在同步合约交易记录，请稍后刷新页面"
     end
@@ -58,10 +55,28 @@ class ImportTradeCsvService
 
   private
 
-  def store_model(row)
-    symbol = row[2]
-    event_time = DateTime.parse(row[1])
-    GetBinanceFuturesTransactionsJob.perform_later(symbol, user_id: @user_id, from_date: event_time - 1.day)
+  def fetch_transactions(csv_data)
+    data = []
+    csv_data.each do |row|
+      if row[2].in?(['卖出', '买入'])
+        symbol = row[1]
+        event_time = DateTime.parse(row[0])
+      else
+        symbol = row[2]
+        event_time = DateTime.parse(row[1])
+      end
+      if data.blank?
+        data.push({symbol: symbol, event_time: event_time})
+      else
+        previous_d = data.select{|d| d[:symbol] == symbol}.last
+        next if previous_d.present? && (event_time.to_i - previous_d[:event_time].to_i).abs < 5.days.to_i
+        data.push({symbol: symbol, event_time: event_time})
+      end
+    end
+
+    data.each do |d|
+      GetBinanceFuturesTransactionsJob.perform_later(d[:symbol], user_id: @user_id, from_date: d[:event_time] - 1.day)
+    end
   end
 
   def is_valid_file?(file_name)
