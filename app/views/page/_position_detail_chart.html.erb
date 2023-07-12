@@ -32,6 +32,16 @@ document.addEventListener('turbolinks:load', () => {
             backgroundColor: 'rgb(54, 162, 235)',
             borderDash: [10,5]
           },
+          {
+            label: "资金费用",
+            data: result.map(i => {
+              return i.funding_fee
+            }),
+            tension: 0.4,
+            backgroundColor: 'rgb(54, 162, 35)',
+            borderDash: [10,5],
+            yAxisID: 'y1'
+          },
         ],
       },
       options: {
@@ -43,6 +53,12 @@ document.addEventListener('turbolinks:load', () => {
           },
           y: {
             position: 'left',
+            ticks: {
+              maxTicksLimit: 5
+            },
+          },
+          y1: {
+            position: 'right',
             ticks: {
               maxTicksLimit: 5
             },
@@ -66,6 +82,9 @@ document.addEventListener('turbolinks:load', () => {
                     qty = "仓位数量: " + i["qty"]
                     total_amount = "总投入: " + i["amount"]
                     return [price, qty, total_amount]
+                  } else if(c_type == '资金费用') {
+                    funding_fee = '资金费用: ' + i["funding_fee"]
+                    return [funding_fee]
                   } else {
                     price = "价格: " + i["daily_price"]
                     amount = "新增投入金额: " + i["position_amount"]

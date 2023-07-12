@@ -84,6 +84,7 @@
     <h3 class="mt-3">历史投入</h3>
     <% if @data.any? %>
       <div>平均持仓时间: <%= get_average_holding_duration @average_durations %></div>
+      <div>资金费用: <%= display_funding_fee(@target_position) %></div>
       <div class="mt-3">
         <table class="table">
           <thead>

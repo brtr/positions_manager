@@ -9,7 +9,7 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
       amount = txs.sum(&:amount)
       revenue = txs.sum(&:revenue)
       price = amount / qty
-      unless AddingPositionsHistory.exists?(event_date: date - 1.day, origin_symbol: key[0], qty: qty, amount: amount, price: price)
+      unless AddingPositionsHistory.exists?(event_date: date - 1.day, origin_symbol: key[0], qty: qty, amount: amount)
         aph = AddingPositionsHistory.where(event_date: date, origin_symbol: key[0], from_symbol: from_symbol,
                                           fee_symbol: key[1], trade_type: trade_type, source: key[3]).first_or_create
         up = UserPosition.where(user_id: nil, origin_symbol: key[0], trade_type: trade_type, source: key[3]).take

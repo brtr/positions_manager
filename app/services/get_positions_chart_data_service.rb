@@ -17,9 +17,15 @@ class GetPositionsChartDataService
       price = position.price.round(4) rescue 0
       amount = position.amount.round(4) rescue 0
 
+      funding_fee_histories = {}
+      FundingFeeHistory.where(origin_symbol: origin_symbol, event_date: (from_date..to_date), source: source).order(event_date: :asc).map do |history|
+        funding_fee_histories[history.event_date.to_s] = history.amount
+      end
+
       result = {}
       price_data["result"].each do |date, daily_price|
-        result[date] = { daily_price: daily_price.to_f.round(4), position_amount: position_data[date].to_f.round(4), date: date, qty: qty, price: price, amount: amount }
+        result[date] = { daily_price: daily_price.to_f.round(4), position_amount: position_data[date].to_f.round(4), date: date,
+                         qty: qty, price: price, amount: amount, funding_fee: funding_fee_histories[date].to_f.round(4) }
       end
 
       $redis.set("#{origin_symbol}_monthly_chart_data", result.to_json)
