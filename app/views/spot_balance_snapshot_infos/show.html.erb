@@ -12,6 +12,9 @@
       </div>
     <% end %>
   </div>
+  <div class="py-3">
+    <p>总投入: <%= @total_summary[:total_amount].round(4) %> <%= last_summary_display(@last_summary[:total_amount]) %> / 绝对收益: <%= @total_summary[:total_revenue].round(4) %> <%= last_summary_display(@last_summary[:total_revenue]) %></p>
+  </div>
   <div id="position-histories-container">
     <%= render partial: "list" %>
   </div>

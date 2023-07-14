@@ -340,7 +340,8 @@ module ApplicationHelper
   end
 
   def position_amount_display(h, s=nil, html_safe: true)
-    str = "#{h.amount.round(4)} #{h.fee_symbol}"
+    symbol = h.fee_symbol rescue h.to_symbol
+    str = "#{h.amount.round(4)} #{symbol}"
     margin = h.amount - s.amount rescue 0
     return str if s.nil? || margin == 0 || (margin > 0 && margin < 1) || (margin < 0 && margin > -1)
     if html_safe
@@ -463,5 +464,17 @@ module ApplicationHelper
   def get_average_holding_duration(duration)
     return '' if duration.to_i.zero?
     distance_of_time_in_words(duration, 0, { include_seconds: false, accumulate_on: :days })
+  end
+
+  def spot_balance_revenue_display(h, s=nil, html_safe: true)
+    str = "#{h.revenue.round(4)} #{h.to_symbol}"
+    margin = h.revenue - s.revenue rescue 0
+    return str if s.nil? || margin == 0 || (margin > 0 && margin < 1) || (margin < 0 && margin > -1)
+    if html_safe
+      str += "(<span class=#{margin > 0 ? 'pos-num' : 'neg-num'}>#{margin.round(4)}</span>)"
+      str.html_safe
+    else
+      "#{str} (#{margin.round(4)})"
+    end
   end
 end

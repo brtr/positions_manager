@@ -18,10 +18,14 @@ class SpotBalanceSnapshotInfosController < ApplicationController
     sort = params[:sort].presence || "amount"
     sort_type = params[:sort_type].presence || "desc"
     records = @info.spot_balance_snapshot_records
+    @total_summary = records.summary
+    snapshots = SpotBalanceSnapshotRecord.joins(:spot_balance_snapshot_info).where(spot_balance_snapshot_info: {user_id: user_id, event_date: @info.event_date - 1.day})
+    @last_summary = snapshots.last_summary(data: @total_summary)
+    @snapshots = snapshots.to_a
     @symbol = params[:search]
     records = records.where(origin_symbol: @symbol) if @symbol.present?
     records = records.where(level: params[:level]) if params[:level].present?
-    @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
+    @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(15)
   end
 
   private
