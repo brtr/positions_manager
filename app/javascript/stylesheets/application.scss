@@ -53,8 +53,8 @@
   height: 35px;
   flex-wrap: nowrap;
   button {
-    width: 10%;
     min-width: 100px;
+    max-width: 100px;
   }
 }
 

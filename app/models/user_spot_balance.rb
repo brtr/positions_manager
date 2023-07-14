@@ -15,4 +15,13 @@ class UserSpotBalance < ApplicationRecord
     return 0 if current_price.nil?
     current_price * qty - amount
   end
+
+  def self.summary
+    data = UserSpotBalance.available
+
+    {
+      total_amount: data.sum(&:amount),
+      total_revenue: data.sum(&:revenue)
+    }
+  end
 end

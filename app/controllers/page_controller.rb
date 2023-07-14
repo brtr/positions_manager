@@ -138,6 +138,7 @@ class PageController < ApplicationController
     @symbols = histories.pluck(:origin_symbol)
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?
     histories = histories.where(level: params[:level]) if params[:level].present?
+    @total_summary = histories.summary
     parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
     @histories = @histories.reverse if sort_type == "desc"
