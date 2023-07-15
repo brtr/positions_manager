@@ -22,10 +22,15 @@ class GetPositionsChartDataService
         funding_fee_histories[history.event_date.to_s] = history.amount
       end
 
+      revenue_list = {}
+      SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil}, origin_symbol: origin_symbol, trade_type: trade_type, source: source).order(event_date: :asc).map do |snapshot|
+        revenue_list[snapshot.event_date.to_s] = snapshot.revenue
+      end
+
       result = {}
       price_data["result"].each do |date, daily_price|
         result[date] = { daily_price: daily_price.to_f.round(4), position_amount: position_data[date].to_f.round(4), date: date,
-                         qty: qty, price: price, amount: amount, funding_fee: funding_fee_histories[date].to_f.round(4) }
+                         qty: qty, price: price, amount: amount, revenue: revenue_list[date].to_f.round(4), funding_fee: funding_fee_histories[date].to_f.round(4) }
       end
 
       $redis.set("#{origin_symbol}_monthly_chart_data", result.to_json)

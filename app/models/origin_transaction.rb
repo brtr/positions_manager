@@ -1,7 +1,9 @@
 class OriginTransaction < ApplicationRecord
-  SKIP_SYMBOLS = %w(USDC).freeze
+  SKIP_SYMBOLS = %w(USDC BTC ETH).freeze
 
-  scope :available, -> { where.not(from_symbol: SKIP_SYMBOLS) }
+  def self.available
+    OriginTransaction.where('(from_symbol IN (?) AND amount >= 50) OR from_symbol NOT IN (?)', SKIP_SYMBOLS, SKIP_SYMBOLS)
+  end
 
   def self.total_summary(user_id=nil)
     records = OriginTransaction.available

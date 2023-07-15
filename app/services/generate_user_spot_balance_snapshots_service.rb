@@ -4,7 +4,7 @@ class GenerateUserSpotBalanceSnapshotsService
       SpotBalanceSnapshotInfo.transaction do
         (Date.parse(from_date)..Date.today).each do |date|
           info = SpotBalanceSnapshotInfo.where(user_id: user_id, event_date: date).first_or_create
-          txs = OriginTransaction.where("DATE(event_time) = ? and user_id = ?", date, user_id)
+          txs = OriginTransaction.available.where("DATE(event_time) = ? and user_id = ?", date, user_id)
           last_records = SpotBalanceSnapshotRecord.joins(:spot_balance_snapshot_info)
                          .where(spot_balance_snapshot_info: {user_id: user_id, event_date: info.event_date - 1.day})
 

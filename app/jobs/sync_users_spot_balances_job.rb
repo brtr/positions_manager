@@ -16,7 +16,7 @@ class SyncUsersSpotBalancesJob < ApplicationJob
 
   def sync_user_spot_balances(user_id)
     maximum_tx_id = UserSpotBalance.where(user_id: user_id).maximum(:tx_id).to_i
-    OriginTransaction.where('user_id = ? and id > ?', user_id, maximum_tx_id).group_by{|tx| [tx.original_symbol, tx.to_symbol, tx.source]}.each do |key, txs|
+    OriginTransaction.available.where('user_id = ? and id > ?', user_id, maximum_tx_id).group_by{|tx| [tx.original_symbol, tx.to_symbol, tx.source]}.each do |key, txs|
       from_symbol = key[0].split(key[1])[0]
       usb = UserSpotBalance.where(user_id: user_id, origin_symbol: key[0], from_symbol: from_symbol, to_symbol: key[1], source: key[2]).first_or_initialize
       total_cost = usb.amount.to_f
