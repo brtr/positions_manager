@@ -4,9 +4,10 @@ require 'rest-client'
 class SyncFuturesTickerService
   SYMBOLS = %w[USDCUSDT BTCDOMUSDT USTCUSDT]
   class << self
-    def get_24hr_tickers(rank)
+    def get_24hr_tickers(bottom_select, top_select)
       binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
       okx_24hr_tickers = OkxFuturesService.new.get_24hr_tickers
+      rank = bottom_select > 0 ? bottom_select : top_select
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
@@ -61,7 +62,15 @@ class SyncFuturesTickerService
         from_symbol
       end.map{|k,v| v[0]}.compact
 
-      $redis.set("get_24hr_tickers", result.to_json)
+      redis_key = if bottom_select > 0
+                    'get_bottom_24hr_tickers'
+                  elsif top_select > 0
+                    'get_top_24hr_tickers'
+                  else
+                    'get_24hr_tickers'
+                  end
+
+      $redis.set(redis_key, result.to_json)
     end
 
     def fetch_symbol(symbol)
