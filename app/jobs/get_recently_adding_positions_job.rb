@@ -16,6 +16,7 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
         unit_cost = up&.price || get_last_price(key[0], date)
         current_price = up&.current_price || get_history_price(from_symbol.downcase, date)
         aph.update(price: price, current_price: current_price, qty: qty, amount: amount, revenue: revenue, unit_cost: unit_cost)
+        SlackService.send_notification(nil, enqueued_block(key[0])) if AddingPositionsHistory.where("id != ? and event_date = ? and origin_symbol = ? and amount BETWEEN ? AND ?", aph.id, date, key[0], amount * 0.95, amount * 1.05).any?
       end
     end
   end
@@ -31,5 +32,17 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
     response = RestClient.get(url)
     data = JSON.parse(response.body)
     data['result'].values[0].to_f rescue nil
+  end
+
+  def enqueued_block(origin_symbol)
+    [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "*[Positions Manager]Sidekiq告警* 今天有重复生成的新增投入记录, 币种是 #{origin_symbol}"
+        }
+      }
+    ]
   end
 end
