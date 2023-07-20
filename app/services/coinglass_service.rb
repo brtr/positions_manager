@@ -2,7 +2,7 @@ require 'openssl'
 require 'rest-client'
 
 class CoinglassService
-  BASE_URL = ENV['COINGLASS_URL']
+  BASE_URL = ENV['COINGLASS_API_URL']
 
   class << self
     def get_top_liquidations

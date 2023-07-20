@@ -477,4 +477,8 @@ module ApplicationHelper
       "#{str} (#{margin.round(4)})"
     end
   end
+
+  def coinglass_detail_link(coin)
+    ENV['COINGLASS_URL'] + "/currencies/#{coin}"
+  end
 end

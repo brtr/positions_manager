@@ -1,6 +1,6 @@
 <div class="m-3">
   <h3>
-    爆仓数据排行榜
+    爆仓数据排行榜 (获取平台4小时爆仓数据)
     <%= link_to "Refresh", refresh_liquidations_list_path, class: 'btn btn-warning' %>
   </h3>
   <div class="row mt-3">
@@ -16,11 +16,13 @@
         </thead>
         <tbody>
           <% @data.reverse.first(10).each do |d| %>
+            <% symbol = d['symbol'] %>
             <tr>
-              <td><%= d['symbol'] %></td>
-              <td><%= d['shortVolUsd'] %></td>
-              <td><%= d['longVolUsd'] %></td>
+              <td><%= symbol %></td>
+              <td>$<%= d['shortVolUsd'] %></td>
+              <td>$<%= d['longVolUsd'] %></td>
               <td><%= (d['rate'].to_f * 100).round(4) %>%</td>
+              <td><%= link_to '详情', coinglass_detail_link(symbol), target: '_blank' %></td>
             </tr>
           <% end %>
         </tbody>
@@ -38,11 +40,13 @@
         </thead>
         <tbody>
           <% @data.first(10).each do |d| %>
+            <% symbol = d['symbol'] %>
             <tr>
-              <td><%= d['symbol'] %></td>
-              <td><%= d['shortVolUsd'] %></td>
-              <td><%= d['longVolUsd'] %></td>
+              <td><%= symbol %></td>
+              <td>$<%= d['shortVolUsd'] %></td>
+              <td>$<%= d['longVolUsd'] %></td>
               <td><%= (d['rate'].to_f * 100).round(4) %>%</td>
+              <td><%= link_to '详情', coinglass_detail_link(symbol), target: '_blank' %></td>
             </tr>
           <% end %>
         </tbody>
