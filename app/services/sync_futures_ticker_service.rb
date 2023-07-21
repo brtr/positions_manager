@@ -7,7 +7,7 @@ class SyncFuturesTickerService
     def get_24hr_tickers(bottom_select, top_select, duration, data_type)
       binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
       okx_24hr_tickers = OkxFuturesService.new.get_24hr_tickers
-      if bottom_select > 0
+      if bottom_select.to_i > 0
         rank = bottom_select
         price_type = 'bottom'
       else
@@ -96,7 +96,7 @@ class SyncFuturesTickerService
 
     def get_price_ratio(symbol, price, rank, price_type, duration)
       url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}&duration=#{duration}"
-      url += "&rank=#{rank}&price_type=#{price_type}" if rank > 0
+      url += "&rank=#{rank}&price_type=#{price_type}" if rank.to_i > 0
       response = RestClient.get(url)
       data = JSON.parse(response)
       data

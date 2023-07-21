@@ -64,11 +64,11 @@
       </table>
     </div>
   </div>
-  <h3 class='mt-5'>最近一年距离底部超过一倍的币种</h3>
+  <h3 class='mt-5' id="bottom_select_table">最近一年距离底部超过一倍的币种</h3>
   <div class="mt-3 col-4">
     <%= form_tag refresh_24hr_ticker_path, class: "position-relative", method: "GET" do %>
       <div class="input-group mb-3 position-filter">
-        <%= select_tag(:bottom_select, options_for_select([["所有币种", 0], ["前100名以外",1],["前200名以外",2]], params[:bottom_select] ),{ prompt: '请选择币种排名', class: 'select2-dropdown' }) %>
+        <%= select_tag(:bottom_select, options_for_select([["所有币种", 0], ["前100名以外",1],["前200名以外",2]], @bottom_select ),{ prompt: '请选择币种排名', class: 'select2-dropdown' }) %>
         <%= hidden_field_tag :data_type, :bottom %>
         <button type="submit" class="btn btn-primary mx-3">确定</button>
       </div>
@@ -120,13 +120,13 @@
       </table>
     </div>
   </div>
-  <h3 class='mt-5'>距离顶部下跌幅度的排行</h3>
+  <h3 class='mt-5' id="top_select_table">距离顶部下跌幅度的排行</h3>
   <div class="mt-3 col-4">
     <%= form_tag refresh_24hr_ticker_path, class: "position-relative", method: "GET" do %>
       <div class="input-group mb-3 position-filter">
-        <%= select_tag(:duration, options_for_select([["最近一年内", 12], ["最近两年内",24]], params[:duration] ),{ class: 'select2-dropdown' }) %>
+        <%= select_tag(:duration, options_for_select([["最近一年内", 12], ["最近两年内",24]], @duration ),{ class: 'select2-dropdown' }) %>
         <span class='ms-3'></span>
-        <%= select_tag(:top_select, options_for_select([["所有币种", 0], ["前100名以内",3], ["前100名以外",4], ["前200名以内",5], ["前200名以外",6]], params[:top_select] ),{ prompt: '请选择币种排名', class: 'select2-dropdown' }) %>
+        <%= select_tag(:top_select, options_for_select([["所有币种", 0], ["前100名以内",3], ["前100名以外",4], ["前200名以内",5], ["前200名以外",6]], @top_select ),{ prompt: '请选择币种排名', class: 'select2-dropdown' }) %>
         <%= hidden_field_tag :data_type, :top %>
         <button type="submit" class="btn btn-primary mx-3">确定</button>
       </div>

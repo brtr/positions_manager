@@ -59,13 +59,13 @@ class PageController < ApplicationController
   end
 
   def refresh_24hr_ticker
-    bottom_select = params[:bottom_select].to_i
-    top_select = params[:top_select].to_i
-    duration = params[:duration].presence || 12
+    bottom_select = params[:bottom_select]
+    top_select = params[:top_select]
+    duration = params[:duration]
     data_type = params[:data_type].presence || 'all'
     SyncFutures24hrTickerJob.perform_later(bottom_select, top_select, duration, data_type)
 
-    redirect_to get_24hr_tickers_ranking_snapshots_path(bottom_select: bottom_select, top_select: top_select, duration: duration), notice: "正在更新，请稍等刷新查看最新排名..."
+    redirect_to get_24hr_tickers_ranking_snapshots_path(anchor: get_anchor(data_type)), notice: "正在更新，请稍等刷新查看最新排名..."
   end
 
   def recently_adding_positions
@@ -198,5 +198,17 @@ class PageController < ApplicationController
     $redis.del('top_liquidatioins_list')
 
     redirect_to liquidations_ranking_path, notice: '爆仓数据刷新成功'
+  end
+
+  private
+  def get_anchor(data_type)
+    case data_type
+    when 'bottom'
+      'bottom_select_table'
+    when 'top'
+      'top_select_table'
+    else
+      ''
+    end
   end
 end

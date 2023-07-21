@@ -16,6 +16,9 @@ class RankingSnapshotsController < ApplicationController
     @daily_ranking = JSON.parse($redis.get("get_24hr_tickers")) rescue []
     @top_select_ranking = JSON.parse($redis.get("get_top_24hr_tickers")) rescue @daily_ranking
     @bottom_select_ranking = JSON.parse($redis.get("get_bottom_24hr_tickers")) rescue @daily_ranking
+    @bottom_select = $redis.get('bottom_select_ranking').to_i
+    @top_select = $redis.get('top_select_ranking').to_i
+    @duration = $redis.get('top_select_duration').presence || 12
     @daily_ranking = @daily_ranking.select{|d| d['source'] == @source} if @source.present?
     @symbols = @daily_ranking.map{|r| [r["symbol"], r["source"]] }
     @three_days_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 3.days).get_rankings
