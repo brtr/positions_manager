@@ -4,10 +4,16 @@ require 'rest-client'
 class SyncFuturesTickerService
   SYMBOLS = %w[USDCUSDT BTCDOMUSDT USTCUSDT]
   class << self
-    def get_24hr_tickers(bottom_select, top_select)
+    def get_24hr_tickers(bottom_select, top_select, duration, data_type)
       binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
       okx_24hr_tickers = OkxFuturesService.new.get_24hr_tickers
-      rank = bottom_select > 0 ? bottom_select : top_select
+      if bottom_select > 0
+        rank = bottom_select
+        price_type = 'bottom'
+      else
+        rank = top_select
+        price_type = 'top'
+      end
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
@@ -15,7 +21,7 @@ class SyncFuturesTickerService
         last_price = ticker["lastPrice"].to_f
         margin = ticker["highPrice"].to_f - ticker["lowPrice"].to_f
         from_symbol = fetch_symbol(ticker["symbol"])
-        price_ratio = get_price_ratio(from_symbol, last_price, rank)
+        price_ratio = get_price_ratio(from_symbol, last_price, rank, price_type, duration)
         {
           "symbol" => ticker["symbol"],
           "lastPrice" => last_price,
@@ -36,7 +42,7 @@ class SyncFuturesTickerService
         last_price = ticker["last"].to_f
         margin = ticker["high24h"].to_f - ticker["low24h"].to_f
         price_change = (ticker["last"].to_f - open_price) / open_price
-        price_ratio = get_price_ratio(from_symbol, last_price, rank)
+        price_ratio = get_price_ratio(from_symbol, last_price, rank, price_type, duration)
         {
           "symbol" => from_symbol + to_symbol,
           "lastPrice" => last_price,
@@ -62,9 +68,9 @@ class SyncFuturesTickerService
         from_symbol
       end.map{|k,v| v[0]}.compact
 
-      redis_key = if bottom_select > 0
+      redis_key = if data_type == 'bottom'
                     'get_bottom_24hr_tickers'
-                  elsif top_select > 0
+                  elsif data_type == 'top'
                     'get_top_24hr_tickers'
                   else
                     'get_24hr_tickers'
@@ -88,9 +94,9 @@ class SyncFuturesTickerService
 
     private
 
-    def get_price_ratio(symbol, price, rank)
-      url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}"
-      url += "&rank=#{rank}" if rank > 0
+    def get_price_ratio(symbol, price, rank, price_type, duration)
+      url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}&duration=#{duration}"
+      url += "&rank=#{rank}&price_type=#{price_type}" if rank > 0
       response = RestClient.get(url)
       data = JSON.parse(response)
       data

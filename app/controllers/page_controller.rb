@@ -61,9 +61,11 @@ class PageController < ApplicationController
   def refresh_24hr_ticker
     bottom_select = params[:bottom_select].to_i
     top_select = params[:top_select].to_i
-    SyncFutures24hrTickerJob.perform_later(bottom_select, top_select)
+    duration = params[:duration].presence || 12
+    data_type = params[:data_type].presence || 'all'
+    SyncFutures24hrTickerJob.perform_later(bottom_select, top_select, duration, data_type)
 
-    redirect_to get_24hr_tickers_ranking_snapshots_path(bottom_select: bottom_select, top_select: top_select), notice: "正在更新，请稍等刷新查看最新排名..."
+    redirect_to get_24hr_tickers_ranking_snapshots_path(bottom_select: bottom_select, top_select: top_select, duration: duration), notice: "正在更新，请稍等刷新查看最新排名..."
   end
 
   def recently_adding_positions
