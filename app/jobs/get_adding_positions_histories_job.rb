@@ -2,8 +2,8 @@ class GetAddingPositionsHistoriesJob < ApplicationJob
   queue_as :daily_job
 
   def perform
-    to_date = Date.current
-    GetAddingPositionsService.execute(to_date - 1.day, to_date)
+    GetSyncedTransactionsJob.perform_now
+    GetRecentlyAddingPositionsJob.perform_now
 
     ForceGcJob.perform_later
   end
