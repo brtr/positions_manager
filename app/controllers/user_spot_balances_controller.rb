@@ -5,6 +5,7 @@ class UserSpotBalancesController < ApplicationController
     @page_index = 20
     sort = params[:sort].presence || "amount"
     sort_type = params[:sort_type].presence || "desc"
+    @actual_balances = UserSpotBalance.actual_balance(current_user.id)
     @symbol = params[:search]
     histories = UserSpotBalance.where(user_id: current_user.id).available
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?

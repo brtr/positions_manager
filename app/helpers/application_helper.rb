@@ -488,7 +488,7 @@ module ApplicationHelper
 
   def display_spot_balance_qty(h)
     str = "#{h.qty.round(4)}"
-    actual_balance = @actual_balances.select{|x| x['asset'] == h.origin_symbol}.first['free'] rescue nil
+    actual_balance = @actual_balances.select{|x| x['asset'] == h.from_symbol}.first['free'].to_f rescue nil
     if actual_balance.present?
       str += "(#{actual_balance.round(4)})"
     else
