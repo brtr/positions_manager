@@ -37,6 +37,7 @@ Capybara.register_driver :selenium_chrome_headless do |app|
   options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
 
   driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  Webdrivers::Chromedriver.required_version = '114.0.5735.90'
 
   ### Allow file downloads in Google Chrome when headless!!!
   ### https://bugs.chromium.org/p/chromium/issues/detail?id=696481#c89
