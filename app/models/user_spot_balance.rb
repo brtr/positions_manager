@@ -16,12 +16,27 @@ class UserSpotBalance < ApplicationRecord
     current_price * qty - amount
   end
 
+  def roi
+    revenue / amount
+  end
+
   def self.summary
     data = UserSpotBalance.available
 
     {
-      total_amount: data.sum(&:amount),
+      total_cost: data.sum(&:amount),
       total_revenue: data.sum(&:revenue)
     }
+  end
+
+  def self.actual_balance(user_id=nil)
+    redis_key = "user_#{user_id}_spot_balance"
+    data = JSON.parse($redis.get(redis_key)) rescue nil
+    if data.nil?
+      data = BinanceSpotsService.new.get_account[:balances] rescue nil
+
+      $redis.set(redis_key, data.to_json, ex: 1.hour)
+    end
+    data
   end
 end

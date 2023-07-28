@@ -20,9 +20,10 @@
         <td><%= h.origin_symbol %></td>
         <td><%= h.price.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.current_price.to_f.round(4) %> <%= h.to_symbol %></td>
-        <td><%= h.qty.round(4) %></td>
+        <td><%= display_spot_balance_qty(h) %></td>
         <td><%= position_amount_display(h, snapshot) %></td>
         <td><%= spot_balance_revenue_display(h, snapshot) %></td>
+        <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(4)}%" %></td>
         <td><%= h.source %></td>
       </tr>
     <% end %>

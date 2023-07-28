@@ -22,6 +22,7 @@
         <td><%= h.qty.round(4) %></td>
         <td><%= position_amount_display(h, snapshot) %></td>
         <td><%= spot_balance_revenue_display(h, snapshot) %></td>
+        <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(4)}%" %></td>
         <td><%= h.source %></td>
         <td><%= UserSpotBalance::LEVEL[h.level] if h.level %></td>
       </tr>

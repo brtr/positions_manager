@@ -138,6 +138,7 @@ class PageController < ApplicationController
     sort = params[:sort].presence || "amount"
     sort_type = params[:sort_type].presence || "desc"
     @symbol = params[:search]
+    @actual_balances = UserSpotBalance.actual_balance
     histories = UserSpotBalance.where(user_id: nil)
     @symbols = histories.pluck(:origin_symbol)
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?

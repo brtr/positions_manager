@@ -262,6 +262,10 @@ module ApplicationHelper
         sort: "revenue"
       },
       {
+        name: "预计ROI",
+        sort: "roi"
+      },
+      {
         name: "来源",
         sort: "none"
       },
@@ -480,5 +484,15 @@ module ApplicationHelper
 
   def coinglass_detail_link(coin)
     ENV['COINGLASS_URL'] + "/currencies/#{coin}"
+  end
+
+  def display_spot_balance_qty(h)
+    str = "#{h.qty.round(4)}"
+    actual_balance = @actual_balances.select{|x| x['asset'] == h.origin_symbol}.first['free'] rescue nil
+    if actual_balance.present?
+      str += "(#{actual_balance.round(4)})"
+    else
+      str
+    end
   end
 end

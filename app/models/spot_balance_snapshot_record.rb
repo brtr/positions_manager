@@ -5,11 +5,15 @@ class SpotBalanceSnapshotRecord < ApplicationRecord
 
   delegate :user_id, to: :spot_balance_snapshot_info
 
+  def roi
+    revenue / amount
+  end
+
   def self.summary
     data = SpotBalanceSnapshotRecord.available
 
     {
-      total_amount: data.sum(&:amount),
+      total_cost: data.sum(&:amount),
       total_revenue: data.sum(&:revenue)
     }
   end
@@ -18,7 +22,7 @@ class SpotBalanceSnapshotRecord < ApplicationRecord
     records = SpotBalanceSnapshotRecord.available.summary
 
     {
-      total_amount: display_number(data[:total_amount] - records[:total_amount]),
+      total_cost: display_number(data[:total_cost] - records[:total_cost]),
       total_revenue: display_number(data[:total_revenue] - records[:total_revenue])
     }
   end
