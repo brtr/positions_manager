@@ -201,6 +201,11 @@ class PageController < ApplicationController
     redirect_to liquidations_ranking_path, notice: '爆仓数据刷新成功'
   end
 
+  def holding_duration_chart
+    @page_index = 29
+    @chart_data = GetHoldingDurationsByRoiChartService.execute
+  end
+
   private
   def get_anchor(data_type)
     case data_type

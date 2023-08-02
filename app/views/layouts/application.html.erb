@@ -28,7 +28,7 @@
               <%= link_to "首页", public_user_positions_path, class: "nav-link #{@page_index == 1 ? 'active' : ''}" %>
             </li>
             <li class="nav-item dropdown">
-              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([2, 6, 11, 24, 25]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([2, 6, 11, 24, 25, 29]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 合约交易记录
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
@@ -46,6 +46,9 @@
                 </li>
                 <li class="nav-item">
                   <%= link_to "资金费率变化曲线图", funding_fee_chart_path, class: "nav-link #{@page_index == 25 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "仓位盈利持有时间曲线图", holding_duration_chart_path, class: "nav-link #{@page_index == 29 ? 'active' : ''}" %>
                 </li>
               </ul>
             </li>
@@ -105,7 +108,7 @@
               </li>
             <% end %>
             <li class="nav-item dropdown">
-              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([5, 17, 26, 27]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([5, 17, 26, 27, 28]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 币种涨跌排名
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
