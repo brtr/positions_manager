@@ -1,8 +1,20 @@
 <div class="m-3 row">
-  <h2>仓位盈利持有时间曲线图</h2>
+  <h2>全部仓位盈利持有时间曲线图</h2>
   <div class="chart mb-5">
     <div>
-      <%= render partial: "holding_duration_chart" %>
+      <%= render partial: "holding_duration_chart/full_data_chart" %>
+    </div>
+  </div>
+  <h2>仓位大于1000盈利持有时间曲线图</h2>
+  <div class="chart mb-5">
+    <div>
+      <%= render partial: "holding_duration_chart/min_amount_data_chart" %>
+    </div>
+  </div>
+  <h2>仓位小于1000盈利持有时间曲线图</h2>
+  <div class="chart mb-5">
+    <div>
+      <%= render partial: "holding_duration_chart/max_amount_data_chart" %>
     </div>
   </div>
 </div>

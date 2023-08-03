@@ -1,7 +1,10 @@
 class GetHoldingDurationsByRoiChartService
   class << self
-    def execute(gap=5)
-      symbols = UserPosition.where(user_id: nil).pluck(:origin_symbol)
+    def execute(gap: 5, min_amount: nil, max_amount: nil)
+      ups = UserPosition.where(user_id: nil)
+      ups = ups.select{|up| up.amount >= min_amount} if min_amount.present?
+      ups = ups.select{|up| up.amount <= max_amount} if max_amount.present?
+      symbols = ups.map(&:origin_symbol)
       records = []
 
       SnapshotPosition.joins(:snapshot_info).where(origin_symbol: symbols, snapshot_info: {user_id: nil}).order(event_date: :asc).group_by(&:origin_symbol).each do |symbol, data|

@@ -203,7 +203,9 @@ class PageController < ApplicationController
 
   def holding_duration_chart
     @page_index = 29
-    @chart_data = GetHoldingDurationsByRoiChartService.execute
+    @full_chart_data = GetHoldingDurationsByRoiChartService.execute
+    @min_amount_chart_data = GetHoldingDurationsByRoiChartService.execute(min_amount: 1000)
+    @max_amount_chart_data = GetHoldingDurationsByRoiChartService.execute(max_amount: 1000)
   end
 
   private
