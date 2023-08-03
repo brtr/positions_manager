@@ -9,7 +9,7 @@ class GetHoldingDurationsByRoiChartService
         roi_30 = data.select{|x| x.roi >= 0.3 }.first
         roi_40 = data.select{|x| x.roi >= 0.4 }.first
 
-        if roi_30.present?
+        if roi_30.present? && roi_30.event_date != open_date
           records.push({
             symbol: symbol,
             roi_30: (roi_30.event_date - open_date).to_i,
@@ -25,7 +25,7 @@ class GetHoldingDurationsByRoiChartService
       ranges.each do |r|
         data[r] = {
           roi_30: records.count{|x| r.cover? x[:roi_30]},
-          roi_40: records.count{|x| r.cover? x[:roi_40]}
+          roi_40: records.count{|x| r.cover?(x[:roi_40]) && x[:roi_40] > 0}
         }
       end
       data
