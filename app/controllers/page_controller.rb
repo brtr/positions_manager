@@ -206,6 +206,7 @@ class PageController < ApplicationController
     @full_chart_data = GetHoldingDurationsByRoiChartService.execute
     @min_amount_chart_data = GetHoldingDurationsByRoiChartService.execute(min_amount: 1000)
     @max_amount_chart_data = GetHoldingDurationsByRoiChartService.execute(max_amount: 1000)
+    @average_roi_chart_data = GetHoldingDurationsByRoiChartService.execute(average: true)
   end
 
   private
