@@ -103,8 +103,12 @@ class UserPosition < ApplicationRecord
     # TODO
   end
 
+  def ranking_symbol
+    "#{from_symbol}#{fee_symbol}"
+  end
+
   def ranking_data
-    JSON.parse($redis.get("get_bottom_24hr_tickers")).select{|x| x['symbol'] == origin_symbol}.first rescue nil
+    JSON.parse($redis.get("get_bottom_24hr_tickers")).select{|x| x['symbol'] == ranking_symbol}.first rescue nil
   end
 
   def risen_ratio

@@ -75,8 +75,12 @@ class UserSyncedPosition < ApplicationRecord
     FundingFeeHistory.where(user_id: user_id, origin_symbol: origin_symbol).where('event_date < ?', Date.yesterday).sum(&:amount).round(4)
   end
 
+  def ranking_symbol
+    "#{from_symbol}#{fee_symbol}"
+  end
+
   def ranking_data
-    JSON.parse($redis.get("get_bottom_24hr_tickers")).select{|x| x['symbol'] == origin_symbol}.first rescue nil
+    JSON.parse($redis.get("get_bottom_24hr_tickers")).select{|x| x['symbol'] == ranking_symbol}.first rescue nil
   end
 
   def risen_ratio
