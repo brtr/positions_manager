@@ -62,6 +62,14 @@ module ApplicationHelper
         sort: "margin_ratio"
       },
       {
+        name: "距离底部上涨幅度",
+        sort: "risen_ratio"
+      },
+      {
+        name: "距离顶部比例",
+        sort: "top_price_ratio"
+      },
+      {
         name: "来源",
         sort: "none"
       },

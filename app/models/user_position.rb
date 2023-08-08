@@ -103,4 +103,16 @@ class UserPosition < ApplicationRecord
     # TODO
   end
 
+  def ranking_data
+    JSON.parse($redis.get("get_bottom_24hr_tickers")).select{|x| x['symbol'] == origin_symbol}.first rescue nil
+  end
+
+  def risen_ratio
+    ranking_data&.fetch('risenRatio')
+  end
+
+  def top_price_ratio
+    ranking_data&.fetch('topPriceRatio')
+  end
+
 end
