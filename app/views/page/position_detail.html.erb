@@ -177,13 +177,19 @@
     <div class="col-10 chart mx-auto">
       <h3>币价折线图</h3>
       <div>
-        <%= render partial: "position_detail_chart" %>
+        <%= render partial: "position_detail/price_chart" %>
       </div>
     </div>
     <div class="col-10 chart mx-auto">
       <h3>预计收益折线图</h3>
       <div>
-        <%= render partial: "position_detail_revenue_chart" %>
+        <%= render partial: "position_detail/revenue_chart" %>
+      </div>
+    </div>
+    <div class="col-10 chart mx-auto">
+      <h3>平均ROI折线图</h3>
+      <div>
+        <%= render partial: "position_detail/roi_chart" %>
       </div>
     </div>
   <% else %>

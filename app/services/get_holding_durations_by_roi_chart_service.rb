@@ -45,5 +45,38 @@ class GetHoldingDurationsByRoiChartService
 
       JSON.parse(data).with_indifferent_access
     end
+
+    def execute_by_symbol(up_id, gap: 5, average: true)
+      up = UserPosition.find(up_id)
+      redis_key = "holding_duration_chart_#{up_id}_data_gap_#{gap.to_i}_average_#{average.to_s}"
+      data = $redis.get(redis_key) rescue nil
+      if data.nil?
+        snapsohts = SnapshotPosition.joins(:snapshot_info).where(origin_symbol: up.origin_symbol, trade_type: up.trade_type, source: up.source, snapshot_info: {user_id: nil}).order(event_date: :asc)
+
+        record = {
+          open_date: snapsohts.first.event_date,
+          data: snapsohts,
+          duration: up.average_durations.to_i / 86400
+        }
+
+        ranges = 0.step(record[:duration].to_i + gap, gap).each_cons(2).map { |s, e| Range.new(s, e, true) }
+
+        data = {}
+        if record.present?
+          ranges.map do |r|
+            total_durations = record[:data].select{ |x| r.cover?((x.event_date - record[:open_date]).to_i) }
+            data[r] = {
+              range: r,
+              average_roi: total_durations.any? ? (((total_durations.sum{|d| d.roi.to_f} / total_durations.count).to_f) * 100).round(3) : 0
+            }
+          end
+        end
+        data = data.to_json
+
+        $redis.set(redis_key, data, ex: 5.hours)
+      end
+
+      JSON.parse(data).with_indifferent_access
+    end
   end
 end
