@@ -22,6 +22,14 @@ document.addEventListener('turbolinks:load', () => {
             tension: 0.4,
             backgroundColor: 'rgb(255, 99, 132)',
             yAxisID: 'y'
+          },{
+            label: "<%= @symbol %> 平均价格走势图(每五天)",
+            data: result.map(i => {
+              return i.average_price
+            }),
+            tension: 0.4,
+            backgroundColor: 'rgb(54, 162, 235)',
+            yAxisID: 'y1'
           },
         ],
       },
@@ -41,6 +49,12 @@ document.addEventListener('turbolinks:load', () => {
               },
             },
           },
+          y1: {
+            position: 'right',
+            ticks: {
+              maxTicksLimit: 5,
+            },
+          },
         },
         responsive: false,
         plugins: {
@@ -54,7 +68,8 @@ document.addEventListener('turbolinks:load', () => {
                 if(data.length > 0){
                   i = data[0]
                   roi = "平均ROI: " + i.average_roi + '%'
-                  return [roi]
+                  price = "平均价格: " + i.average_price
+                  return [roi, price]
                 } else {
                   return context.label
                 }

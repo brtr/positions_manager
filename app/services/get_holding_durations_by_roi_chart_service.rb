@@ -67,7 +67,8 @@ class GetHoldingDurationsByRoiChartService
             total_durations = record[:data].select{ |x| r.cover?((x.event_date - record[:open_date]).to_i) }
             data[r] = {
               range: r,
-              average_roi: total_durations.any? ? (((total_durations.sum{|d| d.roi.to_f} / total_durations.count).to_f) * 100).round(3) : 0
+              average_roi: (total_durations.any? ? (((total_durations.sum{|d| d.roi.to_f} / total_durations.count).to_f) * 100).round(3) : 0),
+              average_price: total_durations.any? ? (total_durations.sum{|d| d.estimate_price.to_f} / total_durations.count).round(3) : 0
             }
           end
         end
