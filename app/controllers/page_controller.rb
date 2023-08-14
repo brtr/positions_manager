@@ -84,9 +84,16 @@ class PageController < ApplicationController
   end
 
   def refresh_recently_adding_positions
-    GetAddingPositionsHistoriesJob.perform_later
+    origin_symbol = params[:origin_symbol]
+    if origin_symbol.presence
+      url = position_detail_path(origin_symbol: origin_symbol, source: params[:source], trade_type: params[:trade_type])
+    else
+      url = recently_adding_positions_path
+    end
 
-    redirect_to recently_adding_positions_path, notice: "正在更新，请稍等刷新查看最新结果..."
+    GetAddingPositionsHistoriesJob.perform_later(symbol: origin_symbol)
+
+    redirect_to url, notice: "正在更新，请稍等刷新查看最新结果..."
   end
 
   def account_balance

@@ -1,8 +1,9 @@
 class GetRecentlyAddingPositionsJob < ApplicationJob
   queue_as :daily_job
 
-  def perform(date: Date.today)
-    SyncedTransaction.where(user_id: nil, event_time: (date - 1.day).all_day).group_by{|tx| [tx.origin_symbol, tx.fee_symbol, tx.position_side, tx.source]}.each do |key, txs|
+  def perform(date: Date.today, symbol: nil)
+    event_time = symbol.present? ? date.all_day : (date - 1.day).all_day
+    SyncedTransaction.where(user_id: nil, event_time: event_time).group_by{|tx| [tx.origin_symbol, tx.fee_symbol, tx.position_side, tx.source]}.each do |key, txs|
       origin_symbol = key[0]
       from_symbol = origin_symbol.split(key[1])[0]
       trade_type = key[2] == 'short' ? 'buy' : 'sell'
