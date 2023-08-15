@@ -8,9 +8,9 @@ Feature: User Synced Positions pages
   Scenario: Visit User Synced positions page
     When I visit the '/user_synced_positions' page
     Then I see '总投入' text
-    Then I see '(-138.4187)' text
+    Then I see '(-138.42)' text
     Then I see '绝对收益' text
-    Then I see '(378.9303)' text
+    Then I see '(378.93)' text
     Then I see 'EOS' text
     When I select2 "BTCUSDT" from "#search" filter
      And I click on the button "确定"

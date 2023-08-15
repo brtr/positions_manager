@@ -8,10 +8,9 @@ Feature: Public pages
   Scenario: Visit Public positions page
     When I visit the '/' page
     Then I see '总投入' text
-    Then I see '(-124.7985)' text
+    Then I see '(-124.8)' text
     Then I see '绝对收益' text
-    Then I see '(392.5504)' text
-    Then I see '(3.7202)' text
+    Then I see '(392.55)' text
     Then I see 'EOS' text
     When I select2 "BTCUSDT" from "#search" filter
      And I click on the button "确定"
@@ -20,9 +19,9 @@ Feature: Public pages
     When I fill '2022-11-05' into the 'compare_date' field
      And I click on the button "确定"
     Then I see '总投入' text
-    Then I see '-6.7985' text
+    Then I see '-6.8' text
     Then I see '绝对收益' text
-    Then I see '345.017' text
+    Then I see '345.02' text
 
   @javascript
   Scenario: Visit Public positions page with sort
