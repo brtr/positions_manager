@@ -140,7 +140,7 @@ class SnapshotInfo < ApplicationRecord
 
   private
   def display_number(num)
-    num >= 1 || num <= -1 ? num.round(4) : ''
+    num.to_f.round(2)
   end
 
   def set_columns
