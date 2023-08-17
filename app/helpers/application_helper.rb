@@ -392,10 +392,8 @@ module ApplicationHelper
   end
 
   def last_summary_display(data)
-    if data.to_f >= 1 || data.to_f <= -1
-      c = data > 0 ? 'pos-num' : 'neg-num'
-      "(<span class='#{c}'>#{data}</span>)".html_safe
-    end
+    c = data > 0 ? 'pos-num' : 'neg-num'
+    "(<span class='#{c}'>#{data.round(2)}</span>)".html_safe
   end
 
   def daily_market_display(data, is_risen = true)
