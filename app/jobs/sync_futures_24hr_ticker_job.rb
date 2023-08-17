@@ -7,6 +7,7 @@ class SyncFutures24hrTickerJob < ApplicationJob
     $redis.set('top_select_duration', duration) if duration.present?
     SyncFuturesTickerService.get_24hr_tickers(bottom_select, top_select, duration, data_type)
     GetMarketDataJob.perform_later
+    GetFundingFeeHistoriesJob.perform_later(sync_ranking: true)
 
     ForceGcJob.perform_later
   end

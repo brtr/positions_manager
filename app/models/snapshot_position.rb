@@ -36,6 +36,8 @@ class SnapshotPosition < ApplicationRecord
 
   def self.last_summary(user_id: nil, data: nil)
     records = SnapshotPosition.available.total_summary(user_id: user_id)
+    old_roi = records[:total_revenue].to_f / records[:total_cost].to_f
+    new_roi = data[:total_revenue].to_f / data[:total_cost].to_f
 
     {
       total_cost: display_number(data[:total_cost] - records[:total_cost]),
@@ -43,7 +45,8 @@ class SnapshotPosition < ApplicationRecord
       profit_count: display_number(data[:profit_count] - records[:profit_count]),
       profit_amount: display_number(data[:profit_amount] - records[:profit_amount]),
       loss_count: display_number(data[:loss_count] - records[:loss_count]),
-      loss_amount: display_number(data[:loss_amount] - records[:loss_amount])
+      loss_amount: display_number(data[:loss_amount] - records[:loss_amount]),
+      roi: display_number(new_roi - old_roi)
     }
   end
 

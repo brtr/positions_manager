@@ -14,6 +14,7 @@ class RankingSnapshotsController < ApplicationController
     @page_index = 5
     @source = params[:source]
     @daily_ranking = JSON.parse($redis.get("get_24hr_tickers")) rescue []
+    @top_3_symbol_funding_rates = JSON.parse($redis.get("top_3_symbol_funding_rates")) rescue []
     @top_select_ranking = JSON.parse($redis.get("get_top_24hr_tickers")) rescue @daily_ranking
     @bottom_select_ranking = JSON.parse($redis.get("get_bottom_24hr_tickers")) rescue @daily_ranking
     @bottom_select = $redis.get('bottom_select_ranking').to_i

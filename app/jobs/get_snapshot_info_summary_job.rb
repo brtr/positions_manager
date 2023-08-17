@@ -5,7 +5,7 @@ class GetSnapshotInfoSummaryJob < ApplicationJob
     user_id = snapshot_info.user_id
     total_summary = date == Date.today ? UserPosition.total_summary(user_id) : snapshot_info.snapshot_positions.total_summary(user_id: user_id, is_synced: is_synced, date: snapshot_info.event_date)
     ranking_snapshots = RankingSnapshot.where(event_date: snapshot_info.event_date)
-    btc_data = ranking_snapshots.find_by(symbol: 'BTCBUSD')
+    btc_data = ranking_snapshots.find_by(symbol: ['BTCBUSD', 'BTCUSDT'])
     btc_change = btc_data.last_price - btc_data.open_price rescue nil
     total_revenue = total_summary[:total_revenue].to_f
     total_cost = total_summary[:total_cost].to_f

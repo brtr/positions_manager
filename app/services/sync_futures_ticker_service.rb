@@ -45,6 +45,7 @@ class SyncFuturesTickerService
         price_ratio = get_price_ratio(from_symbol, last_price, rank, price_type, duration)
         {
           "symbol" => from_symbol + to_symbol,
+          "instId" => ticker["instId"],
           "lastPrice" => last_price,
           "priceChangePercent" => (price_change * 100).round(4).to_s,
           "bottomPriceRatio" => price_ratio['bottom_ratio'].to_s,
