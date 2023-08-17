@@ -46,7 +46,7 @@ class SnapshotPosition < ApplicationRecord
       profit_amount: display_number(data[:profit_amount] - records[:profit_amount]),
       loss_count: display_number(data[:loss_count] - records[:loss_count]),
       loss_amount: display_number(data[:loss_amount] - records[:loss_amount]),
-      roi: display_number(new_roi - old_roi)
+      roi: display_number(new_roi * 100 - old_roi * 100)
     }
   end
 

@@ -38,7 +38,8 @@ class SnapshotInfo < ApplicationRecord
       profit_count: display_number(profit_count - last_info&.profit_count.to_f),
       profit_amount: display_number(profit_amount - last_info&.profit_amount.to_f),
       loss_count: display_number(loss_count - last_info&.loss_count.to_f),
-      loss_amount: display_number(loss_amount - last_info&.loss_amount.to_f)
+      loss_amount: display_number(loss_amount - last_info&.loss_amount.to_f),
+      roi: display_number(total_roi - last_info&.total_roi.to_f)
     }
   end
 
