@@ -29,7 +29,7 @@
             <tr>
               <td><%= get_symbol_url(d["symbol"], d["source"], get_top10_count(d["source"], d["symbol"])) %></td>
               <td><%= ranking(d["symbol"]) %></td>
-              <td><%= d["priceChangePercent"] + " %" %><%= "(#{data['rate'].to_f.round(8)})" if data %></td>
+              <td><%= d["priceChangePercent"] + " %" %><%= "(#{(data['rate'].to_f * 100).round(4)}%)" if data %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["amplitude"].to_s + " %" %></td>
               <td><%= d["source"] %></td>

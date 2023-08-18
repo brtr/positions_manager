@@ -391,9 +391,13 @@ module ApplicationHelper
     "<span class=#{roi > 0 ? 'pos-num' : 'neg-num'}>#{roi}%</span>".html_safe
   end
 
-  def last_summary_display(data)
+  def last_summary_display(data, is_percent = false)
     c = data > 0 ? 'pos-num' : 'neg-num'
-    "(<span class='#{c}'>#{data.round(2)}</span>)".html_safe
+    if is_percent
+      "(<span class='#{c}'>#{data.round(2)}%</span>)".html_safe
+    else
+      "(<span class='#{c}'>#{data.round(2)}</span>)".html_safe
+    end
   end
 
   def daily_market_display(data, is_risen = true)
