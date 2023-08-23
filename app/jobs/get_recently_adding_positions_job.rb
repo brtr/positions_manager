@@ -11,9 +11,10 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
       amount = txs.sum(&:amount)
       revenue = txs.sum(&:revenue)
       price = amount / qty
-      next if AddingPositionsHistory.where(event_date: date - 1.day, origin_symbol: origin_symbol, qty: qty, amount: amount).any?
+      trade_date = event_time.first.to_date
+      next if AddingPositionsHistory.where(event_date: trade_date - 1.day, origin_symbol: origin_symbol, qty: qty, amount: amount).any?
 
-      aph = AddingPositionsHistory.where(event_date: date, origin_symbol: origin_symbol, from_symbol: from_symbol, fee_symbol: key[1], trade_type: trade_type, source: key[3]).first_or_create
+      aph = AddingPositionsHistory.where(event_date: trade_date, origin_symbol: origin_symbol, from_symbol: from_symbol, fee_symbol: key[1], trade_type: trade_type, source: key[3]).first_or_create
       up = UserPosition.where(user_id: nil, origin_symbol: origin_symbol, trade_type: trade_type, source: key[3]).take
       unit_cost = up&.price || get_last_price(origin_symbol, date)
       current_price = up&.current_price || get_history_price(from_symbol.downcase, date)
