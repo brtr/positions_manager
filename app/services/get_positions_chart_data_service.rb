@@ -1,8 +1,8 @@
 class GetPositionsChartDataService
   class << self
-    def execute(origin_symbol, source, trade_type)
+    def execute(origin_symbol, source, trade_type, period)
       to_date = Date.yesterday
-      from_date = to_date - 1.month
+      from_date = period == 'quarter' ? to_date - 3.months : to_date - 1.month
       symbol = get_symbol(origin_symbol).downcase
       url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{from_date}&to_date=#{to_date}"
       response = RestClient.get(url)

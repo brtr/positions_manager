@@ -177,6 +177,19 @@
       </div>
     </div>
     <div class="p-4"></div>
+    <div class="col-10 mx-auto mb-3">
+      <%= form_tag position_detail_path, id: "period_targets", method: "GET", class: "row" do %>
+        <%= hidden_field_tag :origin_symbol, @symbol %>
+        <%= hidden_field_tag :source, @source %>
+        <%= hidden_field_tag :trade_type, @trade_type %>
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group" style="margin-left:3rem;width:33%;">
+          <%= radio_button_tag :period, "quarter", params[:period] == "quarter", class: "btn-check", id: "btnradio1", onclick: "this.form.submit();" %>
+          <label class="btn btn-outline-primary quarter" for="btnradio1">三个月</label>
+          <%= radio_button_tag :period, "month", params[:period] == "month", class: "btn-check", id: "btnradio2", onclick: "this.form.submit();" %>
+          <label class="btn btn-outline-primary month" for="btnradio2">一个月</label>
+        </div>
+      <% end %>
+    </div>
     <div class="col-10 chart mx-auto">
       <h3>币价折线图</h3>
       <div>

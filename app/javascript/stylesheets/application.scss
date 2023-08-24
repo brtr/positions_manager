@@ -62,6 +62,6 @@
 .hide {display: none;}
 #spinner{position: fixed;z-index: 9999;top: 45%;left: 45%;padding: 0 20px;min-width: 100px;border-radius: 8px;}
 
-#user-positions-container, #position-histories-container { width: 1800px; }
+#user-positions-container, #position-histories-container, .get_24hr_tickers_page { width: 1800px; }
 
 .select2, #compare_date, #from_date, #to_date { min-width: 200px; max-width: 350px; }

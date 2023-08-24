@@ -118,6 +118,7 @@ class PageController < ApplicationController
     @symbol = params[:origin_symbol].upcase rescue nil
     @source = params[:source]
     @trade_type = params[:trade_type]
+    @period = params[:period].presence || 'month'
     @data = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, @symbol, @source, @trade_type)
                                   .order(event_date: :desc)
     if @data.any?
@@ -127,7 +128,7 @@ class PageController < ApplicationController
                     else
                       OkxFuturesService.new.get_pending_orders(@symbol)
                     end
-      GetPositionsChartDataService.execute(@symbol, @source, @trade_type)
+      GetPositionsChartDataService.execute(@symbol, @source, @trade_type, @period)
       @chart_data = JSON.parse($redis.get("#{@symbol}_monthly_chart_data")) rescue []
       @average_durations = @data.average_holding_duration
       @roi_chart_data = GetHoldingDurationsByRoiChartService.execute_by_symbol(@target_position.id)
