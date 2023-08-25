@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_04_091423) do
+ActiveRecord::Schema.define(version: 2023_08_24_140525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2023_07_04_091423) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "unit_cost", default: "0.0"
+    t.decimal "trading_roi", default: "0.0"
     t.index ["event_date"], name: "index_adding_positions_histories_on_event_date"
     t.index ["origin_symbol"], name: "index_adding_positions_histories_on_origin_symbol"
   end

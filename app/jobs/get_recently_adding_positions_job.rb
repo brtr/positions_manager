@@ -15,17 +15,16 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
       next if AddingPositionsHistory.where(event_date: trade_date - 1.day, origin_symbol: origin_symbol, qty: qty, amount: amount).any?
 
       aph = AddingPositionsHistory.where(event_date: trade_date, origin_symbol: origin_symbol, from_symbol: from_symbol, fee_symbol: key[1], trade_type: trade_type, source: key[3]).first_or_create
-      up = UserPosition.where(user_id: nil, origin_symbol: origin_symbol, trade_type: trade_type, source: key[3]).take
-      unit_cost = up&.price || get_last_price(origin_symbol, date)
+      if trade_date == Date.today
+        up = UserPosition.where(user_id: nil, origin_symbol: origin_symbol, trade_type: trade_type, source: key[3]).take
+      else
+        up = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: trade_date}, origin_symbol: origin_symbol, trade_type: trade_type, source: key[3]).take
+      end
+      unit_cost = up&.price
       current_price = up&.current_price || get_history_price(from_symbol.downcase, date)
-      aph.update(price: price, current_price: current_price, qty: qty, amount: amount, revenue: revenue, unit_cost: unit_cost)
+      aph.update(price: price, current_price: current_price, qty: qty, amount: amount, revenue: revenue, unit_cost: unit_cost, trading_roi: up&.roi)
       SlackService.send_notification(nil, enqueued_block(from_symbol)) if AddingPositionsHistory.where("id != ? and event_date = ? and origin_symbol = ? and amount BETWEEN ? AND ?", aph.id, date, from_symbol, amount * 0.95, amount * 1.05).any?
     end
-  end
-
-  def get_last_price(symbol, event_date)
-    snapshot = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: event_date - 1.day}, origin_symbol: symbol).take
-    snapshot&.price
   end
 
   def get_history_price(symbol, event_date)
