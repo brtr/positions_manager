@@ -2,7 +2,7 @@
   <thead>
     <tr class="table-container-tr">
       <% positions_table_headers.each do |h| %>
-        <% next if h[:sort].in?(['level', 'notes', 'average_durations']) && source_type != :public %>
+        <% next if h[:sort].in?(['level', 'notes', 'average_durations', 'closing_revenue', 'closing_roi']) && source_type != :public %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
@@ -48,6 +48,10 @@
         <td><%= "#{(h.margin_ratio.to_f * 100).round(4)}%" %></td>
         <td><%= "#{h.risen_ratio.to_f}%" %></td>
         <td><%= "#{h.top_price_ratio.to_f}%" %></td>
+        <% if h.is_a?(UserPosition) && h.user_id.nil? %>
+          <td class="<%= h.closing_revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= h.closing_revenue.round(4) %> <%= h.fee_symbol %></td>
+          <td><%= "#{h.closing_roi.round(3)}%" %></td>
+        <% end %>
         <td><%= h.source %></td>
         <% if h.is_a?(UserPosition) && h.user_id.nil? %>
           <td><%= UserPosition::LEVEL[h.level] if h.level %></td>

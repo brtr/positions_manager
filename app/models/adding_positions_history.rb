@@ -6,7 +6,7 @@ class AddingPositionsHistory < ApplicationRecord
   end
 
   def roi
-    ((get_revenue / amount.abs) * 100).round(4)
+    ((get_revenue / (amount.abs + get_revenue)) * 100).round(4)
   end
 
   def amount_ratio

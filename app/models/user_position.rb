@@ -43,17 +43,6 @@ class UserPosition < ApplicationRecord
                                                  origin_symbol: origin_symbol, trade_type: trade_type, source: source).take
   end
 
-  def average_durations
-    redis_key = "user_positions_duration_#{origin_symbol}_#{trade_type}_#{source}_#{user_id}"
-    duration = $redis.get(redis_key).to_f
-    if duration == 0
-      duration = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, origin_symbol, source, trade_type).average_holding_duration
-      $redis.set(redis_key, duration, ex: 2.hours)
-    end
-
-    duration.to_f
-  end
-
   def self.total_summary(user_id=nil)
     records = user_id ? UserPosition.where(user_id: user_id) : UserPosition.where(user_id: nil)
     profit_records = records.select{|r| r.revenue > 0}
@@ -117,6 +106,48 @@ class UserPosition < ApplicationRecord
 
   def top_price_ratio
     ranking_data&.fetch('topPriceRatio')
+  end
+
+  def adding_positions_histories
+    AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, origin_symbol, source, trade_type)
+  end
+
+  def closing_histories
+    adding_positions_histories.where('qty < 0')
+  end
+
+  def closing_revenue
+    redis_key = "user_positions_closing_revenue_#{origin_symbol}_#{trade_type}_#{source}_#{user_id}"
+    revenue = $redis.get(redis_key).to_f
+    if revenue == 0
+      revenue = closing_histories.sum(&:get_revenue)
+      $redis.set(redis_key, revenue, ex: 1.hours)
+    end
+
+    revenue.to_f
+  end
+
+  def closing_roi
+    redis_key = "user_positions_closing_roi_#{origin_symbol}_#{trade_type}_#{source}_#{user_id}"
+    roi = $redis.get(redis_key).to_f
+    if roi == 0
+      amount = closing_histories.sum{|h| h.amount.abs}
+      roi = amount == 0 ? 0 : ((closing_revenue.to_f / (amount + closing_revenue.to_f)) * 100).round(3)
+      $redis.set(redis_key, revenue, ex: 1.hours)
+    end
+
+    roi.to_f
+  end
+
+  def average_durations
+    redis_key = "user_positions_duration_#{origin_symbol}_#{trade_type}_#{source}_#{user_id}"
+    duration = $redis.get(redis_key).to_f
+    if duration == 0
+      duration = adding_positions_histories.average_holding_duration
+      $redis.set(redis_key, duration, ex: 1.hours)
+    end
+
+    duration.to_f
   end
 
 end

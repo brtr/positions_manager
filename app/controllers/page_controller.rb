@@ -122,6 +122,8 @@ class PageController < ApplicationController
     @data = AddingPositionsHistory.where('current_price is not null and (amount > ? or amount < ?) and origin_symbol = ? and source = ? and trade_type = ?', 1, -1, @symbol, @source, @trade_type)
                                   .order(event_date: :desc)
     if @data.any?
+      @open_data = @data.where('qty > 0')
+      @close_data = @data.where('qty < 0')
       @target_position = @data.first.target_position
       @open_orders = if params[:source] == 'binance'
                       BinanceFuturesService.new.get_pending_orders(@symbol)

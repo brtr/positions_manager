@@ -70,6 +70,14 @@ module ApplicationHelper
         sort: "top_price_ratio"
       },
       {
+        name: "已实现收益",
+        sort: "closing_revenue"
+      },
+      {
+        name: "已实现ROI",
+        sort: "closing_roi"
+      },
+      {
         name: "来源",
         sort: "none"
       },

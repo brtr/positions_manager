@@ -88,7 +88,8 @@
     <% if @data.any? %>
       <div>平均持仓时间: <%= get_average_holding_duration @average_durations %></div>
       <div>资金费用: <%= display_funding_fee(@target_position) %></div>
-      <div class="mt-3">
+      <div class="mt-3" id="position-detail-container">
+        <h4>未平仓投入列表</h4>
         <table class="table">
           <thead>
             <tr class="table-container-tr">
@@ -104,44 +105,107 @@
                 新增收益
                 <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue") %>'>?</span>
               </th>
-              <th>新增收益占新增金额的占比</th>
+              <th>新增ROI</th>
               <th>新增金额占当前该币种总仓位的占比</th>
+              <th>成交时该币种仓位的ROI</th>
               <th>来源</th>
             </tr>
           </thead>
           <tbody>
-            <% @data.each do |d| %>
+            <% if @open_data.any? %>
+              <% @open_data.each do |d| %>
+                <tr>
+                  <td><%= d.event_date.to_s %></td>
+                  <td class="<%= trade_type_style(d.trade_type) %>"><%= trade_type_display(d.trade_type, d.qty) %></td>
+                  <td><%= get_average_holding_duration(d.holding_duration) if d.qty > 0 %></td>
+                  <td><%= d.price.round(4) %></td>
+                  <td><%= d.unit_cost&.round(4) %></td>
+                  <td><%= d.current_price.round(4) %></td>
+                  <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty.round(4) %></td>
+                  <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
+                  <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
+                  <td><%= "#{d.roi}%" %></td>
+                  <td><%= "#{d.amount_ratio}" %></td>
+                  <td><%= "#{(d.trading_roi * 100).round(3)}%" %></td>
+                  <td><%= d.source %></td>
+                </tr>
+              <% end %>
+              <% d = @open_data.first %>
+              <% total_revenue = @open_data.total_revenue(d.current_price, d.trade_type) %>
               <tr>
-                <td><%= d.event_date.to_s %></td>
-                <td class="<%= trade_type_style(d.trade_type) %>"><%= trade_type_display(d.trade_type, d.qty) %></td>
-                <td><%= get_average_holding_duration(d.holding_duration) if d.qty > 0 %></td>
-                <td><%= d.price.round(4) %></td>
-                <td><%= d.unit_cost&.round(4) %></td>
+                <td>总计</td>
+                <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
+                <td></td>
+                <td><%= @open_data.average(:price).round(4) %></td>
+                <td><%= @open_data.average(:unit_cost).round(4) %></td>
                 <td><%= d.current_price.round(4) %></td>
-                <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty.round(4) %></td>
-                <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
-                <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
-                <td><%= "#{d.roi}%" %></td>
-                <td><%= "#{d.amount_ratio}" %></td>
+                <td class="<%= @open_data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @open_data.total_qty %></td>
+                <td class="<%= @open_data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @open_data.total_amount.round(4) %></td>
+                <td class="<%= total_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= total_revenue.round(4) %></td>
+                <td><%= ((total_revenue / @open_data.total_amount.abs) * 100).round(4) %>%</td>
+                <td><%= @open_data.amount_ratio(d.target_position) %></td>
+                <td></td>
                 <td><%= d.source %></td>
               </tr>
             <% end %>
-            <% d = @data.select{|d| d.qty.to_f > 0}.first %>
-            <% total_revenue = @data.total_revenue(d.current_price, d.trade_type) %>
-            <tr>
-              <td>总计</td>
-              <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
-              <td></td>
-              <td><%= @data.average(:price).round(4) %></td>
-              <td><%= @data.average(:unit_cost).round(4) %></td>
-              <td><%= d.current_price.round(4) %></td>
-              <td class="<%= @data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_qty %></td>
-              <td class="<%= @data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @data.total_amount.round(4) %></td>
-              <td class="<%= total_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= total_revenue.round(4) %></td>
-              <td><%= ((total_revenue / @data.total_amount.abs) * 100).round(4) %>%</td>
-              <td><%= @data.amount_ratio(d.target_position) %></td>
-              <td><%= d.source %></td>
+          </tbody>
+        </table>
+        <h4>已平仓投入列表</h4>
+        <table class="table">
+          <thead>
+            <tr class="table-container-tr">
+              <th>时间</th>
+              <th>类别</th>
+              <th>平均成交价</th>
+              <th>平均成本价</th>
+              <th>最新价格</th>
+              <th>平仓数量</th>
+              <th>平仓金额</th>
+              <th>
+                已实现收益
+                <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue") %>'>?</span>
+              </th>
+              <th>已实现ROI</th>
+              <th>平仓金额占当前该币种总仓位的占比</th>
+              <th>成交时该币种仓位的ROI</th>
+              <th>来源</th>
             </tr>
+          </thead>
+          <tbody>
+            <% if @close_data.any? %>
+              <% @close_data.each do |d| %>
+                <tr>
+                  <td><%= d.event_date.to_s %></td>
+                  <td class="<%= trade_type_style(d.trade_type) %>"><%= trade_type_display(d.trade_type, d.qty) %></td>
+                  <td><%= d.price.round(4) %></td>
+                  <td><%= d.unit_cost&.round(4) %></td>
+                  <td><%= d.current_price.round(4) %></td>
+                  <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty.round(4) %></td>
+                  <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
+                  <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
+                  <td><%= "#{d.roi}%" %></td>
+                  <td><%= "#{d.amount_ratio}" %></td>
+                  <td><%= "#{(d.trading_roi * 100).round(3)}%" %></td>
+                  <td><%= d.source %></td>
+                </tr>
+              <% end %>
+              <% d = @close_data.first %>
+              <% total_revenue = @close_data.sum(&:revenue) %>
+              <tr>
+                <td>总计</td>
+                <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
+                <td><%= @close_data.average(:price).round(4) %></td>
+                <td><%= @close_data.average(:unit_cost).round(4) %></td>
+                <td><%= d.current_price.round(4) %></td>
+                <td class="<%= @close_data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @close_data.total_qty.round(4) %></td>
+                <td class="<%= @close_data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @close_data.total_amount.round(4) %></td>
+                <td class="<%= total_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= total_revenue.round(4) %></td>
+                <td><%= ((total_revenue / (@close_data.total_amount.abs + total_revenue)) * 100).round(4) %>%</td>
+                <td><%= @close_data.amount_ratio(d.target_position) %></td>
+                <td></td>
+                <td><%= d.source %></td>
+              </tr>
+            <% end %>
           </tbody>
         </table>
       </div>
