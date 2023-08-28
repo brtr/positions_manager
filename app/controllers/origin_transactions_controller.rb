@@ -5,12 +5,16 @@ class OriginTransactionsController < ApplicationController
     @page_index = 8
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
-    @symbol = params[:search]
-    txs = OriginTransaction.available.where(trade_type: 'buy', user_id: nil).order("#{sort} #{sort_type}")
+    txs = OriginTransaction.available.where(user_id: nil).order("#{sort} #{sort_type}")
     @total_txs = txs
-    txs = txs.where(campaign: params[:campaign]) if params[:campaign].present?
-    txs = txs.where(source: params[:source]) if params[:source].present?
+    @symbol = params[:search]
+    @campaign = params[:campaign]
+    @source = params[:source]
+    @event_date = Date.parse(params[:event_date]) rescue nil
+    txs = txs.where(campaign: @campaign) if @campaign.present?
+    txs = txs.where(source: @source) if @source.present?
     txs = txs.where(original_symbol: @symbol) if @symbol.present?
+    txs = txs.where(event_time: @event_date.all_day) if @event_date.present?
     @txs = txs.page(params[:page]).per(20)
     @total_summary = txs.total_summary
   end

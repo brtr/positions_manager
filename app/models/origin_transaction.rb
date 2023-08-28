@@ -7,23 +7,18 @@ class OriginTransaction < ApplicationRecord
 
   def self.total_summary(user_id=nil)
     records = OriginTransaction.available
-    redis_key = "origin_transactions_total_summary_#{user_id}"
-    result = $redis.get(redis_key)
-    if result.nil?
-      profit_records = records.select{|r| r.revenue > 0}
-      loss_records = records.select{|r| r.revenue < 0}
-      result = {
-        profit_count: profit_records.count,
-        profit_amount: calculate_field(profit_records),
-        loss_count: loss_records.count,
-        loss_amount: calculate_field(loss_records),
-        total_cost: calculate_field(records, :amount),
-        total_revenue: records.where(trade_type: 'sell').sum(&:revenue),
-        total_estimated_revenue: records.where(trade_type: 'buy').sum(&:revenue)
-      }.to_json
-      $redis.set(redis_key, result, ex: 5.hours)
-    end
-    JSON.parse result
+    profit_records = records.select{|r| r.revenue > 0}
+    loss_records = records.select{|r| r.revenue < 0}
+
+    {
+      profit_count: profit_records.count,
+      profit_amount: calculate_field(profit_records),
+      loss_count: loss_records.count,
+      loss_amount: calculate_field(loss_records),
+      total_cost: calculate_field(records, :amount),
+      total_revenue: records.where(trade_type: 'sell').sum(&:revenue),
+      total_estimated_revenue: records.where(trade_type: 'buy').sum(&:revenue)
+    }
   end
 
   def revenue_ratio(total_revenue)
