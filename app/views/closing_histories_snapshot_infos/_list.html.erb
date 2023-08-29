@@ -2,7 +2,6 @@
   <thead>
     <tr class="table-container-tr">
       <% closing_histories_headers.each do |h| %>
-        <% next if h[:sort] == 'event_date' %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
@@ -19,6 +18,7 @@
   <tbody>
     <% @histories.each do |h| %>
       <tr>
+        <td><%= h.event_date %></td>
         <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
         <td>
           <%= link_to display_symbol(h, 1), position_detail_path(origin_symbol: h.origin_symbol, source: h.source, trade_type: h.trade_type), target: '_blank' %>

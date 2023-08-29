@@ -11,7 +11,7 @@ class ClosingHistoriesSnapshotRecord < ApplicationRecord
     total_amount = records.sum{|x| x.amount.abs}
     total_revenue = records.sum(&:revenue)
     infos = ClosingHistoriesSnapshotInfo.includes(:closing_histories_snapshot_records).where("event_date <= ?", date)
-    redis_key = "#{date.to_s}_closing_histories_summary"
+    redis_key = "#{date.to_s}_closing_histories"
 
     {
       total_cost: total_amount + total_revenue,
