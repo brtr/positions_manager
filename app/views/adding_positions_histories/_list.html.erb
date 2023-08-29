@@ -1,0 +1,42 @@
+<table class="table">
+  <thead>
+    <tr class="table-container-tr">
+      <% closing_histories_headers.each do |h| %>
+        <th scope="col">
+          <% if h[:sort] == "none" %>
+            <%= "#{h[:name]}" %>
+          <% else %>
+            <%= link_to "#{h[:name]}", adding_positions_histories_path(ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+          <% end %>
+          <% if h[:sort] == 'get_revenue' %>
+            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue") %>'>?</span>
+          <% end %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @histories.each do |h| %>
+      <tr>
+        <td><%= h.event_date %></td>
+        <td class="<%= trade_type_style(h.trade_type) %>"><%= I18n.t("views.contract_trading.#{h.trade_type}") %></td>
+        <td>
+          <%= link_to display_symbol(h, 1), position_detail_path(origin_symbol: h.origin_symbol, source: h.source, trade_type: h.trade_type), target: '_blank' %>
+        </td>
+        <td><%= h.price.round(4) %></td>
+        <td><%= h.unit_cost&.round(4) %></td>
+        <td><%= h.current_price.round(4) %></td>
+        <td class="<%= h.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.qty.round(4) %></td>
+        <td class="<%= h.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.amount.round(4) %></td>
+        <td class="<%= h.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.get_revenue.round(4) %></td>
+        <td><%= "#{h.roi}%" %></td>
+        <td><%= "#{(h.trading_roi * 100).round(3)}%" %></td>
+        <td><%= h.source %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="paginationBox p-4">
+  <%= paginate @histories %>
+</div>

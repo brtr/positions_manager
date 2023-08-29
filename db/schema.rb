@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_24_140525) do
+ActiveRecord::Schema.define(version: 2023_08_29_003106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,53 @@ ActiveRecord::Schema.define(version: 2023_08_24_140525) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_positions_notes_history_id"], name: "index_attachments_on_user_positions_notes_history_id"
+  end
+
+  create_table "closing_histories_snapshot_infos", force: :cascade do |t|
+    t.decimal "total_cost"
+    t.decimal "total_revenue"
+    t.decimal "total_roi"
+    t.integer "profit_count"
+    t.decimal "profit_amount"
+    t.integer "loss_count"
+    t.decimal "loss_amount"
+    t.decimal "max_profit"
+    t.decimal "max_loss"
+    t.decimal "max_revenue"
+    t.decimal "min_revenue"
+    t.decimal "max_roi"
+    t.decimal "min_roi"
+    t.datetime "max_profit_date"
+    t.datetime "max_loss_date"
+    t.datetime "max_revenue_date"
+    t.datetime "min_revenue_date"
+    t.datetime "max_roi_date"
+    t.datetime "min_roi_date"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "closing_histories_snapshot_records", force: :cascade do |t|
+    t.bigint "closing_histories_snapshot_info_id"
+    t.string "origin_symbol"
+    t.string "from_symbol"
+    t.string "fee_symbol"
+    t.string "source"
+    t.string "trade_type"
+    t.decimal "price"
+    t.decimal "qty"
+    t.decimal "amount"
+    t.decimal "current_price"
+    t.decimal "revenue"
+    t.decimal "roi"
+    t.decimal "amount_ratio"
+    t.decimal "unit_cost", default: "0.0"
+    t.decimal "trading_roi", default: "0.0"
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["closing_histories_snapshot_info_id"], name: "index_closing_histories_snapshot_info_id"
   end
 
   create_table "coin_data_histories", force: :cascade do |t|

@@ -28,7 +28,7 @@
               <%= link_to "首页", public_user_positions_path, class: "nav-link #{@page_index == 1 ? 'active' : ''}" %>
             </li>
             <li class="nav-item dropdown">
-              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([2, 6, 11, 24, 25, 29]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([2, 6, 11, 24, 25, 29, 30, 31]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 合约交易记录
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
@@ -37,6 +37,12 @@
                 </li>
                 <li class="nav-item">
                   <%= link_to "公开合约交易记录", synced_transactions_path, class: "nav-link #{@page_index == 11 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "已平仓合约成交记录", adding_positions_histories_path, class: "nav-link #{@page_index == 30 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "已平仓合约数据快照", closing_histories_snapshot_infos_path, class: "nav-link #{@page_index == 31 ? 'active' : ''}" %>
                 </li>
                 <li class="nav-item">
                   <%= link_to "历史仓位变化曲线图", positions_graphs_snapshot_infos_path, class: "nav-link #{@page_index == 6 ? 'active' : ''}" %>

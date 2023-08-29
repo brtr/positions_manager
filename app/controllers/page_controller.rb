@@ -123,7 +123,7 @@ class PageController < ApplicationController
                                   .order(event_date: :desc)
     if @data.any?
       @open_data = @data.where('qty > 0')
-      @close_data = @data.where('qty < 0')
+      @close_data = @data.closing_data
       @target_position = @data.first.target_position
       @open_orders = if params[:source] == 'binance'
                       BinanceFuturesService.new.get_pending_orders(@symbol)
@@ -133,7 +133,7 @@ class PageController < ApplicationController
       GetPositionsChartDataService.execute(@symbol, @source, @trade_type, @period)
       @chart_data = JSON.parse($redis.get("#{@symbol}_monthly_chart_data")) rescue []
       @average_durations = @data.average_holding_duration
-      @roi_chart_data = GetHoldingDurationsByRoiChartService.execute_by_symbol(@target_position.id)
+      @roi_chart_data = GetHoldingDurationsByRoiChartService.execute_by_symbol(@target_position.id) if @target_position
     end
     @binance_trading_data = GetBinanceTradingDataService.execute(@symbol)
   end

@@ -1,0 +1,34 @@
+<div class="m-3">
+  <h3>
+    <div class="text-center col-10">已平仓合约数据快照 - <%= @info.event_date.to_s %></div>
+  </h3>
+  <div class="mb-3">
+    <%= form_tag adding_positions_histories_path, id: "search_targets", method: "GET" do %>
+      <div class="input-group mb-3 position-filter">
+        <%= select_tag(:origin_symbol, options_for_select(@symbols, @symbol),{ prompt: '请选择币种...', class: 'select2-dropdown form-control'}) %>
+        <span class='ms-3'></span>
+        <%= select_tag(:source, options_for_select(['binance', 'okx'], @source),{ prompt: '请选择来源...', class: 'select2-dropdown form-control'}) %>
+        <span class='ms-3'></span>
+        <%= select_tag(:trade_type, options_for_select([['做空', 'buy'], ['做多', 'sell']], @trade_type),{ prompt: '请选择交易类别...', class: 'select2-dropdown form-control'}) %>
+        <span class='ms-3'></span>
+        <%= text_field_tag :event_date, params[:event_date], class: "form-control datepicker",  type: "text", placeholder: "请选择交易日期", autocomplete: "off" %>
+        <span class='ms-3'></span>
+        <button type="submit" class="btn btn-primary ms-3">确定</button>
+        <%= link_to "Reset", adding_positions_histories_path, class: 'btn btn-default' %>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    <div class="p-3">
+      <p>总投入: <%= @info.total_cost.round(4) %> <%= last_summary_display(@info.margin_summary[:total_cost]) %> / 绝对收益: <%= @info.total_revenue.round(4) %> <%= last_summary_display(@info.margin_summary[:total_revenue]) %> / 绝对收益占总投入的比例: <%= price_change_style @info.total_roi %>%<%= last_summary_display(@info.margin_summary[:roi], true) %></p>
+      <p>盈利总数量: <%= @info.profit_count %> <%= last_summary_display(@info.margin_summary[:profit_count]) %> / 盈利总金额: <%= @info.profit_amount.round(4) %><%= last_summary_display(@info.margin_summary[:profit_amount]) %> </p>
+      <p>亏损总数量: <%= @info.loss_count %> <%= last_summary_display(@info.margin_summary[:loss_count]) %> / 亏损总金额: <%= @info.loss_amount.round(4) %> <%= last_summary_display(@info.margin_summary[:loss_amount]) %> </p>
+      <p>历史最高盈利: <%= @info.max_profit.round(4) %> ( <%= get_date_format(@info.max_profit_date) %> ) / 历史最高亏损: <%= @info.max_loss.round(4) %> ( <%= get_date_format(@info.max_loss_date) %> )</p>
+      <p>历史最高绝对收益: <%= @info.max_revenue.round(4) %> ( <%= get_date_format(@info.max_revenue_date) %> ) / 历史最低绝对收益: <%= @info.min_revenue.round(4) %> ( <%= get_date_format(@info.min_revenue_date) %> )</p>
+      <p>历史最高绝对收益占总投入的比例: <%= @info.max_roi.round(4) %>% ( <%= get_date_format(@info.max_roi_date) %> ) / 历史最低绝对收益占总投入的比例: <%= @info.min_roi.round(4) %>% ( <%= get_date_format(@info.min_roi_date) %> )</p>
+    </div>
+  </div>
+  <div id="user-positions-container">
+    <%= render partial: "list" %>
+  </div>
+</div>

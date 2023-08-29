@@ -1,4 +1,7 @@
 class AddingPositionsHistory < ApplicationRecord
+  scope :available, -> { where('current_price is not null and (amount > ? or amount < ?)', 1, -1) }
+  scope :closing_data, -> { where('qty < 0') }
+
   def get_revenue
     return revenue.to_f if qty < 0
     last_amount = qty.abs * current_price
@@ -55,5 +58,35 @@ class AddingPositionsHistory < ApplicationRecord
     data = AddingPositionsHistory.where('qty > 0')
     return 0 if data.blank?
     data.sum(&:holding_duration) / data.count
+  end
+
+  def self.total_summary
+    records = AddingPositionsHistory.closing_data
+    profit_records = records.select{|r| r.get_revenue > 0}
+    loss_records = records.select{|r| r.get_revenue < 0}
+    date = Date.yesterday
+    total_amount = records.sum{|x| x.amount.abs}
+    total_revenue = records.sum(&:get_revenue)
+    infos = ClosingHistoriesSnapshotInfo.includes(:closing_histories_snapshot_records).where("event_date <= ?", date)
+    {
+      profit_count: profit_records.count,
+      profit_amount: profit_records.sum(&:get_revenue),
+      loss_count: loss_records.count,
+      loss_amount: loss_records.sum(&:get_revenue),
+      total_cost: total_revenue + total_amount,
+      total_revenue: total_revenue,
+      max_profit: infos.max_profit,
+      max_profit_date: $redis.get("#{date.to_s}_closing_histories_max_profit_date"),
+      max_loss: infos.max_loss,
+      max_loss_date: $redis.get("#{date.to_s}_closing_histories_max_loss_date"),
+      max_revenue: infos.max_revenue,
+      max_revenue_date: $redis.get("#{date.to_s}_closing_histories_max_revenue_date"),
+      min_revenue: infos.min_revenue,
+      min_revenue_date: $redis.get("#{date.to_s}_closing_histories_min_revenue_date"),
+      max_roi: infos.max_roi,
+      max_roi_date: $redis.get("#{date.to_s}_closing_histories_max_roi_date"),
+      min_roi: infos.min_roi,
+      min_roi_date: $redis.get("#{date.to_s}_closing_histories_min_roi_date")
+    }
   end
 end

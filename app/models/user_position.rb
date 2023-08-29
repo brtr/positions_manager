@@ -113,7 +113,7 @@ class UserPosition < ApplicationRecord
   end
 
   def closing_histories
-    adding_positions_histories.where('qty < 0')
+    adding_positions_histories.closing_data
   end
 
   def closing_revenue

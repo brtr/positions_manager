@@ -62,6 +62,9 @@ Rails.application.routes.draw do
 
   resources :user_positions_notes_histories
 
+  resources :adding_positions_histories, only: [:index]
+  resources :closing_histories_snapshot_infos, only: [:index, :show]
+
   get '/public_user_positions', to: 'page#user_positions', as: :public_user_positions
   get '/public_spot_balances', to: 'page#spot_balances', as: :public_spot_balances
   get '/export_user_positions', to: 'page#export_user_positions', as: :export_user_positions

@@ -321,6 +321,59 @@ module ApplicationHelper
     ]
   end
 
+  def closing_histories_headers
+    [
+      {
+        name: '时间',
+        sort: 'event_date',
+      },
+      {
+        name: '类别',
+        sort: 'trade_type',
+      },
+      {
+        name: '币种',
+        sort: 'origin_symbol',
+      },
+      {
+        name: '平均成交价',
+        sort: 'price',
+      },
+      {
+        name: '平均成本价',
+        sort: 'unit_cost',
+      },
+      {
+        name: '最新价格',
+        sort: 'current_price',
+      },
+      {
+        name: '平仓数量',
+        sort: 'qty',
+      },
+      {
+        name: '平仓金额',
+        sort: 'amount',
+      },
+      {
+        name: '已实现收益',
+        sort: 'get_revenue',
+      },
+      {
+        name: '已实现ROI',
+        sort: 'roi',
+      },
+      {
+        name: '成交时该币种仓位的ROI',
+        sort: 'trading_roi',
+      },
+      {
+        name: '来源',
+        sort: 'none',
+      }
+    ]
+  end
+
   def adding_positions_remote_params(params, sort)
     res = {
       sort: sort,
