@@ -190,7 +190,7 @@
                 </tr>
               <% end %>
               <% d = @close_data.first %>
-              <% total_revenue = @close_data.sum(&:revenue) %>
+              <% total_revenue = @close_data.sum(&:get_revenue) %>
               <tr>
                 <td>总计</td>
                 <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
