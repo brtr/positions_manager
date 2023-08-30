@@ -4,7 +4,7 @@ RSpec.describe OriginTransactionsController, type: :controller do
   let(:user) { create(:user) }
   before do
     sign_in user
-    10.times{ create(:origin_transaction) }
+    10.times{ create(:origin_transaction, event_time: Time.current - 1.day) }
   end
   let(:tx) { OriginTransaction.first }
 

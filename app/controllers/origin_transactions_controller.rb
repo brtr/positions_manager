@@ -5,7 +5,7 @@ class OriginTransactionsController < ApplicationController
     @page_index = 8
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
-    txs = OriginTransaction.available.where(user_id: nil).order("#{sort} #{sort_type}")
+    txs = OriginTransaction.available.where('user_id is null and event_time >= ?', DateTime.parse('2023-01-01')).order("#{sort} #{sort_type}")
     @total_txs = txs
     @symbol = params[:search]
     @campaign = params[:campaign]
