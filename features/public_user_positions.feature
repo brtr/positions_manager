@@ -1,4 +1,4 @@
-Feature: Public pages
+Feature: Public user positions page
   Background:
     Given I have 10 user positions
     Given I have different snapshots
@@ -40,13 +40,3 @@ Feature: Public pages
     When I click on the '收益差额' link
      And I am waiting for ajax
     Then I should see content "EOS" within "#user-positions-container > table > tbody > tr:nth-child(1)"
-
-  @javascript
-  Scenario: Visit Public spot balances page
-    When I visit the '/public_spot_balances' page
-    Then I see '现货仓位管理' text
-    Then I see 'EOS' text
-    When I select2 "BTCUSDT" from "#search" filter
-     And I click on the button "确定"
-    Then I should not see content "EOS" within "#user-positions-container > table > tbody > tr:nth-child(1)"
-    Then I see 'BTC' text
