@@ -4,6 +4,7 @@ class AddingPositionsHistoriesController < ApplicationController
     @symbol = params[:origin_symbol]
     @source = params[:source]
     @trade_type = params[:trade_type]
+    @event_date = params[:event_date]
     sort = params[:sort].presence || "event_date"
     sort_type = params[:sort_type].presence || "desc"
     histories = AddingPositionsHistory.available.closing_data
@@ -12,6 +13,7 @@ class AddingPositionsHistoriesController < ApplicationController
     histories = histories.where(trade_type: @trade_type) if @trade_type.present?
     histories = histories.where(source: @source) if @source.present?
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?
+    histories = histories.where(event_date: @event_date) if @event_date.present?
     parts = histories.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
     @histories = @histories.reverse if sort_type == "desc"

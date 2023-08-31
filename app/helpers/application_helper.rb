@@ -374,6 +374,47 @@ module ApplicationHelper
     ]
   end
 
+  def wallet_histories_headers
+    [
+      {
+        name: '申请时间',
+        sort: 'apply_time'
+      },
+      {
+        name: '完成时间',
+        sort: 'complete_time'
+      },
+      {
+        name: '币种',
+        sort: 'symbol'
+      },
+      {
+        name: '充值/提币',
+        sort: 'trade_type'
+      },
+      {
+        name: '金额',
+        sort: 'amount'
+      },
+      {
+        name: '手续费',
+        sort: 'fee'
+      },
+      {
+        name: '站内/站外',
+        sort: 'transfer_type'
+      },
+      {
+        name: '交易网络',
+        sort: 'network'
+      },
+      {
+        name: '币安订单号',
+        sort: 'order_no'
+      }
+    ]
+  end
+
   def adding_positions_remote_params(params, sort)
     res = {
       sort: sort,
@@ -501,6 +542,10 @@ module ApplicationHelper
 
   def get_date_format(date)
     date.strftime('%Y-%m-%d') rescue ''
+  end
+
+  def get_datetime_format(datetime)
+    datetime.strftime('%Y-%m-%d %H:%M') rescue ''
   end
 
   def ranking(symbol)

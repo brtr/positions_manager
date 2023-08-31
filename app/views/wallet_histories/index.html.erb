@@ -1,0 +1,22 @@
+<div class="m-3">
+  <h3>
+    充值提币历史记录
+  </h3>
+  <div class="mb-3">
+    <%= form_tag wallet_histories_path, id: "search_targets", method: "GET" do %>
+      <div class="input-group mb-3 position-filter">
+        <%= select_tag(:symbol, options_for_select(@symbols, @symbol),{ prompt: '请选择币种...', class: 'select2-dropdown form-control'}) %>
+        <span class='ms-3'></span>
+        <%= select_tag(:trade_type, options_for_select([['充值', 'deposit'], ['提币', 'withdraw']], @trade_type),{ prompt: '请选择充值还是提币...', class: 'select2-dropdown form-control'}) %>
+        <span class='ms-3'></span>
+        <%= text_field_tag :apply_date, params[:apply_date], class: "form-control datepicker",  type: "text", placeholder: "请选择交易日期", autocomplete: "off" %>
+        <span class='ms-3'></span>
+        <button type="submit" class="btn btn-primary ms-3">确定</button>
+        <%= link_to "Reset", wallet_histories_path, class: 'btn btn-default' %>
+      </div>
+    <% end %>
+  </div>
+  <div id="user-positions-container">
+    <%= render partial: "list" %>
+  </div>
+</div>

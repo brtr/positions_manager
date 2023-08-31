@@ -73,10 +73,19 @@ class BinanceSpotsService
     end
   end
 
-  def withdraw_histories(start_date)
-    end_date = start_date + 89.days
+  def withdraw_histories(end_date = Date.today)
+    start_date = end_date - 89.days
     begin
       @client.withdraw_history(startTime: start_date.to_time.to_i * 1000, endTime: end_date.to_time.to_i * 1000)
+    rescue => e
+      format_error_msg(e)
+    end
+  end
+
+  def deposit_histories(end_date = Date.today)
+    start_date = end_date - 89.days
+    begin
+      @client.deposit_history(startTime: start_date.to_time.to_i * 1000, endTime: end_date.to_time.to_i * 1000)
     rescue => e
       format_error_msg(e)
     end

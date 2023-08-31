@@ -22,6 +22,11 @@ zh-CN:
       buy: 空
       adding_rate: 新增的投入带来的总的盈利或者亏损的金额 / 新增的投入
       revenue: 空单：新增金额 - 新增数量*最新价格 / 多单：新增数量*最新价格 - 新增金额
+    wallet_history:
+      deposit: 充值
+      withdraw: 提币
+      external: 站外转账
+      internal: 站内转账
   activerecord:
     errors:
       models:

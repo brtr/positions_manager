@@ -1,0 +1,34 @@
+<table class="table">
+  <thead>
+    <tr class="table-container-tr">
+      <% wallet_histories_headers.each do |h| %>
+        <th scope="col">
+          <% if h[:sort] == "none" %>
+            <%= "#{h[:name]}" %>
+          <% else %>
+            <%= link_to "#{h[:name]}", wallet_histories_path(ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+          <% end %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @histories.each do |h| %>
+      <tr>
+        <td style="width: 10%"><%= get_datetime_format h.apply_time %></td>
+        <td style="width: 10%"><%= get_datetime_format h.complete_time %></td>
+        <td><%= h.symbol %></td>
+        <td class="<%= h.deposit? ? 'pos-num' : 'neg-num' %>"><%= I18n.t("views.wallet_history.#{h.trade_type}") %></td>
+        <td><%= h.amount.round(4) %></td>
+        <td><%= h.fee.round(4) %></td>
+        <td><%= I18n.t("views.wallet_history.#{h.transfer_type}") %></td>
+        <td><%= h.network %></td>
+        <td><%= h.order_no %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="paginationBox p-4">
+  <%= paginate @histories %>
+</div>

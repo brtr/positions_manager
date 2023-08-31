@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_29_003106) do
+ActiveRecord::Schema.define(version: 2023_08_31_094441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -451,6 +451,27 @@ ActiveRecord::Schema.define(version: 2023_08_29_003106) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["name"], name: "index_users_on_name"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "wallet_histories", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "trade_type"
+    t.integer "transfer_type"
+    t.string "order_no"
+    t.string "network"
+    t.string "symbol"
+    t.boolean "is_completed"
+    t.decimal "amount", default: "0.0"
+    t.decimal "fee", default: "0.0"
+    t.datetime "apply_time"
+    t.datetime "complete_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["is_completed"], name: "index_wallet_histories_on_is_completed"
+    t.index ["order_no"], name: "index_wallet_histories_on_order_no"
+    t.index ["trade_type"], name: "index_wallet_histories_on_trade_type"
+    t.index ["transfer_type"], name: "index_wallet_histories_on_transfer_type"
+    t.index ["user_id"], name: "index_wallet_histories_on_user_id"
   end
 
 end
