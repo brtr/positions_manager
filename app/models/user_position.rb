@@ -118,25 +118,25 @@ class UserPosition < ApplicationRecord
 
   def closing_revenue
     redis_key = "user_positions_closing_revenue_#{origin_symbol}_#{trade_type}_#{source}_#{user_id}"
-    revenue = $redis.get(redis_key).to_f
-    if revenue == 0
-      revenue = closing_histories.sum(&:get_revenue)
-      $redis.set(redis_key, revenue, ex: 1.hours)
+    temp_revenue = $redis.get(redis_key).to_f
+    if temp_revenue == 0
+      temp_revenue = closing_histories.sum(&:get_revenue)
+      $redis.set(redis_key, temp_revenue, ex: 1.hours)
     end
 
-    revenue.to_f
+    temp_revenue.to_f
   end
 
   def closing_roi
     redis_key = "user_positions_closing_roi_#{origin_symbol}_#{trade_type}_#{source}_#{user_id}"
-    roi = $redis.get(redis_key).to_f
-    if roi == 0
+    temp_roi = $redis.get(redis_key).to_f
+    if temp_roi == 0
       amount = closing_histories.sum{|h| h.amount.abs}
-      roi = amount == 0 ? 0 : ((closing_revenue.to_f / (amount + closing_revenue.to_f)) * 100).round(3)
-      $redis.set(redis_key, revenue, ex: 1.hours)
+      temp_roi = amount == 0 ? 0 : ((closing_revenue.to_f / (amount + closing_revenue.to_f)) * 100).round(3)
+      $redis.set(redis_key, temp_roi, ex: 1.hours)
     end
 
-    roi.to_f
+    temp_roi.to_f
   end
 
   def average_durations
