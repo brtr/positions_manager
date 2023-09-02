@@ -10,10 +10,10 @@
       <%= form_with url: import_csv_synced_transactions_path, method: :post, html: {multipart: true} do |f| %>
         <div class="modal-body">
           <div class="field mb-4">
-            <%= f.file_field :file, class: "input-sm form-control",accept: ".xlsx, .csv", placeholder: '请选择文件' %>
+            <%= f.file_field :files, class: "input-sm form-control",accept: ".xlsx, .csv", placeholder: '请选择文件', multiple: true %>
           </div>
           <div class="field mb-4">
-            <%= f.select :source, options_for_select(["Binance"]), {}, {class: "input-sm form-control select2-dropdown"} %>
+            <%= f.select :source, options_for_select(["binance", "okx"]), {}, {class: "input-sm form-control select2-dropdown"} %>
           </div>
           <%= f.hidden_field :source_type, value: source_type %>
           <div class="field mb-3 fs-12">

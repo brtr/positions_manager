@@ -38,14 +38,13 @@ class GetSyncedTransactionsJob < ApplicationJob
                         else
                           revenue == 0 ? 'long' : 'short'
                         end
-        tx = SyncedTransaction.where(order_id: d['ordId']).first_or_create
+        tx = SyncedTransaction.where(order_id: d['ordId'], qty: get_number(qty, revenue)).first_or_create
         tx.update(
           source: 'okx',
           origin_symbol: d['instId'],
           fee_symbol: d['feeCcy'],
           trade_type: trade_type,
           price: price,
-          qty: get_number(qty, revenue),
           amount: get_number(amount, revenue),
           fee: d['fee'].to_f.abs,
           revenue: revenue,

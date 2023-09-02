@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ImportTradeCsvService
+class ImportBinanceTransactionsCsvService
   attr_reader :file, :source, :user_id
   require "csv"
 

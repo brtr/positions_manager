@@ -37,12 +37,17 @@ class SyncedTransactionsController < ApplicationController
     source_type = params[:source_type]
     url = source_type == 'private' ? users_synced_transactions_path : synced_transactions_path
 
-    if params[:file].blank?
+    if params[:files].blank?
       flash[:alert] = "请选择文件"
       redirect_to url
     else
       user_id = current_user.id if source_type == 'private'
-      import_status = ImportTradeCsvService.new(params[:file], params[:source], user_id).call
+      source = params[:source].presence || 'binance'
+      import_status = if source == 'binance'
+                        ImportBinanceTransactionsCsvService.new(params[:files], source, user_id).call
+                      else
+                        ImportOkxTransactionsCsvService.new(params[:files], source, user_id).call
+                      end
       if import_status[:status].to_i == 1
         flash[:notice] = import_status[:message]
       else
