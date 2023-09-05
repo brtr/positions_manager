@@ -126,7 +126,7 @@
                   <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
                   <td><%= "#{d.roi}%" %></td>
                   <td><%= "#{d.amount_ratio}" %></td>
-                  <td><%= "#{(d.trading_roi * 100).round(3)}%" %></td>
+                  <td><%= "#{(d.trading_roi.to_f * 100).round(3)}%" %></td>
                   <td><%= d.source %></td>
                 </tr>
               <% end %>
@@ -185,7 +185,7 @@
                   <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
                   <td><%= "#{d.roi}%" %></td>
                   <td><%= "#{d.amount_ratio}" %></td>
-                  <td><%= "#{(d.trading_roi * 100).round(3)}%" %></td>
+                  <td><%= "#{(d.trading_roi.to_f * 100).round(3)}%" %></td>
                   <td><%= d.source %></td>
                 </tr>
               <% end %>
