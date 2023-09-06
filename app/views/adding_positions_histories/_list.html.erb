@@ -30,7 +30,7 @@
         <td class="<%= h.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.amount.round(4) %></td>
         <td class="<%= h.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.get_revenue.round(4) %></td>
         <td><%= "#{h.roi}%" %></td>
-        <td><%= "#{(h.trading_roi * 100).round(3)}%" %></td>
+        <td><%= "#{(h.trading_roi.to_f * 100).round(3)}%" %></td>
         <td><%= h.source %></td>
       </tr>
     <% end %>

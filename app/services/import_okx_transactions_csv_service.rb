@@ -64,7 +64,7 @@ class ImportOkxTransactionsCsvService
           price = symbol == 'ELON-USDT-SWAP' ? row[11].to_f : other_row[7].to_f
           qty = amount / price
           revenue = row[12].to_f
-          trade_type = ["卖", "SELL"].include?(row[5]) ? "sell" : "buy"
+          trade_type = ["卖", "SELL", "平空"].include?(row[5]) ? "sell" : "buy"
           fee, fee_symbol = row[13].split(' ')
           fee = fee.to_f.abs
           position_side = if trade_type == 'sell'

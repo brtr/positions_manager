@@ -44,7 +44,7 @@ class SyncedTransactionsController < ApplicationController
       user_id = current_user.id if source_type == 'private'
       source = params[:source].presence || 'binance'
       import_status = if source == 'binance'
-                        ImportBinanceTransactionsCsvService.new(params[:files], source, user_id).call
+                        ImportBinanceTransactionsCsvService.new(params[:files].first, source, user_id).call
                       else
                         ImportOkxTransactionsCsvService.new(params[:files], source, user_id).call
                       end
