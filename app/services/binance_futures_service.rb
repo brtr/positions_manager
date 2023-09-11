@@ -73,6 +73,12 @@ class BinanceFuturesService
     end.map{|k,v| v[0]}
   end
 
+  def get_ticker_price(symbol)
+    url = BASE_URL + "/fapi/v1/ticker/price?symbol=#{symbol}"
+    response = RestClient.get(url)
+    JSON.parse(response)
+  end
+
   def get_funding_rate(symbol, start_time=nil)
     url = BASE_URL + "/fapi/v1/fundingRate?"
     payload = {symbol: symbol, limit: 1000, startTime: start_time}

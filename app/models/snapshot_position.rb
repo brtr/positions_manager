@@ -19,6 +19,7 @@ class SnapshotPosition < ApplicationRecord
       profit_amount: profit_records.sum(&:revenue),
       loss_count: loss_records.count,
       loss_amount: loss_records.sum(&:revenue),
+      total_funding_fee: FundingFeeHistory.where('user_id is null and event_date <= ?', date - 1.day).sum(&:amount),
       max_profit: infos.max_profit(user_id: user_id, is_synced: is_synced, date: date),
       max_profit_date: $redis.get("#{redis_key}_max_profit_date"),
       max_loss: infos.max_loss(user_id: user_id, is_synced: is_synced, date: date),
@@ -46,7 +47,8 @@ class SnapshotPosition < ApplicationRecord
       profit_amount: display_number(data[:profit_amount] - records[:profit_amount]),
       loss_count: display_number(data[:loss_count] - records[:loss_count]),
       loss_amount: display_number(data[:loss_amount] - records[:loss_amount]),
-      roi: display_number(new_roi * 100 - old_roi * 100)
+      roi: display_number(new_roi * 100 - old_roi * 100),
+      total_funding_fee: display_number(data[:total_funding_fee] - records[:total_funding_fee])
     }
   end
 

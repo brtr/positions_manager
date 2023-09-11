@@ -28,18 +28,18 @@ class GetRecentlyAddingPositionsJob < ApplicationJob
         trading_roi = up&.roi
       end
 
-      current_price = get_history_price(from_symbol.downcase, date)
+      current_price = get_current_price(source, origin_symbol)
       aph.update(price: price, current_price: current_price, amount: amount, revenue: revenue, unit_cost: unit_cost, trading_roi: trading_roi)
       SlackService.send_notification(nil, enqueued_block(from_symbol)) if AddingPositionsHistory.where("id != ? and event_date = ? and origin_symbol = ? and amount BETWEEN ? AND ?", aph.id, date, from_symbol, amount * 0.95, amount * 1.05).any?
     end
   end
 
-  def get_history_price(symbol, event_date)
-    date = event_date == Date.today ? event_date - 1.day : event_date
-    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{date}&to_date=#{date}"
-    response = RestClient.get(url)
-    data = JSON.parse(response.body)
-    data['result'].values[0].to_f rescue nil
+  def get_current_price(source, symbol)
+    if source == 'binance'
+      BinanceFuturesService.new.get_ticker_price(symbol)["price"].to_f rescue 0
+    else
+      OkxSpotsService.new.get_price(symbol)["data"].first["last"] rescue 0
+    end
   end
 
   def enqueued_block(origin_symbol)

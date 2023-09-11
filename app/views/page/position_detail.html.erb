@@ -136,10 +136,10 @@
                 <td>总计</td>
                 <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
                 <td></td>
-                <td><%= @open_data.average(:price).round(4) %></td>
+                <td><%= (@open_data.total_amount / @open_data.total_qty).round(4) %></td>
                 <td><%= @open_data.average(:unit_cost).round(4) %></td>
                 <td><%= d.current_price.round(4) %></td>
-                <td class="<%= @open_data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @open_data.total_qty %></td>
+                <td class="<%= @open_data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @open_data.total_qty.round(4) %></td>
                 <td class="<%= @open_data.total_amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @open_data.total_amount.round(4) %></td>
                 <td class="<%= total_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= total_revenue.round(4) %></td>
                 <td><%= ((total_revenue / @open_data.total_amount.abs) * 100).round(4) %>%</td>
@@ -194,7 +194,7 @@
               <tr>
                 <td>总计</td>
                 <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
-                <td><%= @close_data.average(:price).round(4) %></td>
+                <td><%= (@close_data.total_amount / @close_data.total_qty).round(4) %></td>
                 <td><%= @close_data.average(:unit_cost).round(4) %></td>
                 <td><%= d.current_price.round(4) %></td>
                 <td class="<%= @close_data.total_qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= @close_data.total_qty.round(4) %></td>

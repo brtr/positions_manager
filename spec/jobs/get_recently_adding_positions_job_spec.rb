@@ -6,7 +6,6 @@ RSpec.describe GetRecentlyAddingPositionsJob, type: :job do
   describe '#GetRecentlyAddingPositionsJob perform' do
     before do
       ActiveJob::Base.queue_adapter = :test
-      allow(subject).to receive(:get_history_price).and_return(nil)
     end
 
     it 'should enqeue job' do
