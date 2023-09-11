@@ -78,14 +78,14 @@ class ImportOkxTransactionsCsvService
                 source: @source,
                 user_id: @user_id,
                 origin_symbol: symbol,
-                qty: qty,
-                trade_type: trade_type
+                trade_type: trade_type,
+                qty: get_number(qty, revenue),
+                amount: get_number(amount,revenue)
               ).first_or_create
 
           tx.update(
             event_time: event_time,
             price: price,
-            amount: amount,
             fee: fee,
             revenue: revenue,
             fee_symbol: fee_symbol
@@ -99,5 +99,9 @@ class ImportOkxTransactionsCsvService
     @files.each do |file|
       %w(csv xlsx).include?(file.original_filename.to_s.split(".").last)
     end
+  end
+
+  def get_number(num, revenue)
+    revenue == 0 || num == 0 ? num : num * -1
   end
 end

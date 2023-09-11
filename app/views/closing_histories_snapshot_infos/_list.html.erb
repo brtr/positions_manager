@@ -2,6 +2,7 @@
   <thead>
     <tr class="table-container-tr">
       <% closing_histories_headers.each do |h| %>
+        <% next if h[:sort] == 'trading_fee' %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
@@ -27,6 +28,7 @@
         <td><%= h.unit_cost&.round(4) %></td>
         <td><%= h.current_price&.round(4) %></td>
         <td class="<%= h.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.qty.round(4) %></td>
+        <td class="<%= h.total_cost.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.total_cost.round(4) %></td>
         <td class="<%= h.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.amount.round(4) %></td>
         <td class="<%= h.revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= h.revenue.round(4) %></td>
         <td><%= "#{h.roi}%" %></td>

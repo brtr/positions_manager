@@ -332,6 +332,10 @@ module ApplicationHelper
         sort: 'trade_type',
       },
       {
+        name: '资金费用',
+        sort: 'trading_fee',
+      },
+      {
         name: '币种',
         sort: 'origin_symbol',
       },
@@ -350,6 +354,10 @@ module ApplicationHelper
       {
         name: '平仓数量',
         sort: 'qty',
+      },
+      {
+        name: '总投入',
+        sort: 'total_cost',
       },
       {
         name: '平仓金额',

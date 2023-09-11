@@ -28,9 +28,21 @@ class AddingPositionsHistory < ApplicationRecord
     trade_type == 'buy' ? (amount.abs + revenue.to_f) / qty.abs : (amount.abs - revenue.to_f) / qty.abs
   end
 
+  def total_cost
+    unit_cost.to_f * qty.abs
+  end
+
   def holding_duration
     return 0 if qty < 0
     Time.current - event_date.to_time
+  end
+
+  def trading_fee
+    (AddingPositionsHistory.where(origin_symbol: origin_symbol, source: source).average_holding_duration / 86400) * last_funding_fee
+  end
+
+  def last_funding_fee
+    FundingFeeHistory.where(origin_symbol: origin_symbol, source: source).last.amount rescue 0
   end
 
   def self.total_qty

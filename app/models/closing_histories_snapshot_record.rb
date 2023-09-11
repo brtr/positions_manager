@@ -53,6 +53,10 @@ class ClosingHistoriesSnapshotRecord < ApplicationRecord
     }
   end
 
+  def total_cost
+    unit_cost.to_f * qty.abs
+  end
+
   private
   def self.display_number(num)
     num.to_f.round(2)
