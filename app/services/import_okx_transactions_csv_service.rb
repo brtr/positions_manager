@@ -79,6 +79,7 @@ class ImportOkxTransactionsCsvService
                 user_id: @user_id,
                 origin_symbol: symbol,
                 trade_type: trade_type,
+                position_side: position_side,
                 qty: get_number(qty, revenue),
                 amount: get_number(amount,revenue)
               ).first_or_create
