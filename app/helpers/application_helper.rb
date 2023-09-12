@@ -580,6 +580,7 @@ module ApplicationHelper
   end
 
   def display_funding_fee(h)
+    return '' if h.nil?
     margin = h.funding_fee.to_f - h.last_funding_fee.to_f
 
     if margin != 0
