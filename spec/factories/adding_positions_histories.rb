@@ -9,5 +9,6 @@ FactoryBot.define do
     qty { 17.1 }
     amount { 30.72015 }
     current_price { 0.919 }
+    event_date { Date.yesterday }
   end
 end
