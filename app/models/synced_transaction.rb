@@ -27,4 +27,18 @@ class SyncedTransaction < ApplicationRecord
   def total_cost
     position_side == 'long' ? amount.abs - revenue : amount.abs + revenue
   end
+
+  def target_position
+    convert_trade_type = position_side == 'long' ? 'sell' : 'buy'
+    UserPosition.find_by(user_id: nil, origin_symbol: origin_symbol, source: source, trade_type: convert_trade_type)
+  end
+
+  def current_price
+    target_position&.current_price
+  end
+
+  def estimate_revenue
+    return 0 if current_price.nil?
+    position_side == 'long' ? current_price * qty - total_cost : total_cost - current_price * qty
+  end
 end

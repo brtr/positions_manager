@@ -9,7 +9,13 @@
             <%= link_to "#{h[:name]}", adding_positions_histories_path(ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
           <% end %>
           <% if h[:sort] == 'get_revenue' %>
-            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue") %>'>?</span>
+            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.closing_revenue") %>'>?</span>
+          <% end %>
+          <% if h[:sort] == 'trading_fee' %>
+            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.trading_fee") %>'>?</span>
+          <% end %>
+          <% if h[:sort] == 'roi' %>
+            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.roi") %>'>?</span>
           <% end %>
         </th>
       <% end %>

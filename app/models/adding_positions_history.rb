@@ -3,7 +3,7 @@ class AddingPositionsHistory < ApplicationRecord
   scope :closing_data, -> { where('qty < 0') }
 
   def get_revenue
-    return revenue.to_f if qty < 0
+    return revenue.to_f + trading_fee if qty < 0
     last_amount = qty.abs * current_price
     trade_type == 'sell' ? last_amount - amount.abs : amount.abs - last_amount
   end
@@ -38,11 +38,22 @@ class AddingPositionsHistory < ApplicationRecord
   end
 
   def trading_fee
-    (AddingPositionsHistory.where(origin_symbol: origin_symbol, source: source).average_holding_duration / 86400) * last_funding_fee
+    fee = $redis.get("aph_#{id}_trading_fee")
+    if fee.nil?
+      if snapshot_position.present?
+        fee = FundingFeeHistory.where('user_id is null and origin_symbol = ? and event_date <= ?', origin_symbol, event_date - 1.day).sum(&:amount) * (amount / snapshot_position.amount)
+      else
+        fee = 0
+      end
+
+      $redis.set("aph_#{id}_trading_fee", fee, ex: 5.hours)
+    end
+
+    fee.to_f
   end
 
-  def last_funding_fee
-    FundingFeeHistory.where(origin_symbol: origin_symbol, source: source).last.amount rescue 0
+  def snapshot_position
+    SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: event_date - 1.day}, origin_symbol: origin_symbol, source: source, trade_type: trade_type).take
   end
 
   def self.total_qty
