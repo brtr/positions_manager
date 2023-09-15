@@ -9,7 +9,7 @@ RSpec.describe AddingPositionsHistory, type: :model do
 
   describe '#roi' do
     it 'should equal revenue divide amount' do
-      roi = ((adding_positions_history.get_revenue / (adding_positions_history.amount.abs + adding_positions_history.get_revenue)) * 100).round(4)
+      roi = ((adding_positions_history.get_revenue / (adding_positions_history.amount.abs)) * 100).round(4)
       expect(adding_positions_history.roi).to eq (roi)
     end
   end

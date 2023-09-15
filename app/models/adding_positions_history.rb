@@ -9,7 +9,8 @@ class AddingPositionsHistory < ApplicationRecord
   end
 
   def roi
-    ((get_revenue / (amount.abs + get_revenue)) * 100).round(4)
+    adding_amount = trade_type == 'sell' ? amount.abs + get_revenue : amount.abs
+    ((get_revenue / adding_amount) * 100).round(4)
   end
 
   def amount_ratio
