@@ -23,8 +23,8 @@ zh-CN:
       adding_rate: 新增的投入带来的总的盈利或者亏损的金额 / 新增的投入
       revenue: 空单：新增金额 - 新增数量*最新价格 / 多单：新增数量*最新价格 - 新增金额
       trading_fee: 交易当天的仓位快照总的资金费用乘以该笔交易占当天仓位的比例
-      roi: 空单：已实现收益 / 平仓金额  / 多单： 已实现收益 / （平仓金额 + 已实现收益)
-      closing_revenue: 收益 - 资金费用
+      roi: 空单：已实现收益 / 总投入  / 多单： 已实现收益 / （总投入 + 已实现收益)
+      closing_revenue: 收益 + 资金费用
     wallet_history:
       deposit: 充值
       withdraw: 提币

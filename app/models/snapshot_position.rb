@@ -5,6 +5,8 @@ class SnapshotPosition < ApplicationRecord
   scope :profit, -> { where("revenue > 0") }
   scope :loss, -> { where("revenue < 0") }
 
+  before_create :set_init_value
+
   def self.total_summary(user_id: nil, is_synced: false, date: Date.yesterday)
     records = SnapshotPosition.available
     profit_records = records.profit
@@ -72,5 +74,10 @@ class SnapshotPosition < ApplicationRecord
   private
   def self.display_number(num)
     num.to_f.round(2)
+  end
+
+  def set_init_value
+    self.qty = 0 if qty.nil?
+    self.amount = 0 if amount.nil?
   end
 end

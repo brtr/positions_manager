@@ -41,4 +41,8 @@ class SyncedTransaction < ApplicationRecord
     return 0 if current_price.nil?
     position_side == 'long' ? current_price * qty - total_cost : total_cost - current_price * qty
   end
+
+  def from_symbol
+    origin_symbol.split(fee_symbol)[0] rescue ''
+  end
 end

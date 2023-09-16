@@ -9,7 +9,11 @@ class AddingPositionsHistory < ApplicationRecord
   end
 
   def roi
-    adding_amount = trade_type == 'sell' ? amount.abs + get_revenue : amount.abs
+    adding_amount = if qty < 0
+                      trade_type == 'sell' ? total_cost.abs + get_revenue : total_cost.abs
+                    else
+                      trade_type == 'sell' ? amount.abs + get_revenue : amount.abs
+                    end
     ((get_revenue / adding_amount) * 100).round(4)
   end
 
