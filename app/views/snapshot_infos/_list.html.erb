@@ -2,7 +2,7 @@
   <thead>
     <tr class="table-container-tr">
       <% positions_table_headers.each do |h| %>
-        <% next if h[:sort].in?(['ranking', 'funding_fee', 'risen_ratio', 'top_price_ratio'])%>
+        <% next if h[:sort].in?(['ranking', 'funding_fee', 'risen_ratio', 'top_price_ratio', 'closing_revenue', 'closing_roi'])%>
         <% next if h[:sort].in?(['level', 'notes', 'average_durations']) && @info.user_id.present? %>
         <th scope="col">
           <% if h[:sort] == "none" %>

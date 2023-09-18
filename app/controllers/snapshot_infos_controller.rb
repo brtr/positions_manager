@@ -21,7 +21,7 @@ class SnapshotInfosController < ApplicationController
     @page_index = user_id.nil? ? 2 : (@info.synced? ? 13 : 4)
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
-    records = @info.snapshot_positions
+    records = @info.snapshot_positions.where('ROUND(qty, 8) != 0')
     @symbol = params[:search]
     records = records.where(origin_symbol: @symbol) if @symbol.present?
     records = records.where(level: params[:level]) if params[:level].present?
