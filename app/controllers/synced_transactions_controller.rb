@@ -5,9 +5,11 @@ class SyncedTransactionsController < ApplicationController
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
     @symbol = params[:search]
+    @source = params[:tx_source]
     txs = SyncedTransaction.where(user_id: nil)
     @total_symbols = txs.pluck(:origin_symbol).uniq
     txs = txs.where(origin_symbol: @symbol) if @symbol.present?
+    txs = txs.where(source: @source) if @source.present?
     txs = txs.available if @flag
     parts = txs.partition {|h| h.send("#{sort}").nil? || h.send("#{sort}") == 'N/A'}
     @txs = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first

@@ -6,9 +6,12 @@
     </button>
   </h3>
   <div class="mb-3">
-    <%= form_tag synced_transactions_path, id: "search_targets", class: "position-relative", method: "GET" do %>
-      <div class="input-group mb-3">
+    <%= form_tag synced_transactions_path, id: "search_targets", method: "GET" do %>
+      <div class="input-group mb-3 position-filter">
         <%= select_tag(:search, options_for_select(@total_symbols, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+        <span class='ms-3'></span>
+        <%= select_tag(:tx_source, options_for_select(['binance', 'okx'], @source),{ prompt: '请选择来源...', class: 'select2-dropdown form-control'}) %>
+        <span class='ms-3'></span>
         <button type="submit" class="btn btn-primary mx-3">确定</button>
         <%= link_to "Reset", synced_transactions_path, class: 'btn btn-warning' %>
       </div>
