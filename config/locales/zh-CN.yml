@@ -17,6 +17,7 @@ zh-CN:
       total_revenue: (买入数量-卖出数量）* 当前价格 + 卖出总价 - 买入成本
       total_roi: 总收益 / 总买入成本
       margin_ratio: 空单为（当前价 - 最低价）/ 最低价，多单为（最高价 - 当前价）/ 当前价
+      average_durations: 未平仓投入总持仓时间 / 未平仓投入数量
     contract_trading:
       sell: 多
       buy: 空
