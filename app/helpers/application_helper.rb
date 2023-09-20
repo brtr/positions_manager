@@ -620,8 +620,4 @@ module ApplicationHelper
       str
     end
   end
-
-  def actual_event_date(date)
-    Date.parse(date) - 1.day rescue ''
-  end
 end

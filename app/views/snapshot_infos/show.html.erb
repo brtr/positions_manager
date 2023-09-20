@@ -19,9 +19,9 @@
       <p>总投入: <%= @info.total_cost.round(4) %> <%= last_summary_display(@info.margin_summary[:total_cost]) %> / 绝对收益: <%= @info.total_revenue.round(4) %> <%= last_summary_display(@info.margin_summary[:total_revenue]) %> / 绝对收益占总投入的比例: <%= price_change_style @info.total_roi %>%<%= last_summary_display(@info.margin_summary[:roi], true) %></p>
       <p>盈利总数量: <%= @info.profit_count %> <%= last_summary_display(@info.margin_summary[:profit_count]) %> / 盈利总金额: <%= @info.profit_amount.round(4) %><%= last_summary_display(@info.margin_summary[:profit_amount]) %> </p>
       <p>亏损总数量: <%= @info.loss_count %> <%= last_summary_display(@info.margin_summary[:loss_count]) %> / 亏损总金额: <%= @info.loss_amount.round(4) %> <%= last_summary_display(@info.margin_summary[:loss_amount]) %> </p>
-      <p>历史最高盈利: <%= @info.max_profit.round(4) %> ( <%= actual_event_date get_date_format(@info.max_profit_date) %> ) / 历史最高亏损: <%= @info.max_loss.round(4) %> ( <%= actual_event_date get_date_format(@info.max_loss_date) %> )</p>
-      <p>历史最高绝对收益: <%= @info.max_revenue.round(4) %> ( <%= actual_event_date get_date_format(@info.max_revenue_date) %> ) / 历史最低绝对收益: <%= @info.min_revenue.round(4) %> ( <%= actual_event_date get_date_format(@info.min_revenue_date) %> )</p>
-      <p>历史最高绝对收益占总投入的比例: <%= @info.max_roi.round(4) %>% ( <%= actual_event_date get_date_format(@info.max_roi_date) %> ) / 历史最低绝对收益占总投入的比例: <%= @info.min_roi.round(4) %>% ( <%= actual_event_date get_date_format(@info.min_roi_date) %> )</p>
+      <p>历史最高盈利: <%= @info.max_profit.round(4) %> ( <%= get_date_format(@info.max_profit_date) %> ) / 历史最高亏损: <%= @info.max_loss.round(4) %> ( <%= get_date_format(@info.max_loss_date) %> )</p>
+      <p>历史最高绝对收益: <%= @info.max_revenue.round(4) %> ( <%= get_date_format(@info.max_revenue_date) %> ) / 历史最低绝对收益: <%= @info.min_revenue.round(4) %> ( <%= get_date_format(@info.min_revenue_date) %> )</p>
+      <p>历史最高绝对收益占总投入的比例: <%= @info.max_roi.round(4) %>% ( <%= get_date_format(@info.max_roi_date) %> ) / 历史最低绝对收益占总投入的比例: <%= @info.min_roi.round(4) %>% ( <%= get_date_format(@info.min_roi_date) %> )</p>
     </div>
   </div>
   <div id="position-histories-container">

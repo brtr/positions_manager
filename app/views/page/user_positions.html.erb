@@ -34,9 +34,9 @@
       <p>盈利总数量: <%= @total_summary[:profit_count] %> <%= last_summary_display(@last_summary[:profit_count]) %> / 盈利总金额: <%= @total_summary[:profit_amount].round(4) %><%= last_summary_display(@last_summary[:profit_amount]) %> </p>
       <p>亏损总数量: <%= @total_summary[:loss_count] %> <%= last_summary_display(@last_summary[:loss_count]) %> / 亏损总金额: <%= @total_summary[:loss_amount].round(4) %> <%= last_summary_display(@last_summary[:loss_amount]) %> </p>
       <p>总资金费用: <%= price_change_style @total_summary[:total_funding_fee].round(4) %><%= last_summary_display(@last_summary[:total_funding_fee].to_f) %><%= link_to '曲线图', funding_fee_chart_path, target: '_blank' %></p>
-      <p>历史最高盈利: <%= @total_summary[:max_profit].round(4) %> ( <%= actual_event_date @total_summary[:max_profit_date] %> ) / 历史最高亏损: <%= @total_summary[:max_loss].round(4) %> ( <%= actual_event_date @total_summary[:max_loss_date] %> )</p>
-      <p>历史最高绝对收益: <%= @total_summary[:max_revenue].round(4) %> ( <%= actual_event_date @total_summary[:max_revenue_date] %> ) / 历史最低绝对收益: <%= @total_summary[:min_revenue].round(4) %> ( <%= actual_event_date @total_summary[:min_revenue_date] %> )</p>
-      <p>历史最高绝对收益占总投入的比例: <%= @total_summary[:max_roi].round(4) %>% ( <%= actual_event_date @total_summary[:max_roi_date] %> ) / 历史最低绝对收益占总投入的比例: <%= @total_summary[:min_roi].round(4) %>% ( <%= actual_event_date @total_summary[:min_roi_date] %> )</p>
+      <p>历史最高盈利: <%= @total_summary[:max_profit].round(4) %> ( <%= @total_summary[:max_profit_date] %> ) / 历史最高亏损: <%= @total_summary[:max_loss].round(4) %> ( <%= @total_summary[:max_loss_date] %> )</p>
+      <p>历史最高绝对收益: <%= @total_summary[:max_revenue].round(4) %> ( <%= @total_summary[:max_revenue_date] %> ) / 历史最低绝对收益: <%= @total_summary[:min_revenue].round(4) %> ( <%= @total_summary[:min_revenue_date] %> )</p>
+      <p>历史最高绝对收益占总投入的比例: <%= @total_summary[:max_roi].round(4) %>% ( <%= @total_summary[:max_roi_date] %> ) / 历史最低绝对收益占总投入的比例: <%= @total_summary[:min_roi].round(4) %>% ( <%= @total_summary[:min_roi_date] %> )</p>
     </div>
   </div>
   <div id="user-positions-container">
