@@ -1,7 +1,7 @@
 class GenerateUserPositionsSnapshotsJob < ApplicationJob
   queue_as :daily_job
 
-  def perform(date: Date.today)
+  def perform(date: Date.yesterday)
     user_ids = UserPosition.where("qty != ?", 0).pluck(:user_id).compact.uniq
     user_ids.each do |user_id|
       snapshot_info = SnapshotInfo.uploaded.where(event_date: date, user_id: user_id).first_or_create

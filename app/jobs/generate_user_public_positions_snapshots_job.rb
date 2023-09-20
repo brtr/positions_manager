@@ -1,7 +1,7 @@
 class GenerateUserPublicPositionsSnapshotsJob < ApplicationJob
   queue_as :daily_job
 
-  def perform(date: Date.today)
+  def perform(date: Date.yesterday)
     snapshot_info = SnapshotInfo.synced.where(event_date: date, user_id: nil).first_or_create
     generate_snapshot(snapshot_info)
     GetSnapshotInfoSummaryJob.perform_later(snapshot_info, date, true)

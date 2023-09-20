@@ -125,7 +125,7 @@ class PageController < ApplicationController
       @open_data = @data.where('qty > 0')
       @close_data = @data.closing_data
       @target_position = @data.first.target_position
-      @open_orders = GetOpenOrdersService.execute(@symbol, @source)
+      @open_orders = GetOpenOrdersService.execute(@symbol, @source) rescue []
       GetPositionsChartDataService.execute(@symbol, @source, @trade_type, @period)
       @chart_data = JSON.parse($redis.get("#{@symbol}_monthly_chart_data")) rescue []
       @average_durations = @data.average_holding_duration
