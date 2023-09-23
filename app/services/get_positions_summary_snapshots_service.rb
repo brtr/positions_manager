@@ -1,6 +1,6 @@
 class GetPositionsSummarySnapshotsService
   class << self
-    def execute(date = Date.today)
+    def execute(date = Date.yesterday)
       info = SnapshotInfo.includes(:snapshot_positions).find_by(user_id: nil, event_date: date)
       total_summary = info.snapshot_positions.total_summary
       last_summary = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {user_id: nil, event_date: info.event_date - 1.day}).last_summary(data: total_summary)
