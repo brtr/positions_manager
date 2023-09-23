@@ -46,7 +46,7 @@ class AddingPositionsHistory < ApplicationRecord
     fee = $redis.get("aph_#{id}_trading_fee")
     if fee.nil?
       if snapshot_position.present?
-        fee = FundingFeeHistory.where('user_id is null and origin_symbol = ? and event_date <= ?', origin_symbol, event_date - 1.day).sum(&:amount) * (amount / snapshot_position.amount)
+        fee = FundingFeeHistory.where('user_id is null and origin_symbol = ? and event_date <= ? and trade_type = ?', origin_symbol, event_date - 1.day, trade_type).sum(&:amount) * (amount / snapshot_position.amount)
       else
         fee = 0
       end
