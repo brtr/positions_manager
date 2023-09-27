@@ -28,7 +28,7 @@
             <% data = @top_3_symbol_funding_rates.select{|x| x['symbol'] == d['symbol']}.first if @top_3_symbol_funding_rates.any? %>
             <tr>
               <td><%= get_symbol_url(d["symbol"], d["source"], get_top10_count(d["source"], d["symbol"])) %></td>
-              <td><%= ranking(d["symbol"]) %></td>
+              <td><%= ticker_ranking(d["symbol"]) %><%= "(#{UserPosition::LEVEL[d['level']]})" if d['level'] %></td>
               <td><%= d["priceChangePercent"] + " %" %><%= "(#{(data['rate'].to_f * 100).round(4)}%)" if data %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["amplitude"].to_s + " %" %></td>
@@ -54,7 +54,7 @@
           <% @daily_ranking.select{|d| d["priceChangePercent"].to_f < 0}.sort_by{|d| d["priceChangePercent"].to_f}.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url d["symbol"], d["source"] %></td>
-              <td><%= ranking(d["symbol"]) %></td>
+              <td><%= ticker_ranking(d["symbol"]) %><%= "(#{UserPosition::LEVEL[d['level']]})" if d['level'] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
               <td><%= d["bottomPriceRatio"] + " %" %></td>
               <td><%= d["amplitude"].to_s + " %" %></td>

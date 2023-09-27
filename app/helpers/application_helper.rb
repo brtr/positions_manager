@@ -10,6 +10,10 @@ module ApplicationHelper
         sort: "average_durations"
       },
       {
+        name: "强势等级",
+        sort: "level"
+      },
+      {
         name: "最新排名",
         sort: "ranking"
       },
@@ -80,10 +84,6 @@ module ApplicationHelper
       {
         name: "来源",
         sort: "none"
-      },
-      {
-        name: "强势等级",
-        sort: "level"
       },
       {
         name: "备注",
@@ -556,7 +556,7 @@ module ApplicationHelper
     datetime.strftime('%Y-%m-%d %H:%M') rescue ''
   end
 
-  def ranking(symbol)
+  def ticker_ranking(symbol)
     symbol = SyncFuturesTickerService.fetch_symbol(symbol)
     CoinRanking.find_by(symbol: symbol.downcase)&.rank
   end

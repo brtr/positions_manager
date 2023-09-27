@@ -31,7 +31,8 @@ class SyncFuturesTickerService
           "topPriceRatio" => price_ratio['top_ratio'],
           "openPrice" => open_price,
           "amplitude" => get_amplitude(open_price, margin),
-          "source" => "binance"
+          "source" => "binance",
+          "level" => get_positions_level(ticker["symbol"])
         }
       end
 
@@ -53,7 +54,8 @@ class SyncFuturesTickerService
           "topPriceRatio" => price_ratio['top_ratio'],
           "openPrice" => open_price,
           "amplitude" => get_amplitude(open_price, margin),
-          "source" => "okx"
+          "source" => "okx",
+          "level" => get_positions_level(ticker["symbol"])
         }
       end
 
@@ -90,10 +92,15 @@ class SyncFuturesTickerService
           return from_symbol
         end
       end
+      from_symbol = 'LUNA' if from_symbol == 'LUNA2'
       from_symbol
     end
 
     private
+
+    def get_positions_level(symbol)
+      UserPosition.where('user_id is null and origin_symbol = ? and level is not null', symbol).take&.level
+    end
 
     def get_price_ratio(symbol, price, rank, price_type, duration)
       url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}&duration=#{duration}"

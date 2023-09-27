@@ -32,6 +32,7 @@
         </td>
         <% if h.is_a?(UserPosition) && h.user_id.nil? %>
           <td><%= get_average_holding_duration(h.average_durations) %></td>
+          <td class="level"><%= UserPosition::LEVEL[h.level] if h.level %></td>
         <% end %>
         <td><%= h.ranking %></td>
         <td><%= link_to display_funding_fee(h), funding_fee_chart_path(symbol: h.origin_symbol, source: h.source), target: '_blank' %></td>
@@ -54,9 +55,8 @@
         <% end %>
         <td><%= h.source %></td>
         <% if h.is_a?(UserPosition) && h.user_id.nil? %>
-          <td><%= UserPosition::LEVEL[h.level] if h.level %></td>
           <td class='notes' data-bs-toggle="tooltip" title='<%= h.notes %>'><%= link_to (h.notes&.truncate(10) || '备注历史'), user_positions_notes_histories_path(origin_symbol: h.origin_symbol, trade_type: h.trade_type, source: h.source) %></td>
-          <td><%= link_to "编辑", edit_user_position_path(id: h.id), remote: true %></td>
+          <td><%= link_to "编辑", edit_user_position_path(id: h.id), remote: true if current_user.present? %></td>
         <% end %>
       </tr>
     <% end %>

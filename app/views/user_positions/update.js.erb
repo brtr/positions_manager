@@ -1,4 +1,5 @@
 $("tr[data-id='<%= @record.id %>']").each(function(){
+  $(this).find('.level').text("<%= UserPosition::LEVEL[@record.level] if @record.level %>");
   $(this).find('.notes').html("<%=j link_to (@record.notes&.truncate(10) || '备注历史'), user_positions_notes_histories_path(origin_symbol: @record.origin_symbol, trade_type: @record.trade_type, source: @record.source) %>")
 })
 $("#spinner").addClass("hide");
