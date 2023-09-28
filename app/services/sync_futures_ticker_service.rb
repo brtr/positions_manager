@@ -7,13 +7,7 @@ class SyncFuturesTickerService
     def get_24hr_tickers(bottom_select, top_select, duration, data_type)
       binance_24hr_tickers = BinanceFuturesService.new.get_24hr_tickers
       okx_24hr_tickers = OkxFuturesService.new.get_24hr_tickers
-      if bottom_select.to_i > 0
-        rank = bottom_select
-        price_type = 'bottom'
-      else
-        rank = top_select
-        price_type = 'top'
-      end
+      rank = bottom_select.to_i > 0 ? bottom_select : top_select
 
       binance_24hr_tickers.map! do |ticker|
         next if Time.at(ticker["closeTime"].to_f / 1000) < Date.today
@@ -21,7 +15,7 @@ class SyncFuturesTickerService
         last_price = ticker["lastPrice"].to_f
         margin = ticker["highPrice"].to_f - ticker["lowPrice"].to_f
         from_symbol = fetch_symbol(ticker["symbol"])
-        price_ratio = get_price_ratio(from_symbol, last_price, rank, price_type, duration)
+        price_ratio = get_price_ratio(from_symbol, last_price, rank, duration)
         {
           "symbol" => ticker["symbol"],
           "lastPrice" => last_price,
@@ -96,18 +90,18 @@ class SyncFuturesTickerService
       from_symbol
     end
 
+    def get_price_ratio(symbol, price, rank, duration)
+      url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}&duration=#{duration}"
+      url += "&rank=#{rank}" if rank.to_i > 0
+      response = RestClient.get(url)
+      data = JSON.parse(response)
+      data
+    end
+
     private
 
     def get_positions_level(symbol)
       UserPosition.where('user_id is null and origin_symbol = ? and level is not null', symbol).take&.level
-    end
-
-    def get_price_ratio(symbol, price, rank, price_type, duration)
-      url = ENV['COIN_ELITE_URL'] + "/api/user_positions/get_price_ratio?symbol=#{symbol}&price=#{price}&duration=#{duration}"
-      url += "&rank=#{rank}&price_type=#{price_type}" if rank.to_i > 0
-      response = RestClient.get(url)
-      data = JSON.parse(response)
-      data
     end
 
     def get_amplitude(open_price, margin)

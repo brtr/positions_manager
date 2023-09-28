@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       get :get_24hr_tickers
       get :list
       get :ranking_graph
+      get :refresh_tickers
     end
   end
 

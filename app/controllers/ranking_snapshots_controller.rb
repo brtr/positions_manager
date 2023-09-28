@@ -7,7 +7,7 @@ class RankingSnapshotsController < ApplicationController
 
   def list
     @page_index = 17
-    @daily_ranking = RankingSnapshot.where(event_date: params[:event_date]).get_rankings
+    @daily_ranking = RankingSnapshot.where(event_date: params[:event_date]).get_daily_rankings
   end
 
   def get_24hr_tickers
@@ -22,8 +22,19 @@ class RankingSnapshotsController < ApplicationController
     @duration = $redis.get('top_select_duration').presence || 12
     @daily_ranking = @daily_ranking.select{|d| d['source'] == @source} if @source.present?
     @symbols = @daily_ranking.map{|r| [r["symbol"], r["source"]] }
-    @three_days_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 3.days).get_rankings
-    @weekly_ranking = RankingSnapshot.where("event_date >= ?", Date.yesterday - 1.week).get_rankings
+    @three_days_duration = $redis.get('three_days_duration') || 12
+    @three_days_select = $redis.get('three_days_select').to_i
+    @three_days_ranking = JSON.parse($redis.get("get_three_days_tickers")) rescue []
+    @weekly_duration = $redis.get('weekly_duration') || 12
+    @weekly_select = $redis.get('weekly_select').to_i
+    @weekly_ranking = JSON.parse($redis.get("get_one_week_tickers")) rescue []
+  end
+
+  def refresh_tickers
+    data_type = params[:data_type]
+    RefreshRankingSnapshotsJob.perform_later(params[:three_days_duration], params[:three_days_select], data_type)
+
+    redirect_to get_24hr_tickers_ranking_snapshots_path(anchor: get_anchor(data_type)), notice: "正在更新，请稍等刷新查看最新排名..."
   end
 
   def ranking_graph
@@ -63,5 +74,16 @@ class RankingSnapshotsController < ApplicationController
     end
 
     date_records
+  end
+
+  def get_anchor(data_type)
+    case data_type
+    when 'three_days'
+      'three_days_select_table'
+    when 'weekly'
+      'weekly_select_table'
+    else
+      ''
+    end
   end
 end
