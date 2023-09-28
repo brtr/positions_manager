@@ -37,7 +37,7 @@ class SyncFuturesTickerService
         last_price = ticker["last"].to_f
         margin = ticker["high24h"].to_f - ticker["low24h"].to_f
         price_change = (ticker["last"].to_f - open_price) / open_price
-        price_ratio = get_price_ratio(from_symbol, last_price, rank, price_type, duration)
+        price_ratio = get_price_ratio(from_symbol, last_price, rank, duration)
         {
           "symbol" => from_symbol + to_symbol,
           "instId" => ticker["instId"],

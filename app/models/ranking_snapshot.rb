@@ -18,7 +18,19 @@ class RankingSnapshot < ApplicationRecord
   end
 
   def self.get_rankings(duration: 12, rank: nil, data_type: nil)
-    redis_key = data_type == 'weekly' ? 'get_one_week_tickers' : 'get_three_days_tickers'
+    if data_type == 'weekly'
+      duration_key = 'weekly_duration'
+      rank_key = 'weekly_select'
+      redis_key = "get_one_week_tickers_#{duration}_#{rank}"
+    else
+      duration_key = 'three_days_duration'
+      rank_key = 'three_days_select'
+      redis_key = "get_three_days_tickers_#{duration}_#{rank}"
+    end
+
+    $redis.set(duration_key, duration)
+    $redis.set(rank_key, rank)
+
     result = JSON.parse($redis.get(redis_key)) rescue nil
     if result.nil?
       result = RankingSnapshot.order(event_date: :asc).group_by{|snapshot| [snapshot.symbol, snapshot.source]}.map do |key, data|
