@@ -26,12 +26,21 @@ RSpec.describe RankingSnapshotsController, type: :controller do
     end
   end
 
-  describe "GET 24hr tickers" do
+  describe "GET short selling tools" do
     it "renders a successful response" do
-      get :get_24hr_tickers
+      get :short_selling_tools
 
       expect(response).to be_successful
-      expect(response).to render_template(:get_24hr_tickers)
+      expect(response).to render_template(:short_selling_tools)
+    end
+  end
+
+  describe "GET long selling tools" do
+    it "renders a successful response" do
+      get :long_selling_tools
+
+      expect(response).to be_successful
+      expect(response).to render_template(:long_selling_tools)
     end
   end
 end

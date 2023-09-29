@@ -48,7 +48,8 @@ Rails.application.routes.draw do
 
   resources :ranking_snapshots, only: [:index, :show] do
     collection do
-      get :get_24hr_tickers
+      get :short_selling_tools
+      get :long_selling_tools
       get :list
       get :ranking_graph
       get :refresh_tickers

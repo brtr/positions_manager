@@ -23,9 +23,18 @@ Feature: Ranking Snapshots pages
 
   @javascript
   Scenario: Visit Ranking Snapshots page
-    When I visit the '/ranking_snapshots/get_24hr_tickers' page
+    When I visit the '/ranking_snapshots/short_selling_tools' page
     Then I see '最近24小时币种涨跌排名列表' text
     Then I see '币种' text
     Then I see 'BTCUSDT' text
     Then I see '24小时涨幅' text
     Then I see '75.0 %' text
+
+  @javascript
+  Scenario: Visit Ranking Snapshots page
+    When I visit the '/ranking_snapshots/long_selling_tools' page
+    Then I see '距离顶部下跌幅度的排行' text
+    Then I see '币种' text
+    Then I see 'ENJUSDT' text
+    Then I see '距离顶部下跌幅度' text
+    Then I see '90.0 %' text

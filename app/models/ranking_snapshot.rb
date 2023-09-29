@@ -49,7 +49,7 @@ class RankingSnapshot < ApplicationRecord
         }
       end
 
-      $redis.set(redis_key, result.to_json, ex: 5.hour)
+      $redis.set(redis_key, result.to_json, ex: 12.hour)
     end
 
     result
@@ -65,7 +65,7 @@ class RankingSnapshot < ApplicationRecord
       symbol = fetch_symbol(symbol)
       rank = CoinRanking.find_by(symbol: symbol&.downcase)&.rank
 
-      $redis.set(redis_key, rank, ex: 5.hours)
+      $redis.set(redis_key, rank, ex: 12.hours)
     end
 
     rank
@@ -82,7 +82,7 @@ class RankingSnapshot < ApplicationRecord
     if price_ratio.nil?
       data = SyncFuturesTickerService.get_price_ratio(symbol, price, rank, duration)
 
-      $redis.set(redis_key, data.to_json, ex: 5.hour)
+      $redis.set(redis_key, data.to_json, ex: 12.hour)
     end
 
     price_ratio

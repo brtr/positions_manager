@@ -10,16 +10,13 @@ class RankingSnapshotsController < ApplicationController
     @daily_ranking = RankingSnapshot.where(event_date: params[:event_date]).get_daily_rankings
   end
 
-  def get_24hr_tickers
+  def short_selling_tools
     @page_index = 5
     @source = params[:source]
     @daily_ranking = JSON.parse($redis.get("get_24hr_tickers")) rescue []
     @top_3_symbol_funding_rates = JSON.parse($redis.get("top_3_symbol_funding_rates")) rescue []
-    @top_select_ranking = JSON.parse($redis.get("get_top_24hr_tickers")) rescue @daily_ranking
     @bottom_select_ranking = JSON.parse($redis.get("get_bottom_24hr_tickers")) rescue @daily_ranking
     @bottom_select = $redis.get('bottom_select_ranking').to_i
-    @top_select = $redis.get('top_select_ranking').to_i
-    @duration = $redis.get('top_select_duration').presence || 12
     @daily_ranking = @daily_ranking.select{|d| d['source'] == @source} if @source.present?
     @symbols = @daily_ranking.map{|r| [r["symbol"], r["source"]] }
     @three_days_duration = $redis.get('three_days_duration') || 12
@@ -30,13 +27,21 @@ class RankingSnapshotsController < ApplicationController
     @weekly_ranking = JSON.parse($redis.get("get_one_week_tickers_#{@weekly_duration}_#{@weekly_select}")) rescue []
   end
 
+  def long_selling_tools
+    @page_index = 33
+    daily_ranking = JSON.parse($redis.get("get_24hr_tickers")) rescue []
+    @top_select = $redis.get('top_select_ranking').to_i
+    @duration = $redis.get('top_select_duration').presence || 12
+    @top_select_ranking = JSON.parse($redis.get("get_top_24hr_tickers")) rescue daily_ranking
+  end
+
   def refresh_tickers
     data_type = params[:data_type]
     duration = params[:three_days_duration] || params[:weekly_duration]
     rank = params[:three_days_select] || params[:weekly_select]
     RefreshRankingSnapshotsJob.perform_later(duration, rank, data_type)
 
-    redirect_to get_24hr_tickers_ranking_snapshots_path(anchor: get_anchor(data_type)), notice: "正在更新，请稍等刷新查看最新排名..."
+    redirect_to short_selling_tools_ranking_snapshots_path(anchor: get_anchor(data_type)), notice: "正在更新，请稍等刷新查看最新排名..."
   end
 
   def ranking_graph

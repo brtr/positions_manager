@@ -65,7 +65,9 @@ class PageController < ApplicationController
     data_type = params[:data_type].presence || 'all'
     SyncFutures24hrTickerJob.perform_later(bottom_select, top_select, duration, data_type)
 
-    redirect_to get_24hr_tickers_ranking_snapshots_path(anchor: get_anchor(data_type)), notice: "正在更新，请稍等刷新查看最新排名..."
+    url = data_type == 'top' ? long_selling_tools_ranking_snapshots_path : short_selling_tools_ranking_snapshots_path(anchor: get_anchor(data_type))
+
+    redirect_to url, notice: "正在更新，请稍等刷新查看最新排名..."
   end
 
   def recently_adding_positions
