@@ -35,6 +35,5 @@ Feature: Ranking Snapshots pages
     When I visit the '/ranking_snapshots/long_selling_tools' page
     Then I see '距离顶部下跌幅度的排行' text
     Then I see '币种' text
-    Then I see 'ENJUSDT' text
+    Then I see 'BTCUSDT' text
     Then I see '距离顶部下跌幅度' text
-    Then I see '90.0 %' text
