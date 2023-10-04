@@ -87,6 +87,7 @@ class SyncFuturesTickerService
         end
       end
       from_symbol = 'LUNA' if from_symbol == 'LUNA2'
+      from_symbol = 'DODO' if from_symbol == 'DODOX'
       from_symbol
     end
 
