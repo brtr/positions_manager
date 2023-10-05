@@ -5,7 +5,7 @@ class OriginTransactionsController < ApplicationController
     @page_index = 8
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
-    txs = OriginTransaction.available.where('user_id is null and event_time >= ?', DateTime.parse('2023-01-01')).order("#{sort} #{sort_type}")
+    txs = OriginTransaction.available.year_to_date.where(user_id: nil).order("#{sort} #{sort_type}")
     @total_txs = txs
     @symbol = params[:search]
     @campaign = params[:campaign]
@@ -24,7 +24,7 @@ class OriginTransactionsController < ApplicationController
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
     @symbol = params[:search]
-    txs = OriginTransaction.available.where(user_id: current_user.id).order("#{sort} #{sort_type}")
+    txs = OriginTransaction.available.year_to_date.where(user_id: current_user.id).order("#{sort} #{sort_type}")
     @total_txs = txs
     txs = txs.where(campaign: params[:campaign]) if params[:campaign].present?
     txs = txs.where(source: params[:source]) if params[:source].present?
@@ -83,8 +83,23 @@ class OriginTransactionsController < ApplicationController
     redirect_to users_origin_transactions_path
   end
 
+  def revenue_chart
+    @page_index = 34
+    infos = TransactionsSnapshotInfo.where(event_date: [period_date..Date.yesterday]).order(event_date: :asc)
+    @records = infos.map do |info|
+      {info.event_date => info.total_revenue}
+    end.inject(:merge)
+  end
+
   private
   def tx_params
     params.require(:origin_transaction).permit(:campaign)
+  end
+
+  def period_date
+    case params[:period]
+    when "quarter" then Date.today.last_quarter.to_date
+    else Date.today.last_month.to_date
+    end
   end
 end

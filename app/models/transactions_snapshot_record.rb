@@ -1,8 +1,21 @@
 class TransactionsSnapshotRecord < ApplicationRecord
+  SKIP_SYMBOLS = %w(USDC BTC ETH).freeze
+
   belongs_to :snapshot_info, class_name: 'TransactionsSnapshotInfo', foreign_key: :transactions_snapshot_info_id
 
+  scope :profit, -> { where("revenue > 0") }
+  scope :loss, -> { where("revenue < 0") }
+
+  def self.available
+    TransactionsSnapshotRecord.where('(from_symbol IN (?) AND amount >= 50) OR from_symbol NOT IN (?)', SKIP_SYMBOLS, SKIP_SYMBOLS)
+  end
+
+  def self.year_to_date
+    TransactionsSnapshotRecord.where('event_time >= ?', DateTime.parse('2023-01-01'))
+  end
+
   def self.total_summary
-    records = TransactionsSnapshotRecord.where(trade_type: 'buy')
+    records = TransactionsSnapshotRecord.available.year_to_date.where(trade_type: 'buy')
     result = $redis.get("origin_transactions_snapshots_total_summary")
     if result.nil?
       profit_records = records.select{|r| r.revenue > 0}

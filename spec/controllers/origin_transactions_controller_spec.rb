@@ -28,7 +28,7 @@ RSpec.describe OriginTransactionsController, type: :controller do
   end
 
   describe "GET users" do
-    before { 10.times{ create(:origin_transaction, user_id: user.id) } }
+    before { 10.times{ create(:origin_transaction, user_id: user.id, event_time: Time.current - 1.day) } }
 
     it "renders a successful response" do
       get :users
