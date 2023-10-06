@@ -36,7 +36,16 @@ class RankingSnapshot < ApplicationRecord
       result = RankingSnapshot.order(event_date: :asc).group_by{|snapshot| [snapshot.symbol, snapshot.source]}.map do |key, data|
         open_price = data.first.open_price
         last_price =  data.last.last_price
-        price_ratio = get_price_ratio(fetch_symbol(key[0]), last_price, rank, duration)
+        price_ratio = nil
+
+        max_retries = 3
+        retries = 0
+        while price_ratio.nil? && retries < max_retries
+          price_ratio = get_price_ratio(fetch_symbol(key[0]), last_price, rank, duration)
+          retries += 1
+          sleep(1)
+        end
+
         price_change = (last_price - open_price) / open_price rescue 0
         {
           "symbol" => key[0],
