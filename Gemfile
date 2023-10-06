@@ -35,7 +35,7 @@ gem "sidekiq"
 gem "sidekiq-scheduler"
 gem 'rest-client'
 gem 'binance-connector-ruby'
-gem "sentry-raven"
+gem "sentry-ruby"
 gem 'whenever', require: false
 gem "simple_calendar", "~> 2.4"
 gem 'aws-sdk-s3'
