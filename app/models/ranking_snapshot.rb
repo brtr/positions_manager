@@ -17,15 +17,15 @@ class RankingSnapshot < ApplicationRecord
     end
   end
 
-  def self.get_rankings(duration: 12, rank: nil, data_type: nil)
+  def self.get_rankings(duration: 12, rank: nil, data_type: nil, source: nil)
     if data_type == 'weekly'
       duration_key = 'weekly_duration'
       rank_key = 'weekly_select'
-      redis_key = "get_one_week_tickers_#{duration}_#{rank}"
+      redis_key = "get_one_week_tickers_#{duration}_#{rank}_#{source}"
     else
       duration_key = 'three_days_duration'
       rank_key = 'three_days_select'
-      redis_key = "get_three_days_tickers_#{duration}_#{rank}"
+      redis_key = "get_three_days_tickers_#{duration}_#{rank}_#{source}"
     end
 
     $redis.set(duration_key, duration)
@@ -53,8 +53,7 @@ class RankingSnapshot < ApplicationRecord
           "priceChangePercent" => (price_change * 100).round(4).to_s,
           "bottomPriceRatio" => (price_ratio['bottom_ratio'].to_s rescue ''),
           "topPriceRatio" => (price_ratio['top_ratio'].to_s rescue ''),
-          "source" => key[1],
-          "rank" => get_coin_ranking(key[0])
+          "source" => key[1]
         }
       end
 
@@ -65,20 +64,6 @@ class RankingSnapshot < ApplicationRecord
   end
 
   private
-
-  def self.get_coin_ranking(symbol)
-    redis_key = "get_coin_ranking_#{symbol}"
-    rank = $redis.get(redis_key).to_f
-
-    if rank.zero?
-      symbol = fetch_symbol(symbol)
-      rank = CoinRanking.find_by(symbol: symbol&.downcase)&.rank
-
-      $redis.set(redis_key, rank, ex: 12.hours)
-    end
-
-    rank
-  end
 
   def self.fetch_symbol(symbol)
     SyncFuturesTickerService.fetch_symbol(symbol)

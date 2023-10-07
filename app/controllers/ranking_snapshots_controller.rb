@@ -19,6 +19,12 @@ class RankingSnapshotsController < ApplicationController
     @bottom_select = $redis.get('bottom_select_ranking').to_i
     @daily_ranking = @daily_ranking.select{|d| d['source'] == @source} if @source.present?
     @symbols = @daily_ranking.map{|r| [r["symbol"], r["source"]] }
+    @three_days_duration = $redis.get('three_days_duration') || 12
+    @three_days_select = $redis.get('three_days_select').to_i
+    @three_days_ranking = JSON.parse($redis.get("get_three_days_tickers_#{@three_days_duration}_#{@three_days_select}_short")) rescue []
+    @weekly_duration = $redis.get('weekly_duration') || 12
+    @weekly_select = $redis.get('weekly_select').to_i
+    @weekly_ranking = JSON.parse($redis.get("get_one_week_tickers_#{@weekly_duration}_#{@weekly_select}_short")) rescue []
   end
 
   def long_selling_tools
@@ -29,19 +35,21 @@ class RankingSnapshotsController < ApplicationController
     @top_select_ranking = JSON.parse($redis.get("get_top_24hr_tickers")) rescue daily_ranking
     @three_days_duration = $redis.get('three_days_duration') || 12
     @three_days_select = $redis.get('three_days_select').to_i
-    @three_days_ranking = JSON.parse($redis.get("get_three_days_tickers_#{@three_days_duration}_#{@three_days_select}")) rescue []
+    @three_days_ranking = JSON.parse($redis.get("get_three_days_tickers_#{@three_days_duration}_#{@three_days_select}_long")) rescue []
     @weekly_duration = $redis.get('weekly_duration') || 12
     @weekly_select = $redis.get('weekly_select').to_i
-    @weekly_ranking = JSON.parse($redis.get("get_one_week_tickers_#{@weekly_duration}_#{@weekly_select}")) rescue []
+    @weekly_ranking = JSON.parse($redis.get("get_one_week_tickers_#{@weekly_duration}_#{@weekly_select}_long")) rescue []
   end
 
   def refresh_tickers
     data_type = params[:data_type]
     duration = params[:three_days_duration] || params[:weekly_duration]
     rank = params[:three_days_select] || params[:weekly_select]
-    RefreshRankingSnapshotsJob.perform_later(duration, rank, data_type)
+    source = params[:source]
+    RefreshRankingSnapshotsJob.perform_later(duration, rank, data_type, source)
+    url = source == 'short' ? short_selling_tools_ranking_snapshots_path(anchor: get_anchor(data_type)) : long_selling_tools_ranking_snapshots_path(anchor: get_anchor(data_type))
 
-    redirect_to long_selling_tools_ranking_snapshots_path(anchor: get_anchor(data_type)), notice: "正在更新，请稍等刷新查看最新排名..."
+    redirect_to url, notice: "正在更新，请稍等刷新查看最新排名..."
   end
 
   def ranking_graph
