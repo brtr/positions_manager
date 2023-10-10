@@ -43,7 +43,6 @@ class RankingSnapshot < ApplicationRecord
         while price_ratio.nil? && retries < max_retries
           price_ratio = get_price_ratio(fetch_symbol(key[0]), last_price, rank, duration)
           retries += 1
-          sleep(1)
         end
 
         price_change = (last_price - open_price) / open_price rescue 0

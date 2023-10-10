@@ -146,11 +146,11 @@
           </tr>
         </thead>
         <tbody>
-          <% @three_days_ranking.sort_by{|d| [d["priceChangePercent"].to_f, d["topPriceRatio"].to_f]}.reverse.first(10).each do |d| %>
+          <% @three_days_ranking.select{|d| d['topPriceRatio'].to_f != 0 }.sort_by{|d| [d["priceChangePercent"].to_f, d["topPriceRatio"].to_f]}.reverse.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url d["symbol"], d["source"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
-              <td><%= d["bottomPriceRatio"] + " %" %></td>
+              <td><%= d["topPriceRatio"] + " %" %></td>
               <td><%= d["source"] %></td>
             </tr>
           <% end %>
@@ -183,7 +183,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @weekly_ranking.sort_by{|d| [d["priceChangePercent"].to_f, d["topPriceRatio"].to_f]}.reverse.first(10).each do |d| %>
+          <% @weekly_ranking.select{|d| d['topPriceRatio'].to_f != 0 }.sort_by{|d| [d["priceChangePercent"].to_f, d["topPriceRatio"].to_f]}.reverse.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url d["symbol"], d["source"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>

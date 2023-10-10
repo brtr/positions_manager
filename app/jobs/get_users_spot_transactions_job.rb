@@ -12,6 +12,8 @@ class GetUsersSpotTransactionsJob < ApplicationJob
         get_binance_orders(user_id)
         get_okx_orders(user_id)
       end
+
+      get_okx_orders # 公共账户
     end
 
     ForceGcJob.perform_later
@@ -30,7 +32,7 @@ class GetUsersSpotTransactionsJob < ApplicationJob
     end
   end
 
-  def get_okx_orders(user_id)
+  def get_okx_orders(user_id=nil)
     result = OkxSpotsService.new(user_id: user_id).get_orders rescue nil
     return if result.nil? || result['data'].nil?
 

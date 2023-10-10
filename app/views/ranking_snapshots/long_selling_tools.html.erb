@@ -58,7 +58,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @three_days_ranking.sort_by{|d| [d["priceChangePercent"].to_f, d["bottomPriceRatio"].to_f]}.first(10).each do |d| %>
+          <% @three_days_ranking.select{|d| d['bottomPriceRatio'].to_f != 0 }.sort_by{|d| [d["priceChangePercent"].to_f, d["bottomPriceRatio"].to_f]}.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url d["symbol"], d["source"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
@@ -95,7 +95,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @weekly_ranking.sort_by{|d| [d["priceChangePercent"].to_f, d["bottomPriceRatio"].to_f]}.first(10).each do |d| %>
+          <% @weekly_ranking.select{|d| d['bottomPriceRatio'].to_f != 0 }.sort_by{|d| [d["priceChangePercent"].to_f, d["bottomPriceRatio"].to_f]}.first(10).each do |d| %>
             <tr>
               <td><%= get_symbol_url d["symbol"], d["source"] %></td>
               <td><%= d["priceChangePercent"] + " %" %></td>
