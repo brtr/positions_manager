@@ -32,6 +32,18 @@ class OriginTransaction < ApplicationRecord
       max_profit_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_profit_date"),
       max_loss: infos.max_loss(user_id: user_id),
       max_loss_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_loss_date"),
+      max_revenue: infos.max_revenue(user_id: user_id),
+      max_revenue_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_revenue_date"),
+      min_revenue: infos.min_revenue(user_id: user_id),
+      min_revenue_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_min_revenue_date"),
+      max_roi: infos.max_roi(user_id: user_id),
+      max_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_roi_date"),
+      min_roi: infos.min_roi(user_id: user_id),
+      min_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_min_roi_date"),
+      max_profit_roi: infos.max_profit_roi(user_id: user_id),
+      max_profit_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_profit_roi_date"),
+      max_loss_roi: infos.max_loss_roi(user_id: user_id),
+      max_loss_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_loss_roi_date")
     }
   end
 

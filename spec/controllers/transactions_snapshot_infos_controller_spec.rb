@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe TransactionsSnapshotInfosController, type: :controller do
   let(:snapshot_info) { create(:transactions_snapshot_info) }
   before do
-    10.times{ create(:transactions_snapshot_record, transactions_snapshot_info_id: snapshot_info.id) }
+    10.times{ create(:transactions_snapshot_record, transactions_snapshot_info_id: snapshot_info.id, event_time: Time.current) }
   end
 
   describe "GET index" do

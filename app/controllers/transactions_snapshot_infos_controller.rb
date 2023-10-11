@@ -10,7 +10,7 @@ class TransactionsSnapshotInfosController < ApplicationController
     @page_index = 10
     sort = params[:sort].presence || "revenue"
     sort_type = params[:sort_type].presence || "desc"
-    records = @info.snapshot_records
+    records = @info.snapshot_records.available.year_to_date
     records = records.where(from_symbol: params[:search]) if params[:search].present?
     @records = records.order("#{sort} #{sort_type}").page(params[:page]).per(20)
     @total_summary = records.total_summary

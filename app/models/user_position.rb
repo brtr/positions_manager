@@ -68,7 +68,11 @@ class UserPosition < ApplicationRecord
       max_roi: infos.max_roi(user_id: user_id),
       max_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_positions_max_roi_date"),
       min_roi: infos.min_roi(user_id: user_id),
-      min_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_positions_min_roi_date")
+      min_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_positions_min_roi_date"),
+      max_profit_roi: infos.max_profit_roi(user_id: user_id),
+      max_profit_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_positions_max_profit_roi_date"),
+      max_loss_roi: infos.max_loss_roi(user_id: user_id),
+      max_loss_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_positions_max_loss_roi_date"),
     }
   end
 

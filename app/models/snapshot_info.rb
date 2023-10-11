@@ -43,6 +43,14 @@ class SnapshotInfo < ApplicationRecord
     }
   end
 
+  def total_profit_roi
+    total_cost.zero? ? 0 : ((total_profit / total_cost) * 100).round(4)
+  end
+
+  def total_loss_roi
+    total_cost.zero? ? 0 : ((total_loss / total_cost) * 100).round(4)
+  end
+
   def self.max_profit(user_id: nil, is_synced: false, date: Date.yesterday)
     redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions_max_profit" : "user_#{user_id}_#{date.to_s}_positions_max_profit"
     total_profit = $redis.get(redis_key).to_f
@@ -134,6 +142,38 @@ class SnapshotInfo < ApplicationRecord
         total_roi = min_roi.total_roi
         $redis.set(redis_key, total_roi, ex: 10.hours)
         $redis.set("#{redis_key}_date", min_roi.event_date.strftime("%Y-%m-%d"), ex: 10.hours)
+      end
+    end
+    total_roi.to_f
+  end
+
+  def self.max_profit_roi(user_id: nil, is_synced: false, date: Date.yesterday)
+    redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions_max_profit_roi" : "user_#{user_id}_#{date.to_s}_positions_max_profit_roi"
+    total_roi = $redis.get(redis_key).to_f
+    if total_roi == 0
+      infos = SnapshotInfo.where(user_id: user_id)
+      infos = user_id.present? && !is_synced ? infos.uploaded : infos.synced
+      max_roi = infos.max {|a, b| a.total_profit_roi <=> b.total_profit_roi}
+      if max_roi
+        total_roi = max_roi.total_profit_roi
+        $redis.set(redis_key, total_roi, ex: 10.hours)
+        $redis.set("#{redis_key}_date", max_roi.event_date.strftime("%Y-%m-%d"), ex: 10.hours)
+      end
+    end
+    total_roi.to_f
+  end
+
+  def self.max_loss_roi(user_id: nil, is_synced: false, date: Date.yesterday)
+    redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions_max_loss_roi" : "user_#{user_id}_#{date.to_s}_positions_max_loss_roi"
+    total_roi = $redis.get(redis_key).to_f
+    if total_roi == 0
+      infos = SnapshotInfo.where(user_id: user_id)
+      infos = user_id.present? && !is_synced ? infos.uploaded : infos.synced
+      max_roi = infos.min {|a, b| a.total_loss_roi <=> b.total_loss_roi}
+      if max_roi
+        total_roi = max_roi.total_loss_roi
+        $redis.set(redis_key, total_roi, ex: 10.hours)
+        $redis.set("#{redis_key}_date", max_roi.event_date.strftime("%Y-%m-%d"), ex: 10.hours)
       end
     end
     total_roi.to_f
