@@ -112,7 +112,7 @@ module ApplicationHelper
       },
       {
         name: "成本价",
-        sort: "none"
+        sort: "cost"
       },
       {
         name: "当前价",

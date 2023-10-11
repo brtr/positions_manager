@@ -2,6 +2,7 @@
   <thead>
     <tr class="table-container-tr">
       <% transactions_table_headers.each do |h| %>
+        <% next if h[:sort] == 'cost' %>
         <th scope="col">
           <% if h[:sort] == "none" %>
             <%= "#{h[:name]}" %>
