@@ -12,6 +12,8 @@ class GetSpotTransactionsJob < ApplicationJob
       GetSpotTradesJob.perform_later(asset)
     end
 
+    GetOkxSpotTradesJob.perform_later
+
     ForceGcJob.perform_later
     $redis.set("get_spot_transactions_refresh_time", Time.now)
   end

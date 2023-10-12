@@ -10,7 +10,7 @@ class OriginTransaction < ApplicationRecord
   end
 
   def self.total_summary(user_id=nil)
-    records = OriginTransaction.available
+    records = OriginTransaction.available.year_to_date
     profit_records = records.select{|r| r.revenue > 0}
     loss_records = records.select{|r| r.revenue < 0}
     total_cost = calculate_field(records, :amount)

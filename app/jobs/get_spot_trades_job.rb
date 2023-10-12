@@ -62,7 +62,7 @@ class GetSpotTradesJob < ApplicationJob
       total_qty = 0
       total_fee = 0
 
-      origin_txs = OriginTransaction.where(user_id: nil, source: SOURCE, original_symbol: symbol).order(event_time: :asc)
+      origin_txs = OriginTransaction.available.year_to_date.where(user_id: nil, source: SOURCE, original_symbol: symbol).order(event_time: :asc)
       return if origin_txs.empty?
       origin_txs.each do |tx|
         if tx.trade_type == 'buy'

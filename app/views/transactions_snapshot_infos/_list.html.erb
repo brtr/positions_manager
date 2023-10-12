@@ -24,10 +24,10 @@
         <td><%= h.current_price.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.qty.round(4) %></td>
         <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>
-        <td><%= "#{(h.cost_ratio(@total_summary['total_cost'].to_f) * 100).round(4)}%" %></td>
+        <td><%= "#{(h.cost_ratio(@total_summary[:total_cost].to_f) * 100).round(4)}%" %></td>
         <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= "#{h.revenue.round(4)} #{h.to_symbol}" %></td>
         <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(4)}%" %></td>
-        <td><%= "#{(h.revenue_ratio(@total_summary['total_cost'].to_f) * 100).round(4)}%" %></td>
+        <td><%= "#{(h.revenue_ratio(@total_summary[:total_cost].to_f) * 100).round(4)}%" %></td>
         <td><%= h.source %></td>
         <td><%= h.campaign %></td>
       </tr>
