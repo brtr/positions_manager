@@ -42,6 +42,8 @@ Rails.application.routes.draw do
 
   resources :combine_transactions, only: :index
   resources :transactions_snapshot_infos, only: [:index, :show]
+  resources :combine_tx_snapshot_infos, only: [:index, :show]
+
   resources :synced_transactions, only: :index do
     get :users, on: :collection
     post :import_csv, on: :collection

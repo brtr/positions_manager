@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_23_091722) do
+ActiveRecord::Schema.define(version: 2023_10_13_103651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,32 @@ ActiveRecord::Schema.define(version: 2023_09_23_091722) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["original_symbol"], name: "index_combine_transactions_on_original_symbol"
     t.index ["source"], name: "index_combine_transactions_on_source"
+  end
+
+  create_table "combine_tx_snapshot_infos", force: :cascade do |t|
+    t.date "event_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "combine_tx_snapshot_records", force: :cascade do |t|
+    t.bigint "combine_tx_snapshot_info_id"
+    t.string "source"
+    t.string "original_symbol"
+    t.string "from_symbol"
+    t.string "to_symbol"
+    t.string "trade_type"
+    t.string "fee_symbol"
+    t.decimal "price", default: "0.0", null: false
+    t.decimal "qty", default: "0.0", null: false
+    t.decimal "amount", default: "0.0", null: false
+    t.decimal "fee", default: "0.0", null: false
+    t.decimal "revenue", default: "0.0", null: false
+    t.decimal "roi", default: "0.0", null: false
+    t.decimal "current_price", default: "0.0", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["combine_tx_snapshot_info_id"], name: "index_snapshot_info"
   end
 
   create_table "funding_fee_histories", force: :cascade do |t|

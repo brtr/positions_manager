@@ -7,7 +7,7 @@ Feature: Combine Transactions pages
     When I visit the '/combine_transactions' page
     Then I see '总投入' text
     Then I see '10' text
-    Then I see '总盈利' text
+    Then I see '绝对盈利' text
     Then I see '20' text
     Then I see 'EOS' text
 

@@ -1,11 +1,11 @@
 <div class="m-3">
-  <h2 class="mb-4 text-center">现货交易历史快照 - <%= @info.event_date.to_s %></h2>
+  <h2 class="mb-4 text-center">现货合并交易历史快照 - <%= @info.event_date.to_s %></h2>
   <div class="mb-3 col-6">
-    <%= form_tag transactions_snapshot_info_path(@info), id: "search_targets", method: "GET" do %>
+    <%= form_tag combine_tx_snapshot_info_path(@info), id: "search_targets", method: "GET" do %>
       <div class="input-group mb-3">
         <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "搜索交易对..." %>
         <button type="submit" class="btn btn-primary">确定</button>
-        <%= link_to "Reset", transactions_snapshot_info_path(@info), class: 'btn btn-default' %>
+        <%= link_to "Reset", combine_tx_snapshot_info_path(@info), class: 'btn btn-default' %>
       </div>
     <% end %>
   </div>

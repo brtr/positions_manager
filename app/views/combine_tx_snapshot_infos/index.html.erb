@@ -1,6 +1,6 @@
 <div class="m-3">
   <div class="m-3">
-    <h3 class="text-center"> 现货交易历史数据快照 </h3>
+    <h3 class="text-center"> 现货合并交易历史数据快照 </h3>
   </div>
   <div id="snapshot-container" class="mt-2">
     <div class="container">
@@ -13,7 +13,7 @@
               <div class="row">
                 <% m[:dates].each do |d| %>
                   <div class="text-center col-2 p-3">
-                    <%= link_to d[:day], transactions_snapshot_info_path(d[:id], user_id: params[:user_id]) %>
+                    <%= link_to d[:day], combine_tx_snapshot_info_path(d[:id]) %>
                   </div>
                 <% end %>
               </div>
