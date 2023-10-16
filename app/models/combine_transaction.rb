@@ -37,9 +37,15 @@ class CombineTransaction < ApplicationRecord
     }
   end
 
-  def revenue_ratio(total_revenue)
-    ratio = (revenue / total_revenue).abs
-    revenue > 0 ? ratio : ratio * -1
+  def revenue_ratio(summary)
+    case
+    when revenue > 0
+      revenue / summary[:profit_amount]
+    when revenue < 0
+      revenue / summary[:loss_amount]
+    else
+      0
+    end
   end
 
   def cost_ratio(total_cost)

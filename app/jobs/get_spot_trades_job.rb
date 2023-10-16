@@ -61,6 +61,7 @@ class GetSpotTradesJob < ApplicationJob
       total_cost = 0
       total_qty = 0
       total_fee = 0
+      total_sold_revenue = 0
 
       origin_txs = OriginTransaction.available.year_to_date.where(user_id: nil, source: SOURCE, original_symbol: symbol).order(event_time: :asc)
       return if origin_txs.empty?
@@ -71,6 +72,7 @@ class GetSpotTradesJob < ApplicationJob
         else
           total_cost -= tx.amount
           total_qty -= tx.qty
+          total_sold_revenue += tx.revenue
         end
 
         total_fee += tx.fee
@@ -84,7 +86,7 @@ class GetSpotTradesJob < ApplicationJob
       revenue = trade_type == 'buy' ? current_price * total_qty - total_cost : total_cost.abs - current_price * total_qty
       roi = revenue / total_cost.abs
 
-      combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: current_price, revenue: revenue, roi: roi)
+      combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: current_price, revenue: revenue, roi: roi, sold_revenue: total_sold_revenue)
     end
   end
 

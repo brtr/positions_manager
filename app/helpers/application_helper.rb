@@ -108,7 +108,7 @@ module ApplicationHelper
       },
       {
         name: "成交价",
-        sort: "none"
+        sort: "price"
       },
       {
         name: "成本价",
@@ -140,7 +140,7 @@ module ApplicationHelper
       },
       {
         name: "收益/总收益",
-        sort: "none"
+        sort: "revenue_ratio"
       },
       {
         name: "来源",

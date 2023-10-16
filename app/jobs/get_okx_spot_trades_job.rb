@@ -78,6 +78,7 @@ class GetOkxSpotTradesJob < ApplicationJob
         total_cost = 0
         total_qty = 0
         total_fee = 0
+        total_sold_revenue = 0
 
         origin_txs.each do |tx|
           if tx.trade_type == 'buy'
@@ -86,6 +87,7 @@ class GetOkxSpotTradesJob < ApplicationJob
           else
             total_cost -= tx.amount
             total_qty -= tx.qty
+            total_sold_revenue += tx.revenue
           end
 
           total_fee += tx.fee
@@ -100,7 +102,7 @@ class GetOkxSpotTradesJob < ApplicationJob
         revenue = trade_type == 'buy' ? origin_tx.current_price * total_qty - total_cost : total_cost.abs - origin_tx.current_price * total_qty
         roi = revenue / total_cost.abs
 
-        combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: origin_tx.current_price, revenue: revenue, roi: roi)
+        combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: origin_tx.current_price, revenue: revenue, roi: roi, sold_revenue: total_sold_revenue)
       end
     end
   end

@@ -15,6 +15,7 @@ class GetCombineTransactionsSnapshotsService
           total_cost = record&.amount.to_f
           total_qty = record&.qty.to_f
           total_fee = record&.fee.to_f
+          total_sold_revenue = record&.sold_revenue.to_f
 
           origin_txs.each do |tx|
             if tx.trade_type == 'buy'
@@ -23,6 +24,7 @@ class GetCombineTransactionsSnapshotsService
             else
               total_cost -= tx.amount
               total_qty -= tx.qty
+              total_sold_revenue += tx.revenue
             end
 
             total_fee += tx.fee
@@ -37,7 +39,7 @@ class GetCombineTransactionsSnapshotsService
           revenue = trade_type == 'buy' ? origin_tx.current_price * total_qty - total_cost : total_cost.abs - origin_tx.current_price * total_qty
           roi = revenue / total_cost.abs
 
-          combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: origin_tx.current_price, revenue: revenue, roi: roi)
+          combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: origin_tx.current_price, revenue: revenue, roi: roi, sold_revenue: total_sold_revenue)
         end
 
         last_info.combine_tx_snapshot_records.where.not(id: ids).each do |record|

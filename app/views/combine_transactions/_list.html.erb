@@ -4,10 +4,16 @@
       <% transactions_table_headers.each do |h| %>
         <% next if h[:sort].in? ['event_time', 'cost'] %>
         <th scope="col">
-          <% if h[:sort] == "none" %>
+          <% if h[:sort].in? ['revenue_ratio', 'none'] %>
             <%= "#{h[:name]}" %>
           <% else %>
             <%= link_to "#{h[:name]}", combine_transactions_path(ch_remote_params(params, h[:sort])), remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+          <% end %>
+          <% if h[:sort] == 'price' %>
+            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.price") %>'>?</span>
+          <% end %>
+          <% if h[:sort] == 'revenue_ratio' %>
+            <span class="question-mark" data-bs-toggle="tooltip" title='<%= t("views.contract_trading.revenue_ratio") %>'>?</span>
           <% end %>
         </th>
       <% end %>
@@ -23,9 +29,9 @@
         <td><%= h.qty.round(4) %></td>
         <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>
         <td><%= "#{(h.cost_ratio(@total_summary[:total_cost].to_f) * 100).round(4)}%" %></td>
-        <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= "#{h.revenue.round(4)} #{h.to_symbol}" %></td>
+        <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= "#{h.revenue.round(4)} #{h.to_symbol} (#{h.sold_revenue.round(4)} #{h.to_symbol})" %></td>
         <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= "#{(h.roi * 100).round(4)}%" %></td>
-        <td><%= "#{(h.revenue_ratio(@total_summary[:total_revenue].to_f) * 100).round(4)}%" %></td>
+        <td><%= "#{(h.revenue_ratio(@total_summary) * 100).round(4)}%" %></td>
         <td><%= h.source %></td>
       </tr>
     <% end %>

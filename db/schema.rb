@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_13_103651) do
+ActiveRecord::Schema.define(version: 2023_10_16_100213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(version: 2023_10_13_103651) do
     t.decimal "current_price", default: "0.0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "sold_revenue", default: "0.0"
     t.index ["original_symbol"], name: "index_combine_transactions_on_original_symbol"
     t.index ["source"], name: "index_combine_transactions_on_source"
   end
@@ -174,6 +175,7 @@ ActiveRecord::Schema.define(version: 2023_10_13_103651) do
     t.decimal "current_price", default: "0.0", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "sold_revenue", default: "0.0"
     t.index ["combine_tx_snapshot_info_id"], name: "index_snapshot_info"
   end
 

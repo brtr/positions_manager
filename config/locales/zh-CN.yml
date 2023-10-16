@@ -26,6 +26,8 @@ zh-CN:
       trading_fee: 交易当天的仓位快照总的资金费用乘以该笔交易占当天仓位的比例
       roi: 空单：已实现收益 / 总投入  / 多单： 已实现收益 / （总投入 + 已实现收益)
       closing_revenue: 收益 + 资金费用
+      price: 交易金额 / 数量
+      revenue_ratio: 如果收益为正，就是和盈利总金额的比例 / 收益为负，就是和亏损总金额的比例
     wallet_history:
       deposit: 充值
       withdraw: 提币
