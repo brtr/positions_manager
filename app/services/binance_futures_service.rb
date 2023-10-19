@@ -73,8 +73,9 @@ class BinanceFuturesService
     end.map{|k,v| v[0]}
   end
 
-  def get_ticker_price(symbol)
-    url = BASE_URL + "/fapi/v1/ticker/price?symbol=#{symbol}"
+  def get_ticker_price(symbol=nil)
+    url = BASE_URL + "/fapi/v1/ticker/price"
+    url += "?symbol=#{symbol}" if symbol
     response = RestClient.get(url)
     JSON.parse(response)
   end
