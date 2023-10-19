@@ -16,7 +16,7 @@ class NotifyNewSymbolJob < ApplicationJob
     prev_symbols = JSON.parse($redis.get(redis_key)) rescue []
     diff_symbols = symbols - prev_symbols
     $redis.set(redis_key, symbols)
-    SlackService.send_notification(nil, format_blocks(diff_symbols)) if diff_symbols.any?
+    SlackService.send_notification(nil, format_api_blocks(diff_symbols)) if diff_symbols.any?
   end
 
   def format_notice_blocks(msg)
