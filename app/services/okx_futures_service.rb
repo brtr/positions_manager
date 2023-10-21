@@ -95,6 +95,16 @@ class OkxFuturesService
     end
   end
 
+  def get_funding_fee_histories(end_at=nil)
+    begin
+      request_path = "/api/v5/account/bills-archive?instType=SWAP&type=8"
+      request_path += "&end=#{end_at}" if end_at
+      do_request("get", request_path)
+    rescue => e
+      format_error_msg(e)
+    end
+  end
+
   private
   def do_request(method, request_path)
     url = BASE_URL + request_path

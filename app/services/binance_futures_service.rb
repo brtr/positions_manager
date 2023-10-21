@@ -116,6 +116,12 @@ class BinanceFuturesService
     JSON.parse(response).last
   end
 
+  def get_funding_fee_histories(symbol, start_time)
+    url = BASE_URL + "/fapi/v1/income?"
+    payload = {symbol: symbol, incomeType: 'FUNDING_FEE', timestamp: get_timestamp, startTime: start_time, limit: 1000}
+    do_request("get", url, payload)
+  end
+
   private
   def do_request(method, url, payload)
     sign = signed_data(build_query(payload))

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_16_100213) do
+ActiveRecord::Schema.define(version: 2023_10_21_091525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,13 @@ ActiveRecord::Schema.define(version: 2023_10_16_100213) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_positions_notes_history_id"], name: "index_attachments_on_user_positions_notes_history_id"
+  end
+
+  create_table "binance_positions", force: :cascade do |t|
+    t.string "symbol"
+    t.decimal "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "closing_histories_snapshot_infos", force: :cascade do |t|

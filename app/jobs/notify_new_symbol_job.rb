@@ -9,14 +9,17 @@ class NotifyNewSymbolJob < ApplicationJob
   end
 
   def check_symbol_from_api
-    symbols = BinanceFuturesService.new.get_ticker_price.map{|x| x['symbol']} rescue []
-    return if symbols.empty?
+    data = BinanceFuturesService.new.get_ticker_price rescue nil
+    return if data.nil?
 
-    redis_key = 'binance_futures_symbols'
-    prev_symbols = JSON.parse($redis.get(redis_key)) rescue []
-    diff_symbols = symbols - prev_symbols
-    $redis.set(redis_key, symbols)
-    SlackService.send_notification(nil, format_api_blocks(diff_symbols)) if diff_symbols.any?
+    symbols = []
+    data.each do |d|
+      bp = BinancePosition.where(symbol: d['symbol']).first_or_initialize
+      symbols.push(bp.symbol) if bp.new_record?
+      bp.update(price: d[:price])
+    end
+
+    SlackService.send_notification(nil, format_api_blocks(symbols)) if symbols.any?
   end
 
   def format_notice_blocks(msg)
@@ -37,7 +40,7 @@ class NotifyNewSymbolJob < ApplicationJob
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": "*币安合约API新增币种: #{symbols.join(", ")}, 共#{symbols.length}个*"
+          "text": "*币安合约API新增币种: #{symbols.join(", ")}, 共 #{symbols.length}个*"
         }
       }
     ]
