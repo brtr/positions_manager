@@ -95,11 +95,12 @@ class OkxFuturesService
     end
   end
 
-  def get_funding_fee_histories(end_at=nil)
+  def get_funding_fee_histories(start_at=nil)
     begin
       request_path = "/api/v5/account/bills-archive?instType=SWAP&type=8"
-      request_path += "&end=#{end_at}" if end_at
-      do_request("get", request_path)
+      request_path += "&begin=#{start_at}" if start_at
+      response = do_request("get", request_path)
+      $redis.set("okx_funding_fee_histories_user_#{@user&.id}", response.to_json)
     rescue => e
       format_error_msg(e)
     end

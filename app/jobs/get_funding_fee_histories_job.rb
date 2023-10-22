@@ -17,10 +17,14 @@ class GetFundingFeeHistoriesJob < ApplicationJob
       $redis.set('top_3_symbol_funding_rates', result.to_json)
     else
       date = Date.yesterday
-      @okx_fee_list = OkxFuturesService.new.get_funding_fee_histories['data']
+      OkxFuturesService.new.get_funding_fee_histories
 
       UserPosition.available.where(user_id: nil).each do |up|
         generate_history(up, date)
+      end
+
+      UserSyncedPosition.available.pluck(:user_id).uniq.each do |user_id|
+        OkxFuturesService.new(user_id: user_id).get_funding_fee_histories
       end
 
       UserSyncedPosition.available.each do |up|
@@ -32,20 +36,22 @@ class GetFundingFeeHistoriesJob < ApplicationJob
   end
 
   def generate_history(up, date)
-    funding_fee = get_fee(up.origin_symbol, up.source, date)
+    funding_fee = get_fee(up.origin_symbol, up.source, date, up.user_id)
     SnapshotPosition.joins(:snapshot_info).where(snapshot_info: { user_id: up.user_id }, origin_symbol: up.origin_symbol, event_date: date, source: up.source).each do |snapshot|
       ffh = FundingFeeHistory.where(origin_symbol: snapshot.origin_symbol, event_date: date, source: snapshot.source, user_id: up.user_id, trade_type: up.trade_type).first_or_initialize
       ffh.update(amount: funding_fee, snapshot_position_id: snapshot&.id)
     end
   end
 
-  def get_fee(symbol, source, date)
+  def get_fee(symbol, source, date, user_id)
     if source == 'binance'
-      fee_list = BinanceFuturesService.new.get_funding_fee_histories(symbol, date.strftime('%Q'))
+      fee_list = BinanceFuturesService.new(user_id: user_id).get_funding_fee_histories(symbol, date.strftime('%Q'))
       daily_fees = fee_list.select{|r| Time.at(r['time']/1000).to_date == date}
       daily_fees.sum{|f| f['income'].to_f}
     elsif source == 'okx'
-      daily_fees = @okx_fee_list.select{|r| Time.at(r['ts'].to_i/1000).to_date == date && r['instId'] == symbol}
+      fee_list = JSON.parse($redis.get("okx_funding_fee_histories_user_#{user_id}")) rescue nil
+      return 0 if fee_list.nil?
+      daily_fees = fee_list['data'].select{|r| Time.at(r['ts'].to_i/1000).to_date == date && r['instId'] == symbol}
       daily_fees.sum{|f| f['pnl'].to_f}
     else
       0
