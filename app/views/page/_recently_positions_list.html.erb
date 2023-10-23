@@ -21,8 +21,8 @@
         <td><%= get_date_format d.event_date %></td>
         <td><%= link_to d.origin_symbol, position_detail_path(origin_symbol: d.origin_symbol, source: d.source, trade_type: d.trade_type), target: '_blank' %></td>
         <td class="<%= trade_type_style(d.trade_type) %>"><%= I18n.t("views.contract_trading.#{d.trade_type}") %></td>
-        <td><%= d.price.round(4) %></td>
-        <td><%= d.current_price.round(4) %></td>
+        <td data-bs-toggle="tooltip" title='<%= d.price %>'><%= d.price.round(4) %></td>
+        <td data-bs-toggle="tooltip" title='<%= d.current_price %>'><%= d.current_price.round(4) %></td>
         <td class="<%= d.qty.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.qty.round(4) %></td>
         <td class="<%= d.amount.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.amount.round(4) %></td>
         <td class="<%= d.get_revenue.to_f > 0 ? 'pos-num' : 'neg-num' %>"><%= d.get_revenue.round(4) %></td>
