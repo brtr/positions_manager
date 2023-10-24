@@ -29,6 +29,7 @@ class GetFundingFeeHistoriesJob < ApplicationJob
 
       UserSyncedPosition.available.each do |up|
         generate_history(up, date)
+        sleep 5
       end
     end
 
