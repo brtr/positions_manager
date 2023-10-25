@@ -17,6 +17,7 @@ class GetFundingFeeHistoriesJob < ApplicationJob
       $redis.set('top_3_symbol_funding_rates', result.to_json)
     else
       date = Date.yesterday
+      BinanceFuturesService.new.get_funding_fee_histories(date.strftime('%Q'))
       OkxFuturesService.new.get_funding_fee_histories
 
       UserPosition.available.where(user_id: nil).each do |up|
@@ -24,12 +25,12 @@ class GetFundingFeeHistoriesJob < ApplicationJob
       end
 
       UserSyncedPosition.available.pluck(:user_id).uniq.each do |user_id|
+        BinanceFuturesService.new(user_id: user_id).get_funding_fee_histories(date.strftime('%Q'))
         OkxFuturesService.new(user_id: user_id).get_funding_fee_histories
       end
 
       UserSyncedPosition.available.each do |up|
         generate_history(up, date)
-        sleep 5
       end
     end
 
@@ -46,8 +47,9 @@ class GetFundingFeeHistoriesJob < ApplicationJob
 
   def get_fee(symbol, source, date, user_id)
     if source == 'binance'
-      fee_list = BinanceFuturesService.new(user_id: user_id).get_funding_fee_histories(symbol, date.strftime('%Q'))
-      daily_fees = fee_list.select{|r| Time.at(r['time']/1000).to_date == date}
+      fee_list = JSON.parse($redis.get("binance_funding_fee_histories_user_#{user_id}")) rescue nil
+      return 0 if fee_list.nil?
+      daily_fees = fee_list.select{|r| Time.at(r['time']/1000).to_date == date && r['symbol'] == symbol}
       daily_fees.sum{|f| f['income'].to_f}
     elsif source == 'okx'
       fee_list = JSON.parse($redis.get("okx_funding_fee_histories_user_#{user_id}")) rescue nil

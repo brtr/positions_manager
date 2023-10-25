@@ -116,10 +116,12 @@ class BinanceFuturesService
     JSON.parse(response).last
   end
 
-  def get_funding_fee_histories(symbol, start_time)
+  def get_funding_fee_histories(start_time, symbol=nil)
     url = BASE_URL + "/fapi/v1/income?"
-    payload = {symbol: symbol, incomeType: 'FUNDING_FEE', timestamp: get_timestamp, startTime: start_time, limit: 1000}
-    do_request("get", url, payload)
+    payload = {incomeType: 'FUNDING_FEE', timestamp: get_timestamp, startTime: start_time, limit: 1000}
+    payload.merge!({symbol: symbol}) if symbol
+    response = do_request("get", url, payload)
+    $redis.set("binance_funding_fee_histories_user_#{@user&.id}", response.to_json)
   end
 
   private
