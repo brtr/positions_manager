@@ -14,17 +14,40 @@ class TransactionsSnapshotRecord < ApplicationRecord
     TransactionsSnapshotRecord.where('event_time >= ?', DateTime.parse('2023-01-01'))
   end
 
-  def self.total_summary
-    records = TransactionsSnapshotRecord.available.year_to_date.where(trade_type: 'buy')
+  def self.total_summary(user_id: nil, date: Date.yesterday)
+    records = TransactionsSnapshotRecord.available.year_to_date
     profit_records = records.select{|r| r.revenue > 0}
     loss_records = records.select{|r| r.revenue < 0}
-    result = {
+    total_cost = calculate_field(records, :amount)
+    total_estimated_revenue = records.where(trade_type: 'buy').sum(&:revenue)
+    total_roi = total_cost.zero? ? 0 : total_estimated_revenue / total_cost
+    infos = TransactionsSnapshotInfo.includes(:snapshot_records).where("event_date <= ?", date)
+
+    {
       profit_count: profit_records.count,
-      profit_amount: profit_records.sum(&:revenue),
+      profit_amount: calculate_field(profit_records),
       loss_count: loss_records.count,
-      loss_amount: loss_records.sum(&:revenue),
-      total_cost: records.sum(&:amount),
-      total_revenue: records.sum(&:revenue)
+      loss_amount: calculate_field(loss_records),
+      total_cost: total_cost,
+      total_revenue: records.where(trade_type: 'sell').sum(&:revenue),
+      total_estimated_revenue: total_estimated_revenue,
+      total_roi: total_roi,
+      max_profit: infos.max_profit(user_id: user_id),
+      max_profit_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_profit_date"),
+      max_loss: infos.max_loss(user_id: user_id),
+      max_loss_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_loss_date"),
+      max_revenue: infos.max_revenue(user_id: user_id),
+      max_revenue_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_revenue_date"),
+      min_revenue: infos.min_revenue(user_id: user_id),
+      min_revenue_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_min_revenue_date"),
+      max_roi: infos.max_roi(user_id: user_id),
+      max_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_roi_date"),
+      min_roi: infos.min_roi(user_id: user_id),
+      min_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_min_roi_date"),
+      max_profit_roi: infos.max_profit_roi(user_id: user_id),
+      max_profit_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_profit_roi_date"),
+      max_loss_roi: infos.max_loss_roi(user_id: user_id),
+      max_loss_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_loss_roi_date")
     }
   end
 
@@ -34,5 +57,11 @@ class TransactionsSnapshotRecord < ApplicationRecord
 
   def cost_ratio(total_cost)
     amount / total_cost
+  end
+
+  private
+  def self.calculate_field(records, field_name = :revenue)
+    buys, sells = records.partition { |record| record.trade_type == "buy" }
+    buys.sum { |record| record.send(field_name) } - sells.sum { |record| record.send(field_name) }
   end
 end
