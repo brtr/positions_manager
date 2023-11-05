@@ -8,7 +8,7 @@ class GenerateOriginTransactionsSnapshotsJob < ApplicationJob
     # 生成快照记录
     generate_snapshot(transactions_snapshot_info)
 
-    GetTransactionsSnapshotInfoSummaryJob.perform_later(snapshot_info, date)
+    GetTransactionsSnapshotInfoSummaryJob.perform_later(transactions_snapshot_info, date)
 
     # 触发垃圾回收任务
     ForceGcJob.perform_later
