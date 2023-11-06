@@ -17,9 +17,9 @@ class OriginTransaction < ApplicationRecord
     total_estimated_revenue = records.where(trade_type: 'buy').sum(&:revenue)
     total_roi = total_cost.zero? ? 0 : total_estimated_revenue / total_cost
     date = Date.yesterday
-    infos = TransactionsSnapshotInfo.includes(:snapshot_records).where("event_date <= ?", date)
+    infos = TransactionsSnapshotInfo.where("event_date <= ?", date)
 
-    {
+    summary = {
       profit_count: profit_records.count,
       profit_amount: calculate_field(profit_records),
       loss_count: loss_records.count,
@@ -27,7 +27,10 @@ class OriginTransaction < ApplicationRecord
       total_cost: total_cost,
       total_revenue: records.where(trade_type: 'sell').sum(&:revenue),
       total_estimated_revenue: total_estimated_revenue,
-      total_roi: total_roi,
+      total_roi: total_roi
+    }
+
+    summary.merge!({
       max_profit: infos.max_profit(user_id: user_id),
       max_profit_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_profit_date"),
       max_loss: infos.max_loss(user_id: user_id),
@@ -44,7 +47,9 @@ class OriginTransaction < ApplicationRecord
       max_profit_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_profit_roi_date"),
       max_loss_roi: infos.max_loss_roi(user_id: user_id),
       max_loss_roi_date: $redis.get("user_#{user_id}_#{date.to_s}_spots_max_loss_roi_date")
-    }
+    }) if user_id.nil?
+
+    summary
   end
 
   def revenue_ratio(total_revenue)

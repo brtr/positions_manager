@@ -21,7 +21,7 @@ class TransactionsSnapshotRecord < ApplicationRecord
     total_cost = calculate_field(records, :amount)
     total_estimated_revenue = records.where(trade_type: 'buy').sum(&:revenue)
     total_roi = total_cost.zero? ? 0 : total_estimated_revenue / total_cost
-    infos = TransactionsSnapshotInfo.includes(:snapshot_records).where("event_date <= ?", date)
+    infos = TransactionsSnapshotInfo.where("event_date <= ?", date)
 
     {
       profit_count: profit_records.count,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_04_080315) do
+ActiveRecord::Schema.define(version: 2023_11_06_095236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -226,6 +226,8 @@ ActiveRecord::Schema.define(version: 2023_11_04_080315) do
     t.index ["campaign"], name: "index_origin_transactions_on_campaign"
     t.index ["order_id"], name: "index_origin_transactions_on_order_id"
     t.index ["source"], name: "index_origin_transactions_on_source"
+    t.index ["trade_type"], name: "index_origin_transactions_on_trade_type"
+    t.index ["user_id", "trade_type"], name: "index_origin_transactions_on_user_id_and_trade_type"
     t.index ["user_id"], name: "index_origin_transactions_on_user_id"
   end
 
@@ -422,6 +424,11 @@ ActiveRecord::Schema.define(version: 2023_11_04_080315) do
     t.datetime "event_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["amount"], name: "index_transactions_snapshot_records_on_amount"
+    t.index ["event_time"], name: "index_transactions_snapshot_records_on_event_time"
+    t.index ["from_symbol"], name: "index_transactions_snapshot_records_on_from_symbol"
+    t.index ["revenue"], name: "index_transactions_snapshot_records_on_revenue"
+    t.index ["trade_type"], name: "index_transactions_snapshot_records_on_trade_type"
     t.index ["transactions_snapshot_info_id"], name: "index_snapshot_info_id"
   end
 
