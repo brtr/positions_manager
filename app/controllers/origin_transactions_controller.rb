@@ -7,13 +7,8 @@ class OriginTransactionsController < ApplicationController
     sort_type = params[:sort_type].presence || "desc"
     txs = OriginTransaction.available.year_to_date.where(user_id: nil).order("#{sort} #{sort_type}")
     @total_txs = txs
-    @symbol = params[:search]
-    @campaign = params[:campaign]
-    @source = params[:source]
+    txs = filter_txs(txs)
     @event_date = Date.parse(params[:event_date]) rescue nil
-    txs = txs.where(campaign: @campaign) if @campaign.present?
-    txs = txs.where(source: @source) if @source.present?
-    txs = txs.where(original_symbol: @symbol) if @symbol.present?
     txs = txs.where(event_time: @event_date.all_day) if @event_date.present?
     @txs = txs.page(params[:page]).per(20)
     @total_summary = txs.total_summary
@@ -23,12 +18,9 @@ class OriginTransactionsController < ApplicationController
     @page_index = 19
     sort = params[:sort].presence || "event_time"
     sort_type = params[:sort_type].presence || "desc"
-    @symbol = params[:search]
     txs = OriginTransaction.available.year_to_date.where(user_id: current_user.id).order("#{sort} #{sort_type}")
     @total_txs = txs
-    txs = txs.where(campaign: params[:campaign]) if params[:campaign].present?
-    txs = txs.where(source: params[:source]) if params[:source].present?
-    txs = txs.where(original_symbol: @symbol) if @symbol.present?
+    txs = filter_txs(txs)
     @txs = txs.page(params[:page]).per(20)
     @total_summary = txs.total_summary(current_user.id)
   end
@@ -101,5 +93,18 @@ class OriginTransactionsController < ApplicationController
     when "quarter" then Date.today.last_quarter.to_date
     else Date.today.last_month.to_date
     end
+  end
+
+  def filter_txs(txs)
+    @symbol = params[:search]
+    @campaign = params[:campaign]
+    @source = params[:source]
+    @trade_type = params[:trade_type]
+
+    txs = txs.where(campaign: @campaign) if @campaign.present?
+    txs = txs.where(source: @source) if @source.present?
+    txs = txs.where(original_symbol: @symbol) if @symbol.present?
+    txs = txs.where(trade_type: @trade_type) if @trade_type.present?
+    txs
   end
 end

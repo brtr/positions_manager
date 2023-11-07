@@ -63,16 +63,13 @@ class SnapshotInfosController < ApplicationController
   end
 
   def export_roi
-    infos = SnapshotInfo.includes(:snapshot_positions).where(user_id: nil, event_date: [Date.today.last_quarter.to_date..Date.yesterday]).order(event_date: :desc)
+    infos = SnapshotInfo.where(user_id: nil, event_date: [Date.today.last_quarter.to_date..Date.yesterday]).includes(:snapshot_positions).order(event_date: :desc)
 
     file = CSV.generate(force_quotes: true) do |csv|
       csv << ['日期', '总投入', '总收益', '收益占比']
       infos.each do |info|
-        total_summary = info.snapshot_positions.total_summary
-        total_cost = total_summary[:total_cost]
-        total_revenue = total_summary[:total_revenue]
-        roi = ((total_revenue / total_cost) * 100).round(4).to_s + "%"
-        csv << [info.event_date, total_cost.round(4), total_revenue.round(4), roi]
+        roi = info.total_roi.to_s + "%"
+        csv << [info.event_date, info.total_cost.round(4), info.total_revenue.round(4), roi]
       end
     end
 

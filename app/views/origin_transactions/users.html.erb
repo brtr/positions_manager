@@ -8,9 +8,11 @@
       <div class="input-group mb-3 position-filter">
         <%= select_tag(:search, options_for_select(@total_txs.pluck(:original_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
         <span class='ms-3'></span>
-        <%= select_tag(:campaign, options_for_select(@total_txs.pluck(:campaign).compact.uniq, params[:campaign]),{ prompt: '请选择campaign...', class: 'select2-dropdown form-control', onchange: 'this.form.submit()' }) %>
+        <%= select_tag(:campaign, options_for_select(@total_txs.pluck(:campaign).compact.uniq, @campaign),{ prompt: '请选择campaign...', class: 'select2-dropdown form-control', onchange: 'this.form.submit()' }) %>
         <span class='ms-3'></span>
-        <%= select_tag(:source, options_for_select(@total_txs.pluck(:source).compact.uniq, params[:source]),{ prompt: '请选择来源...', class: 'select2-dropdown form-control', onchange: 'this.form.submit()' }) %>
+        <%= select_tag(:trade_type, options_for_select([['买入', 'buy'], ['卖出', 'sell']], @trade_type),{ prompt: '请选择交易类别...', class: 'select2-dropdown form-control' }) %>
+        <span class='ms-3'></span>
+        <%= select_tag(:source, options_for_select(@total_txs.pluck(:source).compact.uniq, @source),{ prompt: '请选择来源...', class: 'select2-dropdown form-control', onchange: 'this.form.submit()' }) %>
         <button type="submit" class="btn btn-primary mx-3">确定</button>
         <%= link_to "Reset", users_origin_transactions_path, class: 'btn btn-warning me-3' %>
         <%= link_to "Refresh", refresh_origin_transactions_path(user_id: current_user.id), class: 'btn btn-success' %>

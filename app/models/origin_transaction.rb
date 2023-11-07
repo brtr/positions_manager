@@ -1,8 +1,9 @@
 class OriginTransaction < ApplicationRecord
-  SKIP_SYMBOLS = %w(USDC BTC ETH).freeze
+  SKIP_SYMBOLS = %w(BTC ETH).freeze
+  FILTER_SYMBOL = %w(USDC).freeze
 
   def self.available
-    OriginTransaction.where('(from_symbol IN (?) AND amount >= 50) OR from_symbol NOT IN (?)', SKIP_SYMBOLS, SKIP_SYMBOLS)
+    OriginTransaction.where('from_symbol NOT IN (?) and ((from_symbol IN (?) AND amount >= 50) OR from_symbol NOT IN (?))', FILTER_SYMBOL, SKIP_SYMBOLS, SKIP_SYMBOLS)
   end
 
   def self.year_to_date

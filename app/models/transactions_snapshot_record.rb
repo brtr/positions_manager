@@ -1,5 +1,6 @@
 class TransactionsSnapshotRecord < ApplicationRecord
   SKIP_SYMBOLS = %w(USDC BTC ETH).freeze
+  FILTER_SYMBOL = %w(USDC).freeze
 
   belongs_to :snapshot_info, class_name: 'TransactionsSnapshotInfo', foreign_key: :transactions_snapshot_info_id
 
@@ -7,7 +8,7 @@ class TransactionsSnapshotRecord < ApplicationRecord
   scope :loss, -> { where("revenue < 0") }
 
   def self.available
-    TransactionsSnapshotRecord.where('(from_symbol IN (?) AND amount >= 50) OR from_symbol NOT IN (?)', SKIP_SYMBOLS, SKIP_SYMBOLS)
+    TransactionsSnapshotRecord.where('from_symbol NOT IN (?) and ((from_symbol IN (?) AND amount >= 50) OR from_symbol NOT IN (?))', FILTER_SYMBOL, SKIP_SYMBOLS, SKIP_SYMBOLS)
   end
 
   def self.year_to_date

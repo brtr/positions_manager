@@ -11,7 +11,7 @@ class SnapshotPosition < ApplicationRecord
     records = SnapshotPosition.available
     profit_records = records.profit
     loss_records = records.loss
-    infos = SnapshotInfo.includes(:snapshot_positions).where("event_date <= ?", date)
+    infos = SnapshotInfo.where("event_date <= ?", date)
     redis_key = is_synced ? "user_#{user_id}_#{date.to_s}_synced_positions" : "user_#{user_id}_#{date.to_s}_positions"
 
     {

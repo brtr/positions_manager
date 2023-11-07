@@ -39,7 +39,7 @@ class UserSyncedPosition < ApplicationRecord
     profit_records = records.select{|r| r.revenue > 0}
     loss_records = records.select{|r| r.revenue < 0}
     date = Date.yesterday
-    infos = SnapshotInfo.synced.includes(:snapshot_positions).where("event_date <= ?", date)
+    infos = SnapshotInfo.synced.where("event_date <= ?", date)
     {
       profit_count: profit_records.count,
       profit_amount: profit_records.sum(&:revenue),
