@@ -18,6 +18,7 @@ zh-CN:
       total_roi: 总收益 / 总买入成本
       margin_ratio: 空单为（当前价 - 最低价）/ 最低价，多单为（最高价 - 当前价）/ 当前价
       average_durations: 未平仓投入总持仓时间 / 未平仓投入数量
+      funding_fee: 同一个交易对如果同时存在做空和做多的仓位，资金费用只会累积到总投入较大的仓位上面
     contract_trading:
       sell: 多
       buy: 空

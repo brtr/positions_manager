@@ -21,7 +21,8 @@ class GetFundingFeeHistoriesJob < ApplicationJob
       BinanceFuturesService.new.get_funding_fee_histories(start_at)
       OkxFuturesService.new.get_funding_fee_histories
 
-      UserPosition.available.where(user_id: nil).each do |up|
+      UserPosition.available.where(user_id: nil).group_by(&:origin_symbol).each do |symbol, data|
+        up = data.max{|a,b| a.amount <=> b.amount}
         generate_history(up, date)
       end
 
@@ -31,7 +32,8 @@ class GetFundingFeeHistoriesJob < ApplicationJob
         OkxFuturesService.new(user_id: user_id).get_funding_fee_histories
       end
 
-      UserSyncedPosition.available.each do |up|
+      UserSyncedPosition.available.group_by(&:origin_symbol).each do |symbol, data|
+        up = data.max{|a,b| a.amount <=> b.amount}
         generate_history(up, date)
       end
     end
@@ -41,7 +43,7 @@ class GetFundingFeeHistoriesJob < ApplicationJob
 
   def generate_history(up, date)
     funding_fee = get_fee(up.origin_symbol, up.source, date, up.user_id)
-    SnapshotPosition.joins(:snapshot_info).where(snapshot_info: { user_id: up.user_id }, origin_symbol: up.origin_symbol, event_date: date, source: up.source).each do |snapshot|
+    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: { user_id: up.user_id }, origin_symbol: up.origin_symbol, event_date: date, source: up.source).each do |snapshot|
       ffh = FundingFeeHistory.where(origin_symbol: snapshot.origin_symbol, event_date: date, source: snapshot.source, user_id: up.user_id, trade_type: up.trade_type).first_or_initialize
       ffh.update(amount: funding_fee, snapshot_position_id: snapshot&.id)
     end
