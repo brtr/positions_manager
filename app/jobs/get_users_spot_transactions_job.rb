@@ -84,7 +84,7 @@ class GetUsersSpotTransactionsJob < ApplicationJob
 
   def get_revenue(trade_type, amount, cost, qty, current_price)
     if trade_type == 'sell'
-      amount - cost
+      amount - cost * qty
     else
       current_price * qty - amount
     end
