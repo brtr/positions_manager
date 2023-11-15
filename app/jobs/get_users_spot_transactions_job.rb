@@ -39,6 +39,7 @@ class GetUsersSpotTransactionsJob < ApplicationJob
     OriginTransaction.transaction do
       result['data'].each do |d|
         next if d['category'] != 'normal'
+        next if OriginTransaction.exists?(order_id: d['ordId'], user_id: user_id, source: 'okx')
         original_symbol = d['instId']
         qty = d['accFillSz'].to_f
         price = d['avgPx'].to_f
