@@ -43,12 +43,12 @@ class GetOkxSpotTradesJob < ApplicationJob
           current_price: current_price,
           event_time: event_time
         )
-        update_tx(tx, current_price)
+        update_tx(tx)
         ids.push(tx.id)
       end
 
       txs.where.not(id: ids).each do |tx|
-        update_tx(tx, current_price)
+        update_tx(tx)
       end
 
       combine_trades if user_id.nil?
@@ -65,10 +65,12 @@ class GetOkxSpotTradesJob < ApplicationJob
     price.to_f
   end
 
-  def update_tx(tx, current_price)
-    tx.current_price = current_price
-    tx.cost = get_spot_cost(tx.user_id, tx.original_symbol, tx.event_time.to_date) || tx.price
-    tx.revenue = get_revenue(tx.trade_type, tx.amount, tx.cost, tx.qty, current_price)
+  def update_tx(tx)
+    tx.current_price = get_current_price(tx.original_symbol, tx.user_id)
+    if tx.cost.to_f.zero?
+      tx.cost = get_spot_cost(tx.user_id, tx.original_symbol, tx.event_time.to_date) || tx.price
+    end
+    tx.revenue = get_revenue(tx.trade_type, tx.amount, tx.cost, tx.qty, tx.current_price)
     tx.roi = tx.revenue / tx.amount
     tx.save
   end
