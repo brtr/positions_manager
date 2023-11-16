@@ -101,7 +101,7 @@ class GetOkxSpotTradesJob < ApplicationJob
         combine_tx = CombineTransaction.where(source: SOURCE, original_symbol: original_symbol, from_symbol: origin_tx.from_symbol, to_symbol: origin_tx.to_symbol,
                                               fee_symbol: origin_tx.fee_symbol, trade_type: trade_type).first_or_create
 
-        price = total_cost / total_qty
+        price = total_qty.zero? ? 0 : total_cost / total_qty
         revenue = trade_type == 'buy' ? origin_tx.current_price * total_qty - total_cost : total_cost.abs - origin_tx.current_price * total_qty
         roi = revenue / total_cost.abs
 
