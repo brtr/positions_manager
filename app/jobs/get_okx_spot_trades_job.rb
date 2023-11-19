@@ -101,7 +101,7 @@ class GetOkxSpotTradesJob < ApplicationJob
                                               fee_symbol: origin_tx.fee_symbol, trade_type: 'buy').first_or_create
 
         price = total_qty.zero? ? 0 : total_cost / total_qty
-        revenue = trade_type == 'buy' ? origin_tx.current_price * total_qty - total_cost : total_cost.abs - origin_tx.current_price * total_qty
+        revenue = origin_tx.current_price * total_qty - total_cost
         roi = revenue / total_cost.abs
 
         combine_tx.update(price: price, qty: total_qty, amount: total_cost, fee: total_fee, current_price: origin_tx.current_price, revenue: revenue, roi: roi, sold_revenue: total_sold_revenue)
