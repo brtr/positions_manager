@@ -9,7 +9,7 @@ class GetSpotTradesJob < ApplicationJob
     origin_symbol = "#{symbol}#{TRADE_SYMBOL}"
     txs = OriginTransaction.where(source: SOURCE, original_symbol: origin_symbol, user_id: user_id)
     trades = BinanceSpotsService.new(user_id: user_id).get_my_trades(origin_symbol)
-    current_price = get_current_price(origin_symbol, user_id)
+    current_price = get_current_price(origin_symbol, user_id, symbol)
     if trades.is_a?(String) || trades.blank?
       Rails.logger.debug "获取不到#{origin_symbol}的交易记录"
       txs.each{|tx| update_tx(tx, current_price)} if txs.any?
@@ -38,14 +38,23 @@ class GetSpotTradesJob < ApplicationJob
     $redis.del("origin_transactions_total_summary_#{user_id}")
   end
 
-  def get_current_price(symbol, user_id)
+  def get_current_price(symbol, user_id, from_symbol)
     price = $redis.get("binance_spot_price_#{symbol}").to_f
     if price == 0
-      price = BinanceSpotsService.new(user_id: user_id).get_price(symbol)[:price] rescue 0
+      price = BinanceSpotsService.new(user_id: user_id).get_price(symbol)[:price].to_f rescue 0
+      price = get_coin_price(from_symbol) if price.zero?
       $redis.set("binance_spot_price_#{symbol}", price, ex: 2.hours)
     end
 
     price.to_f
+  end
+
+  def get_coin_price(symbol)
+    date = Date.yesterday
+    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{date}&to_date=#{date}"
+    response = RestClient.get(url)
+    data = JSON.parse(response.body)
+    data['result'].values[0].to_f rescue nil
   end
 
   def update_tx(tx, current_price)

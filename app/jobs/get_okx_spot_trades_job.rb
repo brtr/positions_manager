@@ -23,7 +23,7 @@ class GetOkxSpotTradesJob < ApplicationJob
         from_symbol = original_symbol.split("-#{FEE_SYMBOL}")[0]
         event_time = Time.at(d['cTime'].to_i / 1000)
         cost = get_spot_cost(user_id, original_symbol, event_time.to_date) || price
-        current_price = get_current_price(original_symbol, user_id)
+        current_price = get_current_price(original_symbol, user_id, from_symbol)
         revenue = get_revenue(trade_type, amount, cost, qty, current_price) if revenue.to_f == 0
         roi = revenue / amount
         tx = OriginTransaction.where(order_id: d['ordId'], user_id: user_id, source: SOURCE).first_or_initialize
@@ -55,18 +55,27 @@ class GetOkxSpotTradesJob < ApplicationJob
     end
   end
 
-  def get_current_price(symbol, user_id)
+  def get_current_price(symbol, user_id, from_symbol)
     price = $redis.get("okx_spot_price_#{symbol}").to_f
     if price == 0
-      price = OkxSpotsService.new(user_id: user_id).get_price(symbol)["data"].first["last"] rescue 0
+      price = OkxSpotsService.new(user_id: user_id).get_price(symbol)["data"].first["last"].to_f rescue 0
+      price = get_coin_price(from_symbol) if price.zero?
       $redis.set("okx_spot_price_#{symbol}", price, ex: 2.hours)
     end
 
     price.to_f
   end
 
+  def get_coin_price(symbol)
+    date = Date.yesterday
+    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{date}&to_date=#{date}"
+    response = RestClient.get(url)
+    data = JSON.parse(response.body)
+    data['result'].values[0].to_f rescue nil
+  end
+
   def update_tx(tx)
-    tx.current_price = get_current_price(tx.original_symbol, tx.user_id)
+    tx.current_price = get_current_price(tx.original_symbol, tx.user_id, tx.from_symbol)
     if tx.cost.to_f.zero?
       tx.cost = get_spot_cost(tx.user_id, tx.original_symbol, tx.event_time.to_date) || tx.price
     end
