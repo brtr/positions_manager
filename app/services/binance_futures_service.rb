@@ -56,9 +56,10 @@ class BinanceFuturesService
     do_request("get", url, payload)
   end
 
-  def get_pending_orders(symbol)
+  def get_pending_orders(symbol=nil)
     url = BASE_URL + "/fapi/v1/openOrders?"
-    payload = {timestamp: get_timestamp, symbol: symbol}
+    payload = {timestamp: get_timestamp}
+    payload.merge!({symbol: symbol}) if symbol
     do_request("get", url, payload)
   end
 

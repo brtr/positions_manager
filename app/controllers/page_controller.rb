@@ -220,6 +220,11 @@ class PageController < ApplicationController
     @average_roi_chart_data = GetHoldingDurationsByRoiChartService.execute(average: true)
   end
 
+  def open_orders
+    @page_index = 36
+    @open_orders = OpenPositionOrder.order(amount: :desc).page(params[:page]).per(15)
+  end
+
   private
   def get_anchor(data_type)
     case data_type

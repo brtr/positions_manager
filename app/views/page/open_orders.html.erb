@@ -1,0 +1,36 @@
+<div class="m-3 row">
+  <div class="col-10 mx-auto">
+    <h3>币安合约委托单</h3>
+    <div class="mt-3">
+      <table class="table">
+        <thead>
+          <tr class="table-container-tr">
+            <th>币种</th>
+            <th>类别</th>
+            <th>委托价</th>
+            <th>触发价</th>
+            <th>委托数量</th>
+            <th>委托金额</th>
+            <th>订单类型</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @open_orders.any? %>
+            <% @open_orders.each do |order| %>
+              <tr>
+                <td><%= order.symbol %></td>
+                <td class="<%= trade_type_style(order.trade_type) %>"><%= I18n.t("views.trading.#{order.trade_type}") %></td>
+                <td><%= order.price.round(4) %></td>
+                <td><%= order.stop_price.round(4) %></td>
+                <td><%= order.orig_qty.round(4) %></td>
+                <td><%= order.amount.round(4) %></td>
+                <td><%= order.order_type %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @open_orders %>
+    </div>
+  </div>
+</div>
