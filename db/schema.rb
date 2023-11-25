@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_24_092319) do
+ActiveRecord::Schema.define(version: 2023_11_25_091109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,7 +215,9 @@ ActiveRecord::Schema.define(version: 2023_11_24_092319) do
     t.decimal "amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "order_time"
     t.index ["order_id"], name: "index_open_position_orders_on_order_id"
+    t.index ["order_time"], name: "index_open_position_orders_on_order_time"
     t.index ["position_side"], name: "index_open_position_orders_on_position_side"
     t.index ["symbol"], name: "index_open_position_orders_on_symbol"
     t.index ["trade_type"], name: "index_open_position_orders_on_trade_type"

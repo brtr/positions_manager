@@ -12,6 +12,8 @@ zh-CN:
     trading:
       sell: 卖
       buy: 买
+      long: 多
+      short: 空
       revenue: "#买入交易为买入数量 * 当前价格 - 买入成本 / #卖出交易为卖出总价"
       roi: 收益 / 成本
       total_revenue: (买入数量-卖出数量）* 当前价格 + 卖出总价 - 买入成本

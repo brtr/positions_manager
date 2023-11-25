@@ -1,14 +1,29 @@
 <div class="m-3 row">
   <div class="col-10 mx-auto">
     <h3>币安合约委托单</h3>
+    <div class="mb-3 mt-3">
+      <%= form_tag open_orders_path, id: "search_targets", class: "position-relative", method: "GET" do %>
+        <div class="input-group mb-3 position-filter">
+          <%= select_tag(:search, options_for_select(@symbols, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
+          <span class='ms-3'></span>
+          <%= select_tag(:trade_type, options_for_select([['买入', 'buy'], ['卖出', 'sell']], @trade_type),{ prompt: '请选择买卖类别...', class: 'select2-dropdown form-control' }) %>
+          <span class='ms-3'></span>
+          <%= select_tag(:position_side, options_for_select([['做多', 'long'], ['做空', 'short']], @position_side),{ prompt: '请选择持仓类别...', class: 'select2-dropdown form-control' }) %>
+          <span class='ms-3'></span>
+          <button type="submit" class="btn btn-primary mx-3">确定</button>
+          <%= link_to "Reset", open_orders_path, class: 'btn btn-warning me-3' %>
+        </div>
+      <% end %>
+    </div>
     <div class="mt-3">
       <table class="table">
         <thead>
           <tr class="table-container-tr">
+            <th>订单时间</th>
             <th>币种</th>
-            <th>类别</th>
+            <th>买卖类别</th>
+            <th>持仓类别</th>
             <th>委托价</th>
-            <th>触发价</th>
             <th>委托数量</th>
             <th>委托金额</th>
             <th>订单类型</th>
@@ -18,10 +33,11 @@
           <% if @open_orders.any? %>
             <% @open_orders.each do |order| %>
               <tr>
+                <td><%= order.order_time %></td>
                 <td><%= order.symbol %></td>
                 <td class="<%= trade_type_style(order.trade_type) %>"><%= I18n.t("views.trading.#{order.trade_type}") %></td>
+                <td class="<%= position_side_style(order.position_side) %>"><%= I18n.t("views.trading.#{order.position_side}") %></td>
                 <td><%= order.price.round(4) %></td>
-                <td><%= order.stop_price.round(4) %></td>
                 <td><%= order.orig_qty.round(4) %></td>
                 <td><%= order.amount.round(4) %></td>
                 <td><%= order.order_type %></td>

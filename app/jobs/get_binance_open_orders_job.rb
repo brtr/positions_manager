@@ -18,9 +18,13 @@ class GetBinanceOpenOrdersJob < ApplicationJob
           order_type: open_order['type'],
           trade_type: open_order['side'].downcase,
           position_side: open_order['positionSide'].downcase,
-          stop_price: open_order['stopPrice']
+          stop_price: open_order['stopPrice'],
+          order_time: Time.at(open_order['time']/1000)
         )
       end
+
+      symbols = open_orders.map{|order| order['symbol']}
+      OpenPositionOrder.where.not(symbol: symbols).delete_all
     end
   end
 end

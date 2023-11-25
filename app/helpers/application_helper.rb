@@ -490,6 +490,10 @@ module ApplicationHelper
     trade_type.to_s.downcase == 'sell' ? "text-danger" : "text-success"
   end
 
+  def position_side_style(position_side)
+    position_side.to_s.downcase == 'long' ? "text-danger" : "text-success"
+  end
+
   def display_symbol(h, s=nil)
     str = "#{h.from_symbol} / #{h.fee_symbol}"
     return str if s.present?

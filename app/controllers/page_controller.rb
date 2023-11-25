@@ -222,7 +222,15 @@ class PageController < ApplicationController
 
   def open_orders
     @page_index = 36
-    @open_orders = OpenPositionOrder.order(amount: :desc).page(params[:page]).per(15)
+    @symbol = params[:search]
+    @trade_type = params[:trade_type]
+    @position_side = params[:position_side]
+    open_orders = OpenPositionOrder.order(order_time: :desc)
+    @symbols = open_orders.pluck(:symbol).uniq
+    open_orders = open_orders.where(symbol: @symbol) if @symbol.present?
+    open_orders = open_orders.where(trade_type: @trade_type) if @trade_type.present?
+    open_orders = open_orders.where(position_side: @position_side) if @position_side.present?
+    @open_orders = open_orders.page(params[:page]).per(15)
   end
 
   private
