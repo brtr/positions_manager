@@ -2,7 +2,7 @@
   <div class="col-10 mx-auto">
     <h3>币安合约委托单</h3>
     <div class="mb-3 mt-3">
-      <%= form_tag open_orders_path, id: "search_targets", class: "position-relative", method: "GET" do %>
+      <%= form_tag open_position_orders_path, id: "search_targets", class: "position-relative", method: "GET" do %>
         <div class="input-group mb-3 position-filter">
           <%= select_tag(:search, options_for_select(@symbols, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
           <span class='ms-3'></span>
@@ -11,7 +11,7 @@
           <%= select_tag(:position_side, options_for_select([['做多', 'long'], ['做空', 'short']], @position_side),{ prompt: '请选择持仓类别...', class: 'select2-dropdown form-control' }) %>
           <span class='ms-3'></span>
           <button type="submit" class="btn btn-primary mx-3">确定</button>
-          <%= link_to "Reset", open_orders_path, class: 'btn btn-warning me-3' %>
+          <%= link_to "Reset", open_position_orders_path, class: 'btn btn-warning me-3' %>
         </div>
       <% end %>
     </div>

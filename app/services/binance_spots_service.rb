@@ -22,7 +22,7 @@ class BinanceSpotsService
   end
 
   def get_open_orders
-    @client.open_order_list
+    @client.open_orders
   end
 
   def get_order(symbol, order_id)

@@ -220,7 +220,7 @@ class PageController < ApplicationController
     @average_roi_chart_data = GetHoldingDurationsByRoiChartService.execute(average: true)
   end
 
-  def open_orders
+  def open_position_orders
     @page_index = 36
     @symbol = params[:search]
     @trade_type = params[:trade_type]
@@ -230,6 +230,17 @@ class PageController < ApplicationController
     open_orders = open_orders.where(symbol: @symbol) if @symbol.present?
     open_orders = open_orders.where(trade_type: @trade_type) if @trade_type.present?
     open_orders = open_orders.where(position_side: @position_side) if @position_side.present?
+    @open_orders = open_orders.page(params[:page]).per(15)
+  end
+
+  def open_spot_orders
+    @page_index = 37
+    @symbol = params[:search]
+    @trade_type = params[:trade_type]
+    open_orders = OpenSpotOrder.order(order_time: :desc)
+    @symbols = open_orders.pluck(:symbol).uniq
+    open_orders = open_orders.where(symbol: @symbol) if @symbol.present?
+    open_orders = open_orders.where(trade_type: @trade_type) if @trade_type.present?
     @open_orders = open_orders.page(params[:page]).per(15)
   end
 

@@ -1,0 +1,2 @@
+class OpenSpotOrder < ApplicationRecord
+end

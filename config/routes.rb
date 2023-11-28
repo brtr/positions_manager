@@ -90,7 +90,8 @@ Rails.application.routes.draw do
   get "/liquidations_ranking" => "page#liquidations_ranking", as: :liquidations_ranking
   get "/refresh_liquidations_list" => "page#refresh_liquidations_list", as: :refresh_liquidations_list
   get "/holding_duration_chart" => "page#holding_duration_chart", as: :holding_duration_chart
-  get "/open_orders" => "page#open_orders", as: :open_orders
+  get "/open_position_orders" => "page#open_position_orders", as: :open_position_orders
+  get "/open_spot_orders" => "page#open_spot_orders", as: :open_spot_orders
   post "/set_public_positions_filter" => "page#set_public_positions_filter", as: :set_public_positions_filter
 
   get "/healthcheck", to: "page#health_check"

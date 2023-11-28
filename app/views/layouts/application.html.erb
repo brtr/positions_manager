@@ -45,7 +45,7 @@
                   <%= link_to "已平仓合约数据快照", closing_histories_snapshot_infos_path, class: "nav-link #{@page_index == 31 ? 'active' : ''}" %>
                 </li>
                 <li class="nav-item">
-                  <%= link_to "委托单列表", open_orders_path, class: "nav-link #{@page_index == 36 ? 'active' : ''}" %>
+                  <%= link_to "委托单列表", open_position_orders_path, class: "nav-link #{@page_index == 36 ? 'active' : ''}" %>
                 </li>
                 <li class="nav-item">
                   <%= link_to "历史仓位变化曲线图", positions_graphs_snapshot_infos_path, class: "nav-link #{@page_index == 6 ? 'active' : ''}" %>
@@ -62,7 +62,7 @@
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([8, 9, 10, 22, 23, 34, 35]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+              <button class="nav-link btn dropdown-toggle <%= 'active' if @page_index.in?([8, 9, 10, 22, 23, 34, 35, 37]) %>" type="button" id="dropdownMenuTradingHistory" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 现货交易记录
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuTradingHistory">
@@ -74,6 +74,9 @@
                 </li>
                 <li class="nav-item">
                   <%= link_to "现货收益曲线图", revenue_chart_origin_transactions_path, class: "nav-link #{@page_index == 34 ? 'active' : ''}" %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to "委托单列表", open_spot_orders_path, class: "nav-link #{@page_index == 37 ? 'active' : ''}" %>
                 </li>
                 <li class="nav-item">
                   <%= link_to "合并交易记录列表", combine_transactions_path, class: "nav-link #{@page_index == 9 ? 'active' : ''}" %>
