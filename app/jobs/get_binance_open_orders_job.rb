@@ -41,7 +41,10 @@ class GetBinanceOpenOrdersJob < ApplicationJob
         price = open_order[:price].to_f
         qty = open_order[:origQty].to_f
         amount = price * qty
-        order = OpenSpotOrder.where(order_id: open_order[:orderId], symbol: open_order[:symbol]).first_or_initialize
+        symbol = open_order[:symbol]
+        from_symbol = symbol.split('USDT')[0]
+        get_current_price(symbol, from_symbol)
+        order = OpenSpotOrder.where(order_id: open_order[:orderId], symbol: symbol).first_or_initialize
         order.update(
           status: open_order[:status],
           price: price,
@@ -58,5 +61,22 @@ class GetBinanceOpenOrdersJob < ApplicationJob
       symbols = open_orders.map{|order| order[:symbol]}.uniq
       OpenSpotOrder.where.not(symbol: symbols).delete_all
     end
+  end
+
+  def get_current_price(symbol, from_symbol)
+    price = $redis.get("binance_spot_price_#{symbol}").to_f
+    if price == 0
+      price = BinanceSpotsService.new(user_id: user_id).get_price(symbol)[:price].to_f rescue 0
+      price = get_coin_price(from_symbol) if price.zero?
+      $redis.set("binance_spot_price_#{symbol}", price, ex: 2.hours)
+    end
+  end
+
+  def get_coin_price(symbol)
+    date = Date.yesterday
+    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{date}&to_date=#{date}"
+    response = RestClient.get(url)
+    data = JSON.parse(response.body)
+    data['result'].values[0].to_f rescue nil
   end
 end
