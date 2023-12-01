@@ -22,9 +22,8 @@
             <th>买卖类别</th>
             <th>委托价</th>
             <th>当前价</th>
-            <th>委托家和当前价的比例</th>
+            <th>委托价和当前价的比例</th>
             <th>委托数量</th>
-            <th>成交数量</th>
             <th>委托金额</th>
             <th>订单类型</th>
           </tr>
@@ -38,9 +37,8 @@
                 <td class="<%= trade_type_style(order.trade_type) %>"><%= I18n.t("views.trading.#{order.trade_type}") %></td>
                 <td><%= order.price.round(4) %></td>
                 <td><%= order.current_price.round(4) %></td>
-                <td><%= order.margin_rate.round(2) %>%</td>
+                <td class="<%= order.margin_rate > 0 ? 'pos-num' : 'neg-num' %>"><%= order.margin_rate.round(2) %>%</td>
                 <td><%= order.orig_qty.round(4) %></td>
-                <td><%= order.executed_qty.round(4) %></td>
                 <td><%= order.amount.round(4) %></td>
                 <td><%= order.order_type %></td>
               </tr>

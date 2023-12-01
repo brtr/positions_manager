@@ -4,6 +4,6 @@ class OpenSpotOrder < ApplicationRecord
   end
 
   def margin_rate
-    current_price.zero? ? 0 : ((price - current_price) / current_price) * 100
+    current_price.zero? ? 0 : ((current_price - price) / current_price) * 100
   end
 end
