@@ -43,11 +43,12 @@ class GetBinanceOpenOrdersJob < ApplicationJob
         amount = price * qty
         symbol = open_order[:symbol]
         from_symbol = symbol.split('USDT')[0]
-        get_current_price(symbol, from_symbol)
+        current_price = get_current_price(symbol, from_symbol)
         order = OpenSpotOrder.where(order_id: open_order[:orderId], symbol: symbol).first_or_initialize
         order.update(
           status: open_order[:status],
           price: price,
+          current_price: current_price,
           orig_qty: qty,
           executed_qty: open_order[:executedQty],
           amount: amount,
@@ -66,10 +67,11 @@ class GetBinanceOpenOrdersJob < ApplicationJob
   def get_current_price(symbol, from_symbol)
     price = $redis.get("binance_spot_price_#{symbol}").to_f
     if price == 0
-      price = BinanceSpotsService.new(user_id: user_id).get_price(symbol)[:price].to_f rescue 0
+      price = BinanceSpotsService.new.get_price(symbol)[:price].to_f rescue 0
       price = get_coin_price(from_symbol) if price.zero?
       $redis.set("binance_spot_price_#{symbol}", price, ex: 2.hours)
     end
+    price
   end
 
   def get_coin_price(symbol)

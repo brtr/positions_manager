@@ -36,7 +36,7 @@
                 <td><%= order.symbol %></td>
                 <td class="<%= trade_type_style(order.trade_type) %>"><%= I18n.t("views.trading.#{order.trade_type}") %></td>
                 <td><%= order.price.round(4) %></td>
-                <td><%= order.current_price.round(4) %></td>
+                <td><%= order.current_price&.round(4) %></td>
                 <td class="<%= order.margin_rate > 0 ? 'pos-num' : 'neg-num' %>"><%= order.margin_rate.round(2) %>%</td>
                 <td><%= order.orig_qty.round(4) %></td>
                 <td><%= order.amount.round(4) %></td>
