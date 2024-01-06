@@ -1,0 +1,39 @@
+<table class="table">
+  <thead>
+    <tr class="table-container-tr">
+      <% transactions_table_headers.each do |h| %>
+        <% next if h[:sort].in?(['cost_ratio', 'revenue_ratio']) %>
+        <th scope="col">
+          <% if h[:sort] == "none" %>
+            <%= "#{h[:name]}" %>
+          <% else %>
+            <% url = get_origin_list_url(source_type, ch_remote_params(params, h[:sort])) %>
+            <%= link_to "#{h[:name]}", url, remote: true, class: "#{params[:sort] == h[:sort] ? 'text-primary' : ''}" %>
+          <% end %>
+        </th>
+      <% end %>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @txs.each do |h| %>
+      <tr>
+        <td><%= h.event_time.strftime('%Y-%m-%d %H:%M:%S') rescue '' %></td>
+        <td><%= h.from_symbol %> / <%= h.to_symbol %></td>
+        <td class="<%= trade_type_style(h.trade_type) %>"><%= h.trade_type == 'buy' ? '买入' : '卖出' %></td>
+        <td data-bs-toggle="tooltip" title='<%= h.price %>'><%= h.price.round(4) %> <%= h.to_symbol %></td>
+        <td data-bs-toggle="tooltip" title='<%= h.cost %>'><%= h.cost.round(4) %> <%= h.to_symbol %></td>
+        <td data-bs-toggle="tooltip" title='<%= h.current_price %>'><%= h.current_price.round(4) %> <%= h.to_symbol %></td>
+        <td><%= h.qty.round(4) %></td>
+        <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>
+        <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= display_spot_tx_revenue(h.revenue, h.to_symbol, h.trade_type) %></td>
+        <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= display_spot_tx_roi(h.roi, h.trade_type) %></td>
+        <td><%= h.source %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="paginationBox p-4">
+  <%= paginate @txs %>
+</div>

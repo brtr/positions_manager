@@ -91,8 +91,8 @@ class GetGateSpotTradesJob < ApplicationJob
 
   def get_spot_cost(user_id, origin_symbol, date)
     cost = SpotBalanceSnapshotRecord.joins(:spot_balance_snapshot_info)
-            .find_by(spot_balance_snapshot_info: {user_id: user_id, event_date: date}, origin_symbol: origin_symbol, source: SOURCE)&.price.to_f
-    cost = UserSpotBalance.find_by(user_id: user_id, origin_symbol: origin_symbol, source: SOURCE)&.price.to_f if cost.zero? && date == Date.today
+            .find_by(spot_balance_snapshot_info: {user_id: user_id, event_date: date}, origin_symbol: origin_symbol, source: SOURCE)&.price
+    cost = UserSpotBalance.find_by(user_id: user_id, origin_symbol: origin_symbol, source: SOURCE)&.price if cost.nil? && date == Date.today
     cost
   end
 end

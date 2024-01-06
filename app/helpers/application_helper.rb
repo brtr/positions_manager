@@ -128,7 +128,7 @@ module ApplicationHelper
       },
       {
         name: "币种投入/总投入",
-        sort: "none"
+        sort: "cost_ratio"
       },
       {
         name: "预计收益 / 实际收益",
@@ -538,8 +538,10 @@ module ApplicationHelper
   def get_origin_list_url(source_type, params)
     if source_type == :public
       origin_transactions_path(params)
-    else
+    elsif source_type == :users
       users_origin_transactions_path(params)
+    else
+      new_platforms_origin_transactions_path(params)
     end
   end
 

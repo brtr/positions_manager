@@ -5,7 +5,7 @@ class UserSpotBalance < ApplicationRecord
 
   scope :available, -> { where("qty > 0") }
 
-  enum source: [:binance, :okx, :huobi]
+  enum source: [:binance, :okx, :huobi, :gate]
 
   def current_price
     OriginTransaction.find_by(original_symbol: origin_symbol, source: source)&.current_price

@@ -5,8 +5,6 @@
       <div class="input-group mb-3 position-filter">
         <%= select_tag(:search, options_for_select(@total_txs.pluck(:original_symbol).uniq, @symbol), { prompt: '请选择币种...', class: 'select2-dropdown form-control' }) %>
         <span class='ms-3'></span>
-        <%= select_tag(:campaign, options_for_select(@total_txs.pluck(:campaign).compact.uniq, @campaign),{ prompt: '请选择campaign...', class: 'select2-dropdown form-control' }) %>
-        <span class='ms-3'></span>
         <%= select_tag(:trade_type, options_for_select([['买入', 'buy'], ['卖出', 'sell']], @trade_type),{ prompt: '请选择交易类别...', class: 'select2-dropdown form-control' }) %>
         <span class='ms-3'></span>
         <%= select_tag(:source, options_for_select(@total_txs.pluck(:source).compact.uniq, @source),{ prompt: '请选择来源...', class: 'select2-dropdown form-control' }) %>
@@ -19,7 +17,7 @@
     <% end %>
   </div>
   <div id="trading-histories-container">
-    <%= render partial: "list", locals: { source_type: :public } %>
+    <%= render partial: "new_list", locals: { source_type: :new_platform } %>
   </div>
 </div>
 
