@@ -17,11 +17,22 @@ class GateSpotsService
     end
   end
 
-  def get_orders
+  def get_trades(options='')
     begin
-      request_path = '/api/v4/spot/orders'
-      query_string = 'status=finished'
+      request_path = '/api/v4/spot/my_trades'
+      query_string = options
       do_request("get", request_path, query_string)
+    rescue => e
+      format_error_msg(e)
+    end
+  end
+
+  def get_price(symbol)
+    begin
+      request_path = "/api/v4/spot/tickers?currency_pair=#{symbol}"
+      url = BASE_URL + request_path
+      response = RestClient.get(url)
+      JSON.parse(response)
     rescue => e
       format_error_msg(e)
     end
@@ -41,9 +52,8 @@ class GateSpotsService
       "Accept" => "application/json"
     }
 
-    puts headers
     response = RestClient.get(url, headers)
-    summary = JSON.parse(response)
+    JSON.parse(response)
   end
 
   def signed_data(data)

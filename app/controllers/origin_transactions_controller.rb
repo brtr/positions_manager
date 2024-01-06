@@ -25,6 +25,18 @@ class OriginTransactionsController < ApplicationController
     @total_summary = txs.total_summary(current_user.id)
   end
 
+  def new_platforms
+    @page_index = 38
+    sort = params[:sort].presence || "event_time"
+    sort_type = params[:sort_type].presence || "desc"
+    txs = OriginTransaction.where(source: ['gate', 'bitget']).order("#{sort} #{sort_type}")
+    @total_txs = txs
+    txs = filter_txs(txs)
+    @event_date = Date.parse(params[:event_date]) rescue nil
+    txs = txs.where(event_time: @event_date.all_day) if @event_date.present?
+    @txs = txs.page(params[:page]).per(20)
+  end
+
   def edit
     @tx = OriginTransaction.find params[:id]
   end

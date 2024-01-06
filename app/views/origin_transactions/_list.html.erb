@@ -26,10 +26,10 @@
         <td><%= h.current_price.round(4) %> <%= h.to_symbol %></td>
         <td><%= h.qty.round(4) %></td>
         <td><%= h.amount.round(4) %> <%= h.to_symbol %></td>
-        <td><%= "#{(h.cost_ratio(@total_summary[:total_cost].to_f) * 100).round(4)}%" %></td>
+        <td><%= "#{(h.cost_ratio(@total_summary[:total_cost].to_f) * 100).round(4)}%" rescue '' %></td>
         <td class="<%= h.revenue > 0 ? 'pos-num' : 'neg-num' %>"><%= display_spot_tx_revenue(h.revenue, h.to_symbol, h.trade_type) %></td>
         <td class="<%= h.roi > 0 ? 'pos-num' : 'neg-num' %>" ><%= display_spot_tx_roi(h.roi, h.trade_type) %></td>
-        <td><%= "#{(h.revenue_ratio(@total_summary[:total_estimated_revenue].to_f) * 100).round(4)}%" %></td>
+        <td><%= "#{(h.revenue_ratio(@total_summary[:total_estimated_revenue].to_f) * 100).round(4)}%" rescue '' %></td>
         <td><%= h.source %></td>
         <td><%= h.campaign %></td>
         <td><%= link_to "编辑", edit_origin_transaction_path(id: h.id), remote: true %></td>

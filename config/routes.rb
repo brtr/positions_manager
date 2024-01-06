@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       get :users
       post :add_key
       get :revenue_chart
+      get :new_platforms
     end
   end
 
