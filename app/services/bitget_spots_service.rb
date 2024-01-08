@@ -19,20 +19,21 @@ class BitgetSpotsService
     end
   end
 
-  def get_orders(start_time: nil, end_time: DateTime.now)
+  def get_orders
     begin
-      start_time ||= end_time - 2.weeks
-      request_path = "/api/v2/tax/spot-record?endTime=#{end_time.strftime('%Q')}&startTime=#{start_time.strftime('%Q')}"
+      request_path = "/api/v2/spot/trade/history-orders"
       do_request("get", request_path)
     rescue => e
       format_error_msg(e)
     end
   end
 
-  def get_price(instId)
+  def get_price(symbol)
     begin
-      request_path = "/api/v5/market/ticker?instId=#{instId}"
-      do_request("get", request_path)
+      request_path = "/api/v2/spot/market/tickers?symbol=#{symbol}"
+      url = BASE_URL + request_path
+      response = RestClient.get(url)
+      JSON.parse(response)
     rescue => e
       format_error_msg(e)
     end
@@ -41,7 +42,7 @@ class BitgetSpotsService
   private
   def do_request(method, request_path)
     url = BASE_URL + request_path
-    timestamp = '1685013478665' #get_timestamp
+    timestamp = get_timestamp
     sign = signed_data("#{timestamp}#{method.upcase}#{request_path}")
     headers = {
       "ACCESS-KEY" => @api_key,
@@ -49,10 +50,14 @@ class BitgetSpotsService
       "ACCESS-TIMESTAMP" => timestamp,
       "ACCESS-PASSPHRASE" => @passphrase,
       "Content-Type" => "application/json",
-      "locale" => "en-US"
+      "locale" => "zh-CN"
     }
 
-    response = RestClient.get(url, headers)
+    begin
+      response = RestClient.get(url, headers)
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    end
     JSON.parse(response)
   end
 
@@ -61,7 +66,7 @@ class BitgetSpotsService
   end
 
   def get_timestamp
-    DateTime.now.strftime('%Q')
+    DateTime.now.strftime('%Q').to_i
   end
 
   def format_error_msg(e)
