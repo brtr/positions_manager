@@ -52,7 +52,7 @@ class GetAddingPositionsService
     end
 
     def get_history_price(symbol, event_date)
-      url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{event_date}&to_date=#{event_date}"
+      url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price_by_symbol?symbol=#{symbol}&from_date=#{event_date}&to_date=#{event_date}"
       response = RestClient.get(url)
       data = JSON.parse(response.body)
       data['result'].values[0].to_f rescue nil

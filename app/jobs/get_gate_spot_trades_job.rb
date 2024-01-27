@@ -56,19 +56,11 @@ class GetGateSpotTradesJob < ApplicationJob
     price = $redis.get("gate_spot_price_#{symbol}").to_f
     if price == 0
       price = GateSpotsService.new(user_id: user_id).get_price(symbol).first["last"].to_f rescue 0
-      price = get_coin_price(from_symbol) if price.zero?
+      price = CoinService.get_price_by_date(from_symbol) if price.zero?
       $redis.set("gate_spot_price_#{symbol}", price, ex: 2.hours)
     end
 
     price.to_f
-  end
-
-  def get_coin_price(symbol)
-    date = Date.yesterday
-    url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{date}&to_date=#{date}"
-    response = RestClient.get(url)
-    data = JSON.parse(response.body)
-    data['result'].values[0].to_f rescue nil
   end
 
   def update_tx(tx)

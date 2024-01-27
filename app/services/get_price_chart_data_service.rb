@@ -3,7 +3,7 @@ class GetPriceChartDataService
     def execute(durations = 1)
       to_date = Date.yesterday
       from_date = durations.to_i == 3 ? to_date - 3.months : to_date - 1.month
-      url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=btc&from_date=#{from_date}&to_date=#{to_date}"
+      url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price_by_symbol?symbol=btc&from_date=#{from_date}&to_date=#{to_date}"
       response = RestClient.get(url)
       btc_data = JSON.parse(response.body)
 

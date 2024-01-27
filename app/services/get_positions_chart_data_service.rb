@@ -4,7 +4,7 @@ class GetPositionsChartDataService
       to_date = Date.yesterday
       from_date = period == 'quarter' ? to_date - 3.months : to_date - 1.month
       symbol = get_symbol(origin_symbol).downcase
-      url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price?symbol=#{symbol}&from_date=#{from_date}&to_date=#{to_date}"
+      url = ENV['COIN_ELITE_URL'] + "/api/coins/history_price_by_symbol?symbol=#{symbol}&from_date=#{from_date}&to_date=#{to_date}"
       response = RestClient.get(url)
       price_data = JSON.parse(response.body)
 
