@@ -57,6 +57,7 @@ class UserPosition < ApplicationRecord
       total_cost: records.sum(&:amount),
       total_revenue: records.sum(&:revenue),
       total_funding_fee: FundingFeeHistory.where(user_id: nil).sum(&:amount),
+      new_total_funding_fee: FundingFeeHistory.where('user_id is null and event_date > ?', '2024-02-14').sum(&:amount), #统计2月14号清仓之后新的资金费用
       max_profit: infos.max_profit(user_id: user_id),
       max_profit_date: $redis.get("user_#{user_id}_#{date.to_s}_positions_max_profit_date"),
       max_loss: infos.max_loss(user_id: user_id),

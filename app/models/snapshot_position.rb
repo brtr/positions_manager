@@ -22,6 +22,7 @@ class SnapshotPosition < ApplicationRecord
       loss_count: loss_records.count,
       loss_amount: loss_records.sum(&:revenue),
       total_funding_fee: FundingFeeHistory.where('user_id is null and event_date <= ?', date - 1.day).sum(&:amount),
+      new_total_funding_fee: FundingFeeHistory.where('user_id is null and event_date > ? and event_date <= ?', '2024-02-14', date - 1.day).sum(&:amount), #统计2月14号清仓之后新的资金费用
       max_profit: infos.max_profit(user_id: user_id, is_synced: is_synced, date: date),
       max_profit_date: $redis.get("#{redis_key}_max_profit_date"),
       max_loss: infos.max_loss(user_id: user_id, is_synced: is_synced, date: date),
