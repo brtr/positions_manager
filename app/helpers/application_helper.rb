@@ -506,6 +506,7 @@ module ApplicationHelper
   end
 
   def last_summary_display(data, is_percent = false)
+    data = data.to_f
     c = data > 0 ? 'pos-num' : 'neg-num'
     if is_percent
       "(<span class='#{c}'>#{data.round(2)}%</span>)".html_safe

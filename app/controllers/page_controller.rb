@@ -8,6 +8,7 @@ class PageController < ApplicationController
     sort_type = params[:sort_type].presence || "desc"
     @symbol = params[:search]
     histories = UserPosition.available.where(user_id: nil)
+    @total_summary = histories.total_summary
     histories = histories.where(origin_symbol: @symbol) if @symbol.present?
     histories = histories.where(level: params[:level]) if params[:level].present?
     histories = histories.select{|h| h.amount < @max_amount} if @flag && @max_amount > 0
@@ -15,10 +16,9 @@ class PageController < ApplicationController
     @histories = parts.last.sort_by{|h| h.send("#{sort}")} + parts.first
     @histories = @histories.reverse if sort_type == "desc"
     @histories = Kaminari.paginate_array(@histories).page(params[:page]).per(15)
-    @total_summary = UserPosition.available.total_summary
     compare_date = params[:compare_date].presence || Date.yesterday
-    snapshots = SnapshotPosition.joins(:snapshot_info).where(snapshot_info: {source_type: 'synced', user_id: nil, event_date: compare_date})
-    @last_summary = snapshots.last_summary(data: @total_summary)
+    snapshots = SnapshotInfo.where(source_type: 'synced', user_id: nil, event_date: compare_date).first&.snapshot_positions
+    @last_summary = snapshots.last_summary(data: @total_summary) rescue {}
     @snapshots = snapshots.to_a
     flash[:alert] = "找不到相应的快照" if params[:compare_date].present? && @snapshots.blank?
   end
