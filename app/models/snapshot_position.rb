@@ -51,7 +51,8 @@ class SnapshotPosition < ApplicationRecord
       loss_count: display_number(data[:loss_count] - records[:loss_count]),
       loss_amount: display_number(data[:loss_amount] - records[:loss_amount]),
       roi: display_number(new_roi * 100 - old_roi * 100),
-      total_funding_fee: display_number(data[:total_funding_fee] - records[:total_funding_fee])
+      total_funding_fee: display_number(data[:total_funding_fee] - records[:total_funding_fee]),
+      new_total_funding_fee: display_number(data[:new_total_funding_fee].to_f - records[:new_total_funding_fee].to_f)
     }
   end
 

@@ -47,6 +47,9 @@ class UserPosition < ApplicationRecord
     records = user_id ? UserPosition.where(user_id: user_id) : UserPosition.where(user_id: nil)
     profit_records = records.select{|r| r.revenue > 0}
     loss_records = records.select{|r| r.revenue < 0}
+    total_cost = records.sum(&:amount)
+    new_total_funding_fee = FundingFeeHistory.where('user_id is null and event_date > ?', '2024-02-14').sum(&:amount) #统计2月14号清仓之后新的资金费用
+    funding_rate = total_cost.zero? ? 0 : new_total_funding_fee.to_f / total_cost
     date = Date.yesterday
     infos = SnapshotInfo.includes(:snapshot_positions).where("event_date <= ?", date)
     {
@@ -54,10 +57,11 @@ class UserPosition < ApplicationRecord
       profit_amount: profit_records.sum(&:revenue),
       loss_count: loss_records.count,
       loss_amount: loss_records.sum(&:revenue),
-      total_cost: records.sum(&:amount),
+      total_cost: total_cost,
       total_revenue: records.sum(&:revenue),
       total_funding_fee: FundingFeeHistory.where(user_id: nil).sum(&:amount),
-      new_total_funding_fee: FundingFeeHistory.where('user_id is null and event_date > ?', '2024-02-14').sum(&:amount), #统计2月14号清仓之后新的资金费用
+      new_total_funding_fee: new_total_funding_fee,
+      funding_rate: (funding_rate.abs * 100).round(2),
       max_profit: infos.max_profit(user_id: user_id),
       max_profit_date: $redis.get("user_#{user_id}_#{date.to_s}_positions_max_profit_date"),
       max_loss: infos.max_loss(user_id: user_id),
